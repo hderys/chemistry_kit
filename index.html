@@ -93,7 +93,7 @@
             max-width: 860px;
             width: 100%;
             height: 95vh;
-            max-height: 720px;
+            max-height: 780px;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 40px;
@@ -113,7 +113,7 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
         .header h1 {
             font-size: 1.1rem;
@@ -161,43 +161,40 @@
             background: #f0e8f8;
         }
 
-        .tabs-wrapper {
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
+        /* ===== 分頁: 2x3 網格 ===== */
+        .tabs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
             flex-shrink: 0;
-            margin-bottom: 4px;
-            scrollbar-width: none;
-        }
-        .tabs-wrapper::-webkit-scrollbar {
-            display: none;
-        }
-        .tabs {
-            display: flex;
-            gap: 4px;
-            padding: 4px 2px;
-            min-width: max-content;
+            margin-bottom: 6px;
         }
         .tab-btn {
-            padding: 8px 14px;
-            border: none;
-            border-radius: 30px;
-            font-size: 0.65rem;
+            padding: 10px 4px;
+            border: 2px solid #d0c0e0;
+            border-radius: 16px;
+            font-size: 0.85rem;
             font-weight: 700;
             cursor: pointer;
             transition: 0.15s;
-            background: transparent;
+            background: white;
             color: #7a5a9a;
-            white-space: nowrap;
-            flex-shrink: 0;
+            text-align: center;
+            line-height: 1.3;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .tab-btn.active {
             background: #7a4a9a;
             color: white;
-            box-shadow: 0 2px 8px rgba(120, 60, 160, 0.25);
+            border-color: #7a4a9a;
+            box-shadow: 0 2px 10px rgba(120, 60, 160, 0.25);
         }
         .tab-btn:hover:not(.active) {
             background: #f0e8f8;
+            border-color: #b090d0;
         }
 
         .stats-grid {
@@ -227,13 +224,14 @@
             letter-spacing: 0.3px;
         }
 
+        /* ===== 離子庫切換 (加大) ===== */
         .toggle-row {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             flex-shrink: 0;
-            margin: 2px 0 4px 0;
+            margin: 2px 0 6px 0;
             flex-wrap: wrap;
         }
         .toggle-row.hidden {
@@ -242,27 +240,28 @@
         .toggle-group {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             background: #f8f4fc;
-            padding: 2px 10px;
-            border-radius: 14px;
+            padding: 4px 14px;
+            border-radius: 40px;
             border: 2px solid #e8e0f0;
         }
         .toggle-group .toggle-label {
-            font-size: 0.55rem;
-            font-weight: 600;
-            color: #7a5a9a;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #5a3a7a;
         }
         .toggle-btn {
-            padding: 2px 12px;
+            padding: 6px 18px;
             border: none;
-            border-radius: 30px;
-            font-size: 0.55rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
             font-weight: 700;
             cursor: pointer;
             transition: 0.15s;
             background: #e8e0f0;
             color: #7a5a9a;
+            min-height: 36px;
         }
         .toggle-btn.active {
             background: #7a4a9a;
@@ -273,6 +272,7 @@
             background: #d8c8e8;
         }
 
+        /* ===== 題目區 ===== */
         .question-area {
             background: white;
             border-radius: 20px;
@@ -345,6 +345,14 @@
             outline: none;
             letter-spacing: 2px;
         }
+        .symbol-input-wrap input.correct {
+            border-color: #2a8a5a;
+            background: #ecfdf5;
+        }
+        .symbol-input-wrap input.incorrect {
+            border-color: #d9534f;
+            background: #fce4e7;
+        }
         .charge-group {
             display: flex;
             flex-direction: column;
@@ -375,6 +383,14 @@
             transition: 0.15s;
             color: #2a1a3a;
             outline: none;
+        }
+        .charge-input-wrap input.correct {
+            border-color: #2a8a5a;
+            background: #ecfdf5;
+        }
+        .charge-input-wrap input.incorrect {
+            border-color: #d9534f;
+            background: #fce4e7;
         }
 
         .mode1-display {
@@ -414,6 +430,14 @@
             outline: none;
             width: 140px;
             min-height: 38px;
+        }
+        .mode1-input-wrapper input.correct {
+            border-color: #2a8a5a;
+            background: #ecfdf5;
+        }
+        .mode1-input-wrapper input.incorrect {
+            border-color: #d9534f;
+            background: #fce4e7;
         }
         .mode1-input-suffix {
             padding: 5px 12px;
@@ -580,6 +604,14 @@
             width: 160px;
             min-height: 38px;
         }
+        .pair-input-area input.correct {
+            border-color: #2a8a5a;
+            background: #ecfdf5;
+        }
+        .pair-input-area input.incorrect {
+            border-color: #d9534f;
+            background: #fce4e7;
+        }
 
         .pair-display-mode4 {
             font-size: 1.4rem;
@@ -652,6 +684,14 @@
             color: #2a1a3a;
             width: 120px;
             min-height: 34px;
+        }
+        .colour-input-row input.correct {
+            border-color: #2a8a5a;
+            background: #ecfdf5;
+        }
+        .colour-input-row input.incorrect {
+            border-color: #d9534f;
+            background: #fce4e7;
         }
         .colour-input-row .btn-colourless {
             background: #f0e8f8;
@@ -745,6 +785,14 @@
             outline: none;
             color: #2a1a3a;
         }
+        .color-input-wrap input.correct {
+            border-color: #2a8a5a;
+            background: #ecfdf5;
+        }
+        .color-input-wrap input.incorrect {
+            border-color: #d9534f;
+            background: #fce4e7;
+        }
         .btn-small {
             padding: 2px 10px;
             font-size: 0.6rem;
@@ -764,30 +812,30 @@
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            margin-top: 2px;
+            gap: 8px;
+            margin-top: 4px;
             flex-shrink: 0;
         }
         .btn-group {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             flex-wrap: wrap;
             justify-content: center;
         }
         .btn {
             border: none;
-            padding: 6px 18px;
+            padding: 8px 22px;
             border-radius: 40px;
             font-weight: 700;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: 0.15s;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-            min-height: 38px;
-            min-width: 60px;
+            min-height: 42px;
+            min-width: 80px;
             justify-content: center;
         }
         .btn-check {
@@ -814,24 +862,48 @@
             transform: none !important;
         }
 
-        .status-badge {
-            font-size: 0.6rem;
-            padding: 2px 10px;
-            border-radius: 40px;
-            background: #f0e8f8;
-            color: #5a3a7a;
-            font-weight: 600;
-            white-space: nowrap;
-            min-height: 24px;
+        /* ===== 回饋區域 (大面積顏色) ===== */
+        .feedback-area {
+            margin-top: 4px;
+            padding: 8px 14px;
+            border-radius: 16px;
+            flex-shrink: 0;
+            text-align: center;
+            min-height: 44px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.2s;
+            background: #f0e8f8;
+            border: 2px solid #d0c0e0;
         }
-        .status-badge.success {
+        .feedback-area.correct {
             background: #d1f0e3;
+            border-color: #2a8a5a;
+        }
+        .feedback-area.error {
+            background: #fce4e7;
+            border-color: #d9534f;
+        }
+        .feedback-area .fb-icon {
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+        .feedback-area .fb-text {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #2a1a3a;
+        }
+        .feedback-area .fb-detail {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #5a3a7a;
+        }
+        .feedback-area.correct .fb-text {
             color: #0d553a;
         }
-        .status-badge.error {
-            background: #fce4e7;
+        .feedback-area.error .fb-text {
             color: #9d3340;
         }
 
@@ -941,6 +1013,7 @@
             display: none !important;
         }
 
+        /* ===== 手機版 ===== */
         @media (max-width: 600px) {
             .card {
                 padding: 0.3rem 0.5rem;
@@ -959,8 +1032,14 @@
                 font-size: 0.6rem;
             }
             .tab-btn {
-                padding: 6px 10px;
-                font-size: 0.55rem;
+                padding: 8px 4px;
+                font-size: 0.7rem;
+                min-height: 42px;
+                border-radius: 12px;
+            }
+            .tabs-grid {
+                gap: 4px;
+                margin-bottom: 4px;
             }
             .question-area {
                 padding: 0.2rem 0.4rem;
@@ -1015,10 +1094,10 @@
                 min-height: 34px;
             }
             .btn {
-                padding: 6px 14px;
-                font-size: 0.7rem;
-                min-height: 34px;
-                min-width: 50px;
+                padding: 6px 16px;
+                font-size: 0.75rem;
+                min-height: 36px;
+                min-width: 60px;
             }
             .sol-options button {
                 padding: 5px 14px;
@@ -1035,10 +1114,18 @@
                 font-size: 0.65rem;
                 padding: 3px 10px;
             }
-            .status-badge {
-                font-size: 0.5rem;
-                padding: 2px 8px;
-                min-height: 20px;
+            .feedback-area {
+                padding: 6px 10px;
+                min-height: 38px;
+            }
+            .feedback-area .fb-icon {
+                font-size: 1.2rem;
+            }
+            .feedback-area .fb-text {
+                font-size: 0.8rem;
+            }
+            .feedback-area .fb-detail {
+                font-size: 0.6rem;
             }
             .stat-item .number {
                 font-size: 0.7rem;
@@ -1115,14 +1202,18 @@
                 padding: 1px 6px;
             }
             .toggle-btn {
-                font-size: 0.45rem;
-                padding: 1px 8px;
-            }
-            .toggle-group .toggle-label {
-                font-size: 0.45rem;
+                padding: 4px 12px;
+                font-size: 0.65rem;
+                min-height: 30px;
             }
             .toggle-group {
-                padding: 1px 6px;
+                padding: 3px 10px;
+            }
+            .toggle-group .toggle-label {
+                font-size: 0.6rem;
+            }
+            .toggle-row {
+                gap: 6px;
             }
         }
         @media (max-height: 650px) {
@@ -1152,9 +1243,10 @@
                 font-size: 0.85rem;
             }
             .btn {
-                padding: 4px 12px;
-                font-size: 0.65rem;
-                min-height: 30px;
+                padding: 5px 14px;
+                font-size: 0.7rem;
+                min-height: 32px;
+                min-width: 55px;
             }
             .symbol-input-wrap input {
                 width: 55px;
@@ -1197,6 +1289,19 @@
                 min-height: 26px;
                 font-size: 0.6rem;
             }
+            .feedback-area {
+                padding: 4px 10px;
+                min-height: 32px;
+            }
+            .feedback-area .fb-icon {
+                font-size: 1rem;
+            }
+            .feedback-area .fb-text {
+                font-size: 0.7rem;
+            }
+            .feedback-area .fb-detail {
+                font-size: 0.55rem;
+            }
             .reference-table {
                 font-size: 0.5rem;
             }
@@ -1209,6 +1314,11 @@
             }
             .reference-table .ion-symbol {
                 font-size: 0.6rem;
+            }
+            .tab-btn {
+                padding: 6px 4px;
+                font-size: 0.6rem;
+                min-height: 34px;
             }
         }
     </style>
@@ -1240,16 +1350,14 @@
             </div>
         </div>
 
-        <!-- 分頁 (滾動式) -->
-        <div class="tabs-wrapper">
-            <div class="tabs" id="tabBar">
-                <button class="tab-btn active" data-tab="0" id="tab0">📝 名稱→符號</button>
-                <button class="tab-btn" data-tab="1" id="tab1">🔤 符號→名稱</button>
-                <button class="tab-btn" data-tab="2" id="tab2">📖 離子對照表</button>
-                <button class="tab-btn" data-tab="3" id="tab3">📝 名稱→化學式</button>
-                <button class="tab-btn" data-tab="4" id="tab4">🔄 化學式→名稱</button>
-                <button class="tab-btn" data-tab="5" id="tab5">🎨 溶解度與顏色</button>
-            </div>
+        <!-- ===== 分頁: 2x3 網格 ===== -->
+        <div class="tabs-grid" id="tabBar">
+            <button class="tab-btn active" data-tab="0" id="tab0">📝 名稱→符號</button>
+            <button class="tab-btn" data-tab="1" id="tab1">🔤 符號→名稱</button>
+            <button class="tab-btn" data-tab="2" id="tab2">📖 離子對照表</button>
+            <button class="tab-btn" data-tab="3" id="tab3">📝 名稱→化學式</button>
+            <button class="tab-btn" data-tab="4" id="tab4">🔄 化學式→名稱</button>
+            <button class="tab-btn" data-tab="5" id="tab5">🎨 溶解度與顏色</button>
         </div>
 
         <!-- 統計 -->
@@ -1268,7 +1376,7 @@
             </div>
         </div>
 
-        <!-- 離子庫切換 (Tab 0,1,2 顯示) -->
+        <!-- 離子庫切換 (加大) -->
         <div class="toggle-row" id="toggleRowIon">
             <div class="toggle-group">
                 <span class="toggle-label">📚 離子庫：</span>
@@ -1311,9 +1419,13 @@
                 <div class="action-bar" id="actionBar0">
                     <div class="btn-group">
                         <button class="btn btn-check check-btn" data-tab="0">✔ 檢查</button>
-                        <button class="btn btn-next next-btn" data-tab="0" disabled>🎲 Next</button>
+                        <button class="btn btn-next next-btn" data-tab="0" disabled>🎲 下一題</button>
                     </div>
-                    <span class="status-badge" id="statusBadge0">✏️ 輸入後檢查</span>
+                </div>
+                <div class="feedback-area" id="feedback0">
+                    <span class="fb-icon">✏️</span>
+                    <span class="fb-text">輸入後檢查</span>
+                    <span class="fb-detail"></span>
                 </div>
                 <div id="answerReveal0"></div>
             </div>
@@ -1328,9 +1440,13 @@
                 <div class="action-bar" id="actionBar1">
                     <div class="btn-group">
                         <button class="btn btn-check check-btn" data-tab="1">✔ 檢查</button>
-                        <button class="btn btn-next next-btn" data-tab="1" disabled>🎲 Next</button>
+                        <button class="btn btn-next next-btn" data-tab="1" disabled>🎲 下一題</button>
                     </div>
-                    <span class="status-badge" id="statusBadge1">✏️ 輸入後檢查</span>
+                </div>
+                <div class="feedback-area" id="feedback1">
+                    <span class="fb-icon">✏️</span>
+                    <span class="fb-text">輸入後檢查</span>
+                    <span class="fb-detail"></span>
                 </div>
                 <div id="answerReveal1"></div>
             </div>
@@ -1360,7 +1476,7 @@
                 </div>
             </div>
 
-            <!-- Tab 3: 名稱→化學式 (強制全部) -->
+            <!-- Tab 3: 名稱→化學式 -->
             <div class="tab-content" id="tabContent3">
                 <div class="pair-display" id="pairDisplay3">硫酸銅(II) <small>copper(II) sulphate</small></div>
                 <div class="pair-input-area">
@@ -1369,14 +1485,18 @@
                 <div class="action-bar" id="actionBar3">
                     <div class="btn-group">
                         <button class="btn btn-check check-btn" data-tab="3">✔ 檢查</button>
-                        <button class="btn btn-next next-btn" data-tab="3" disabled>🎲 Next</button>
+                        <button class="btn btn-next next-btn" data-tab="3" disabled>🎲 下一題</button>
                     </div>
-                    <span class="status-badge" id="statusBadge3">✏️ 輸入後檢查</span>
+                </div>
+                <div class="feedback-area" id="feedback3">
+                    <span class="fb-icon">✏️</span>
+                    <span class="fb-text">輸入後檢查</span>
+                    <span class="fb-detail"></span>
                 </div>
                 <div id="answerReveal3"></div>
             </div>
 
-            <!-- Tab 4: 化學式→名稱 (強制全部) -->
+            <!-- Tab 4: 化學式→名稱 -->
             <div class="tab-content" id="tabContent4">
                 <div class="pair-display-mode4" id="pairDisplay4">CuSO₄</div>
                 <div class="pair-input-area">
@@ -1385,14 +1505,18 @@
                 <div class="action-bar" id="actionBar4">
                     <div class="btn-group">
                         <button class="btn btn-check check-btn" data-tab="4">✔ 檢查</button>
-                        <button class="btn btn-next next-btn" data-tab="4" disabled>🎲 Next</button>
+                        <button class="btn btn-next next-btn" data-tab="4" disabled>🎲 下一題</button>
                     </div>
-                    <span class="status-badge" id="statusBadge4">✏️ 輸入後檢查</span>
+                </div>
+                <div class="feedback-area" id="feedback4">
+                    <span class="fb-icon">✏️</span>
+                    <span class="fb-text">輸入後檢查</span>
+                    <span class="fb-detail"></span>
                 </div>
                 <div id="answerReveal4"></div>
             </div>
 
-            <!-- Tab 5: 溶解度與顏色 (強制溶解度篩選) -->
+            <!-- Tab 5: 溶解度與顏色 -->
             <div class="tab-content" id="tabContent5">
                 <div class="sol-display" id="solDisplay">Loading...</div>
                 <div class="sol-question-sub" id="solQ1">1. 是否溶於水？</div>
@@ -1409,9 +1533,13 @@
                 <div class="action-bar" id="actionBar5">
                     <div class="btn-group">
                         <button class="btn btn-check check-btn" data-tab="5">✔ 檢查</button>
-                        <button class="btn btn-next next-btn" data-tab="5" disabled>🎲 Next</button>
+                        <button class="btn btn-next next-btn" data-tab="5" disabled>🎲 下一題</button>
                     </div>
-                    <span class="status-badge" id="statusBadge5">✏️ 先選溶解度，再輸入顏色（如適用）</span>
+                </div>
+                <div class="feedback-area" id="feedback5">
+                    <span class="fb-icon">✏️</span>
+                    <span class="fb-text">先選溶解度，再輸入顏色（如適用）</span>
+                    <span class="fb-detail"></span>
                 </div>
                 <div id="answerReveal5"></div>
             </div>
@@ -1436,7 +1564,7 @@
     <script>
         (function() {
             // ============================================================
-            //  1. 離子資料庫
+            //  1. 離子資料庫 (汞(I) 已排除)
             // ============================================================
             const CORE_ION_DB = [
                 { name: "sodium ion", chinese: "鈉離子", symbol: "Na", charge: "+", color: "colourless",
@@ -1447,8 +1575,6 @@
                     display: "Cu<sup>+</sup>" },
                 { name: "silver ion", chinese: "銀離子", symbol: "Ag", charge: "+", color: "colourless",
                     display: "Ag<sup>+</sup>" },
-                { name: "mercury(I) ion", chinese: "汞(I)離子", symbol: "Hg", charge: "+", color: "colourless",
-                    display: "Hg<sup>+</sup>" },
                 { name: "hydrogen ion", chinese: "氫離子", symbol: "H", charge: "+", color: "colourless",
                     display: "H<sup>+</sup>" },
                 { name: "ammonium ion", chinese: "銨離子", symbol: "NH4", charge: "+", color: "colourless",
@@ -1581,7 +1707,7 @@
             ];
 
             // ============================================================
-            //  2. 化合物資料庫
+            //  2. 化合物資料庫 (汞(I) 已排除)
             // ============================================================
             const COMPOUNDS_FULL = [
                 { formula: 'NaCl', name_zh: '氯化鈉', name_en: 'sodium chloride', soluble: 'soluble', colour: '無色',
@@ -1678,8 +1804,6 @@
                     colour: '綠色', colour_en: 'green' },
                 { formula: 'HgCl2', name_zh: '氯化汞(II)', name_en: 'mercury(II) chloride', soluble: 'soluble',
                     colour: '無色', colour_en: 'colourless' },
-                { formula: 'Hg2Cl2', name_zh: '氯化汞(I)', name_en: 'mercury(I) chloride', soluble: 'sparingly',
-                    colour: '無色', colour_en: 'colourless' },
                 { formula: 'CH3COONa', name_zh: '乙酸鈉', name_en: 'sodium ethanoate', soluble: 'soluble', colour: '無色',
                     colour_en: 'colourless' },
                 { formula: '(CH3COO)2Cu', name_zh: '乙酸銅(II)', name_en: 'copper(II) ethanoate', soluble: 'soluble',
@@ -1690,6 +1814,7 @@
                     colour: '無色', colour_en: 'colourless' },
             ];
 
+            // 汞(I) 已排除 (Hg2Cl2, Hg2SO4, Hg2(NO3)2, Hg2CO3 不在清單中)
             const EXCLUDED_SOL = new Set(['Na2O', 'K2O', 'CaO', 'BaO', 'MgO', 'NaH', 'KH', 'CaH2', 'BaH2', 'MgH2', 'AlH3']);
             const COMPOUNDS_SOL = COMPOUNDS_FULL.filter(c => !EXCLUDED_SOL.has(c.formula));
 
@@ -1731,13 +1856,12 @@
             const percentCountEl = document.getElementById('percentCount');
             const historyList = document.getElementById('historyList');
 
-            // 分頁專用
-            const statusBadges = {
-                0: document.getElementById('statusBadge0'),
-                1: document.getElementById('statusBadge1'),
-                3: document.getElementById('statusBadge3'),
-                4: document.getElementById('statusBadge4'),
-                5: document.getElementById('statusBadge5')
+            const feedbacks = {
+                0: document.getElementById('feedback0'),
+                1: document.getElementById('feedback1'),
+                3: document.getElementById('feedback3'),
+                4: document.getElementById('feedback4'),
+                5: document.getElementById('feedback5')
             };
             const answerReveals = {
                 0: document.getElementById('answerReveal0'),
@@ -1802,6 +1926,10 @@
             function getDisplaySuffix() { return currentLang === 'zh' ? '離子' : ' ion'; }
 
             function getColorlessText() { return currentLang === 'zh' ? '無色' : 'colourless'; }
+
+            function getCheckLabel() { return currentLang === 'zh' ? '✔ 檢查' : '✔ Check'; }
+
+            function getNextLabel() { return currentLang === 'zh' ? '🎲 下一題' : '🎲 Next'; }
 
             function getColorDisplay(colorKey) {
                 if (!colorKey) return currentLang === 'zh' ? '無色' : 'colourless';
@@ -1884,6 +2012,15 @@
                 }
             }
 
+            function updateButtonLabels() {
+                const checkLabel = getCheckLabel();
+                const nextLabel = getNextLabel();
+                document.querySelectorAll('.check-btn').forEach(b => b.textContent = checkLabel);
+                document.querySelectorAll('.next-btn').forEach(b => b.textContent = nextLabel);
+                colorlessBtnIon.textContent = '填上 ' + getColorlessText();
+                btnColourless.textContent = '⬜ ' + getColorlessText();
+            }
+
             function getTagName(tabIndex) {
                 const tags = ['離子→符號', '符號→離子', '對照表', '名稱→化學式', '化學式→名稱', '溶解度'];
                 const tagsEn = ['Ion→Sym', 'Sym→Ion', 'Table', 'Name→Fml', 'Fml→Name', 'Solubility'];
@@ -1936,11 +2073,21 @@
                 document.querySelectorAll('.sol-options button').forEach(b => b.disabled = lock);
             }
 
-            function getStatusBadge(tab) { return statusBadges[tab] || document.getElementById('statusBadge0'); }
+            function getFeedback(tab) { return feedbacks[tab] || feedbacks[0]; }
 
-            function getAnswerReveal(tab) { return answerReveals[tab] || document.getElementById('answerReveal0'); }
+            function getAnswerReveal(tab) { return answerReveals[tab] || answerReveals[0]; }
 
             function getNextBtn(tab) { return nextBtns[tab] || document.querySelector('.next-btn[data-tab="0"]'); }
+
+            function setFeedback(tab, icon, text, detail, isCorrect) {
+                const fb = getFeedback(tab);
+                fb.className = 'feedback-area';
+                if (isCorrect === true) fb.classList.add('correct');
+                else if (isCorrect === false) fb.classList.add('error');
+                fb.querySelector('.fb-icon').textContent = icon;
+                fb.querySelector('.fb-text').textContent = text;
+                fb.querySelector('.fb-detail').textContent = detail || '';
+            }
 
             function getHintText() {
                 if (currentTab === 0) {
@@ -2011,8 +2158,7 @@
 
             function loadIonQuestion() {
                 if (ION_DB.length === 0) {
-                    getStatusBadge(currentTab).textContent = '⚠️ 離子庫為空';
-                    getStatusBadge(currentTab).className = 'status-badge error';
+                    setFeedback(currentTab, '⚠️', '離子庫為空', '', false);
                     return;
                 }
                 currentIon = pickRandomIon();
@@ -2031,6 +2177,7 @@
                         colorInputWrap.classList.remove('hidden');
                         colorInputIon.disabled = false;
                         colorInputIon.value = '';
+                        colorInputIon.className = '';
                     } else {
                         colorInputWrap.classList.add('hidden');
                     }
@@ -2050,23 +2197,21 @@
                 footerNote.textContent = getFooterText();
                 isAnsweredCorrectly = false;
                 getNextBtn(currentTab).disabled = true;
-                getStatusBadge(currentTab).textContent = '✏️ 輸入後檢查';
-                getStatusBadge(currentTab).className = 'status-badge';
+                setFeedback(currentTab, '✏️', currentTab === 0 ? '輸入符號和電荷後檢查' : '輸入名稱後檢查', '', null);
                 getAnswerReveal(currentTab).innerHTML = '';
                 lockInputs(false);
                 statsGrid.style.display = 'grid';
                 toggleRowIon.style.display = 'flex';
+                updateButtonLabels();
             }
 
             function checkIonAnswer() {
                 if (!currentIon) {
-                    getStatusBadge(currentTab).textContent = '⚠️ 請先載入題目';
-                    getStatusBadge(currentTab).className = 'status-badge error';
+                    setFeedback(currentTab, '⚠️', '請先載入題目', '', false);
                     return;
                 }
                 if (isAnsweredCorrectly) {
-                    getStatusBadge(currentTab).textContent = '✅ 已答對，請點「Next」';
-                    getStatusBadge(currentTab).className = 'status-badge success';
+                    setFeedback(currentTab, '✅', '已答對，請點「下一題」', '', true);
                     return;
                 }
 
@@ -2088,18 +2233,15 @@
                         colorInputIon.className = colorRaw === '' ? '' : (colorCorrect ? 'correct' : 'incorrect');
                     }
                     if (!mainCorrect && s !== currentIon.symbol && c === currentIon.charge) {
-                        getStatusBadge(currentTab).textContent = `❌ 符號大小寫錯誤：應為 ${currentIon.symbol}，你輸入 ${s}`;
-                        getStatusBadge(currentTab).className = 'status-badge error';
+                        setFeedback(currentTab, '❌', `符號大小寫錯誤：應為 ${currentIon.symbol}，你輸入 ${s}`, '', false);
                         return;
                     }
                     if (!mainCorrect && s === currentIon.symbol && c !== currentIon.charge) {
-                        getStatusBadge(currentTab).textContent = `❌ 電荷格式錯誤：應為 ${currentIon.charge}，你輸入 ${c}`;
-                        getStatusBadge(currentTab).className = 'status-badge error';
+                        setFeedback(currentTab, '❌', `電荷格式錯誤：應為 ${currentIon.charge}，你輸入 ${c}`, '', false);
                         return;
                     }
                     if (!mainCorrect && s !== currentIon.symbol && c !== currentIon.charge) {
-                        getStatusBadge(currentTab).textContent = `❌ 符號應為 ${currentIon.symbol}，電荷應為 ${currentIon.charge}`;
-                        getStatusBadge(currentTab).className = 'status-badge error';
+                        setFeedback(currentTab, '❌', `符號應為 ${currentIon.symbol}，電荷應為 ${currentIon.charge}`, '', false);
                         return;
                     }
                 } else {
@@ -2115,8 +2257,7 @@
                     }
                     nameInput.className = user === '' ? '' : (mainCorrect ? 'correct' : 'incorrect');
                     if (!mainCorrect) {
-                        getStatusBadge(currentTab).textContent = `❌ 正確名稱應為 ${expected}`;
-                        getStatusBadge(currentTab).className = 'status-badge error';
+                        setFeedback(currentTab, '❌', `正確名稱應為 ${expected}`, '', false);
                         return;
                     }
                 }
@@ -2128,21 +2269,19 @@
                     totalAttempts++;
                     correctAttempts++;
                     lockInputs(true);
-                    getStatusBadge(currentTab).textContent = '✅ 完全正確！';
-                    getStatusBadge(currentTab).className = 'status-badge success';
+                    setFeedback(currentTab, '✅', '完全正確！', '點「下一題」繼續', true);
                     getNextBtn(currentTab).disabled = false;
-                    getAnswerReveal(currentTab).innerHTML =
-                        `<div class="answer-hint" style="border-color:#2a8a5a; background:#ecfdf5;">🎉 正確！點「Next」繼續</div>`;
+                    getAnswerReveal(currentTab).innerHTML = '';
                 } else {
                     totalAttempts++;
                     getNextBtn(currentTab).disabled = true;
                     lockInputs(false);
                     if (currentTab === 0 && colorEnabled && !colorCorrect) {
-                        getStatusBadge(currentTab).textContent =
-                            `❌ 顏色應為 ${getColorDisplay(currentIon.color)}，你輸入 ${colorRaw || '(空)'}`;
-                        getStatusBadge(currentTab).className = 'status-badge error';
+                        setFeedback(currentTab, '❌', `顏色應為 ${getColorDisplay(currentIon.color)}，你輸入 ${colorRaw || '(空)'}`,
+                            '', false);
                         return;
                     }
+                    setFeedback(currentTab, '❌', '請修正後再試', '', false);
                 }
 
                 const displayAns = mainRaw || '(空)';
@@ -2150,6 +2289,7 @@
                 const ionName = currentLang === 'zh' ? currentIon.chinese : currentIon.name;
                 addHistory(ionName, displayAns, correctAns, allCorrect);
                 updateStats();
+                updateButtonLabels();
             }
 
             // ============================================================
@@ -2168,8 +2308,7 @@
                 pairInput3.placeholder = currentLang === 'zh' ? '請輸入化學式...' : 'Enter formula...';
                 isAnsweredCorrectly = false;
                 getNextBtn(3).disabled = true;
-                getStatusBadge(3).textContent = '✏️ 輸入後檢查';
-                getStatusBadge(3).className = 'status-badge';
+                setFeedback(3, '✏️', '輸入化學式後檢查', '', null);
                 getAnswerReveal(3).innerHTML = '';
                 lockInputs(false);
                 pairInput3.focus();
@@ -2179,6 +2318,7 @@
                 footerNote.textContent = getFooterText();
                 colorArea.classList.add('hidden');
                 colorInputWrap.classList.add('hidden');
+                updateButtonLabels();
             }
 
             function loadCompoundQuestion4() {
@@ -2200,8 +2340,7 @@
                 pairInput4.placeholder = currentLang === 'zh' ? '請輸入名稱...' : 'Enter name...';
                 isAnsweredCorrectly = false;
                 getNextBtn(4).disabled = true;
-                getStatusBadge(4).textContent = '✏️ 輸入後檢查';
-                getStatusBadge(4).className = 'status-badge';
+                setFeedback(4, '✏️', '輸入名稱後檢查', '', null);
                 getAnswerReveal(4).innerHTML = '';
                 lockInputs(false);
                 pairInput4.focus();
@@ -2211,23 +2350,21 @@
                 footerNote.textContent = getFooterText();
                 colorArea.classList.add('hidden');
                 colorInputWrap.classList.add('hidden');
+                updateButtonLabels();
             }
 
             function checkCompound3() {
                 if (!currentCompound3) {
-                    getStatusBadge(3).textContent = '⚠️ 請先載入題目';
-                    getStatusBadge(3).className = 'status-badge error';
+                    setFeedback(3, '⚠️', '請先載入題目', '', false);
                     return;
                 }
                 if (isAnsweredCorrectly) {
-                    getStatusBadge(3).textContent = '✅ 已答對，請點「Next」';
-                    getStatusBadge(3).className = 'status-badge success';
+                    setFeedback(3, '✅', '已答對，請點「下一題」', '', true);
                     return;
                 }
                 const ans = pairInput3.value.trim();
                 if (ans === '') {
-                    getStatusBadge(3).textContent = '✏️ 請輸入答案';
-                    getStatusBadge(3).className = 'status-badge error';
+                    setFeedback(3, '✏️', '請輸入答案', '', null);
                     return;
                 }
                 const correct = currentCompound3.formula;
@@ -2240,39 +2377,34 @@
                     isAnsweredCorrectly = true;
                     correctAttempts++;
                     lockInputs(true);
-                    getStatusBadge(3).textContent = '✅ 完全正確！';
-                    getStatusBadge(3).className = 'status-badge success';
+                    setFeedback(3, '✅', '完全正確！', '點「下一題」繼續', true);
                     getNextBtn(3).disabled = false;
-                    getAnswerReveal(3).innerHTML =
-                        `<div class="answer-hint" style="border-color:#2a8a5a; background:#ecfdf5;">🎉 正確！點「Next」繼續</div>`;
+                    getAnswerReveal(3).innerHTML = '';
                 } else {
                     getNextBtn(3).disabled = true;
                     lockInputs(false);
-                    getStatusBadge(3).textContent = `❌ 正確答案為 ${correct}`;
-                    getStatusBadge(3).className = 'status-badge error';
+                    setFeedback(3, '❌', `正確答案為 ${correct}`, '請記住這個化學式', false);
                     getAnswerReveal(3).innerHTML = '';
                 }
                 const displayAns = ans || '(空)';
                 const ionName = currentLang === 'zh' ? currentCompound3.name_zh : currentCompound3.name_en;
                 addHistory(ionName, displayAns, correct, ok);
                 updateStats();
+                updateButtonLabels();
             }
 
             function checkCompound4() {
                 if (!currentCompound4) {
-                    getStatusBadge(4).textContent = '⚠️ 請先載入題目';
-                    getStatusBadge(4).className = 'status-badge error';
+                    setFeedback(4, '⚠️', '請先載入題目', '', false);
                     return;
                 }
                 if (isAnsweredCorrectly) {
-                    getStatusBadge(4).textContent = '✅ 已答對，請點「Next」';
-                    getStatusBadge(4).className = 'status-badge success';
+                    setFeedback(4, '✅', '已答對，請點「下一題」', '', true);
                     return;
                 }
                 const ans = pairInput4.value.trim();
                 if (ans === '') {
-                    getStatusBadge(4).textContent = '✏️ 請輸入答案';
-                    getStatusBadge(4).className = 'status-badge error';
+                    setFeedback(4, '✏️', '請輸入答案', '', null);
                     return;
                 }
                 const correct = currentLang === 'zh' ? currentCompound4.name_zh : currentCompound4.name_en;
@@ -2288,22 +2420,20 @@
                     isAnsweredCorrectly = true;
                     correctAttempts++;
                     lockInputs(true);
-                    getStatusBadge(4).textContent = '✅ 完全正確！';
-                    getStatusBadge(4).className = 'status-badge success';
+                    setFeedback(4, '✅', '完全正確！', '點「下一題」繼續', true);
                     getNextBtn(4).disabled = false;
-                    getAnswerReveal(4).innerHTML =
-                        `<div class="answer-hint" style="border-color:#2a8a5a; background:#ecfdf5;">🎉 正確！點「Next」繼續</div>`;
+                    getAnswerReveal(4).innerHTML = '';
                 } else {
                     getNextBtn(4).disabled = true;
                     lockInputs(false);
-                    getStatusBadge(4).textContent = `❌ 正確答案為 ${correct}`;
-                    getStatusBadge(4).className = 'status-badge error';
+                    setFeedback(4, '❌', `正確答案為 ${correct}`, '請記住這個名稱', false);
                     getAnswerReveal(4).innerHTML = '';
                 }
                 const displayAns = ans || '(空)';
                 const ionName = currentLang === 'zh' ? currentCompound4.name_zh : currentCompound4.name_en;
                 addHistory(ionName, displayAns, correct, ok);
                 updateStats();
+                updateButtonLabels();
             }
 
             // ============================================================
@@ -2341,8 +2471,7 @@
                 document.querySelector('#solSoluble').textContent = currentLang === 'zh' ? '✅ 溶' : '✅ Soluble';
                 document.querySelector('#solInsoluble').textContent = currentLang === 'zh' ? '❌ 不溶' : '❌ Insoluble';
                 btnColourless.textContent = '⬜ ' + getColorlessText();
-                getStatusBadge(5).textContent = '✏️ 先選溶解度，再輸入顏色（如適用）';
-                getStatusBadge(5).className = 'status-badge';
+                setFeedback(5, '✏️', '先選溶解度，再輸入顏色（如適用）', '', null);
                 getAnswerReveal(5).innerHTML = '';
                 isAnsweredCorrectly = false;
                 getNextBtn(5).disabled = true;
@@ -2351,6 +2480,7 @@
                 toggleRowIon.style.display = 'none';
                 hintRow.innerHTML = getHintText();
                 footerNote.textContent = getFooterText();
+                updateButtonLabels();
             }
 
             function onSolSelected(value) {
@@ -2370,18 +2500,15 @@
 
             function checkSolAnswer() {
                 if (!currentCompound5) {
-                    getStatusBadge(5).textContent = '⚠️ 請先載入題目';
-                    getStatusBadge(5).className = 'status-badge error';
+                    setFeedback(5, '⚠️', '請先載入題目', '', false);
                     return;
                 }
                 if (isAnsweredCorrectly) {
-                    getStatusBadge(5).textContent = '✅ 已答對，請點「Next」';
-                    getStatusBadge(5).className = 'status-badge success';
+                    setFeedback(5, '✅', '已答對，請點「下一題」', '', true);
                     return;
                 }
                 if (!solSelectedSoluble) {
-                    getStatusBadge(5).textContent = '⚠️ 請先選擇溶解度';
-                    getStatusBadge(5).className = 'status-badge error';
+                    setFeedback(5, '⚠️', '請先選擇溶解度', '', null);
                     return;
                 }
 
@@ -2405,8 +2532,7 @@
                 if (solOk && isSolubleExpected) {
                     let inputColour = colourInput.value.trim().toLowerCase();
                     if (inputColour === '') {
-                        getStatusBadge(5).textContent = '⚠️ 請輸入顏色';
-                        getStatusBadge(5).className = 'status-badge error';
+                        setFeedback(5, '⚠️', '請輸入顏色', '', null);
                         return;
                     }
                     let isFe3 = currentCompound5.formula.indexOf('Fe') !== -1 &&
@@ -2423,8 +2549,7 @@
                         colourDisplay = getColorDisplay(currentCompound5.colour);
                     }
                     if (!colourOk) {
-                        getStatusBadge(5).textContent = `❌ 顏色應為 ${colourDisplay}，你輸入 ${colourInput.value || '(空)'}`;
-                        getStatusBadge(5).className = 'status-badge error';
+                        setFeedback(5, '❌', `顏色應為 ${colourDisplay}，你輸入 ${colourInput.value || '(空)'}`, '', false);
                         return;
                     }
                 }
@@ -2436,14 +2561,9 @@
                     totalAttempts++;
                     correctAttempts++;
                     lockInputs(true);
-                    getStatusBadge(5).textContent = '✅ 完全正確！';
-                    getStatusBadge(5).className = 'status-badge success';
+                    setFeedback(5, '✅', '完全正確！', '點「下一題」繼續', true);
                     getNextBtn(5).disabled = false;
-                    let msg = currentLang === 'zh' ? '🎉 正確！' : '🎉 Correct!';
-                    msg += ' ' + currentCompound5.formula + ' ' + solDisplay;
-                    if (isSolubleExpected) msg += '，' + (currentLang === 'zh' ? '顏色為' : 'colour: ') + colourDisplay;
-                    getAnswerReveal(5).innerHTML =
-                        '<div class="answer-hint" style="border-color:#2a8a5a; background:#ecfdf5;">' + msg + '</div>';
+                    getAnswerReveal(5).innerHTML = '';
                 } else {
                     totalAttempts++;
                     getNextBtn(5).disabled = true;
@@ -2451,11 +2571,11 @@
                     if (!solOk) {
                         let exp = isSolubleExpected ? (currentLang === 'zh' ? '溶' : 'soluble') : (currentLang === 'zh' ?
                             '不溶' : 'insoluble');
-                        getStatusBadge(5).textContent =
-                            `❌ ${currentLang === 'zh' ? '溶解度應為' : 'Solubility should be'} ${exp}` +
+                        let msg =
+                            `${currentLang === 'zh' ? '溶解度應為' : 'Solubility should be'} ${exp}` +
                             (expected === 'slightly' ? (currentLang === 'zh' ? '（微溶）' : ' (slightly soluble)') : '') +
                             (expected === 'sparingly' ? (currentLang === 'zh' ? '（難溶）' : ' (sparingly soluble)') : '');
-                        getStatusBadge(5).className = 'status-badge error';
+                        setFeedback(5, '❌', msg, '', false);
                         return;
                     }
                 }
@@ -2464,6 +2584,7 @@
                 let ionName = currentLang === 'zh' ? currentCompound5.name_zh : currentCompound5.name_en;
                 addHistory(ionName, displayAns, correctAns, allOk);
                 updateStats();
+                updateButtonLabels();
             }
 
             // ============================================================
@@ -2493,6 +2614,7 @@
                 footerNote.textContent = getFooterText();
 
                 updateTabLabels();
+                updateButtonLabels();
 
                 if (tabIndex === 0 || tabIndex === 1) {
                     if (ION_DB.length === 0) { ION_DB = [...CORE_ION_DB];
@@ -2519,9 +2641,8 @@
                 for (let i = 0; i < btns.length; i++) {
                     btns[i].classList.toggle('active', btns[i].dataset.lang === lang);
                 }
-                colorlessBtnIon.textContent = '填上 ' + getColorlessText();
-                btnColourless.textContent = '⬜ ' + getColorlessText();
                 updateTabLabels();
+                updateButtonLabels();
                 if (currentTab === 2) renderReferenceTable();
                 else {
                     if (currentTab === 0 || currentTab === 1) loadIonQuestion();
@@ -2560,6 +2681,7 @@
                 chargeFilter.value = 'all';
 
                 updateTabLabels();
+                updateButtonLabels();
                 switchTab(0);
             }
 
@@ -2590,7 +2712,7 @@
             }
 
             // ============================================================
-            //  12. 事件綁定 (使用事件委託)
+            //  12. 事件綁定
             // ============================================================
             welcomeZh.addEventListener('click', function() { initApp('zh'); });
             welcomeEn.addEventListener('click', function() { initApp('en'); });
@@ -2611,7 +2733,6 @@
             coreToggle.addEventListener('click', function() { if (currentIonDb !== 'core') switchDb('core'); });
             extraToggle.addEventListener('click', function() { if (currentIonDb !== 'extra') switchDb('extra'); });
 
-            // 事件委託：檢查按鈕
             document.addEventListener('click', function(e) {
                 const checkBtn = e.target.closest('.check-btn');
                 if (checkBtn) {
@@ -2632,7 +2753,6 @@
                 }
             });
 
-            // Enter 鍵
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
                     let active = document.activeElement;
@@ -2641,7 +2761,6 @@
                             active.id === 'pairInput4' || active.id === 'colourInput' ||
                             active.id === 'colorInputIon')) {
                         e.preventDefault();
-                        // 找出當前分頁的檢查按鈕
                         const checkBtn = document.querySelector(`.check-btn[data-tab="${currentTab}"]`);
                         if (checkBtn) checkBtn.click();
                     }
@@ -2664,8 +2783,7 @@
                     symbolInput.className = '';
                     chargeInput.className = '';
                     colorInputIon.className = '';
-                    getStatusBadge(currentTab).textContent = '✏️ 輸入後檢查';
-                    getStatusBadge(currentTab).className = 'status-badge';
+                    setFeedback(currentTab, '✏️', '輸入後檢查', '', null);
                     getAnswerReveal(currentTab).innerHTML = '';
                 }
             });
@@ -2696,13 +2814,12 @@
                     if (this.disabled || isAnsweredCorrectly) return;
                     this.className = '';
                     if (colorEnabled && currentTab === 0) colorInputIon.className = '';
-                    getStatusBadge(currentTab).textContent = '✏️ 修改中，再檢查';
-                    getStatusBadge(currentTab).className = 'status-badge';
+                    setFeedback(currentTab, '✏️', '修改中，再檢查', '', null);
                     getAnswerReveal(currentTab).innerHTML = '';
                 });
             }
 
-            console.log('🧪 離子與化合物練習已啟動 (檢查功能已修復！)');
+            console.log('🧪 離子與化合物練習已啟動 (汞(I) 已排除、回饋加強版！)');
         })();
     </script>
 </body>
