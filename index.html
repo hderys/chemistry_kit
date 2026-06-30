@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>🧪 離子與化合物 · DSE 化學</title>
     <style>
         * {
@@ -24,7 +24,6 @@
             padding: 10px;
         }
 
-        /* ===== 歡迎畫面 ===== */
         .welcome-screen {
             max-width: 580px;
             width: 100%;
@@ -90,12 +89,11 @@
             background: #f5effa;
         }
 
-        /* ===== 主卡片 ===== */
         .card {
             max-width: 860px;
             width: 100%;
             height: 95vh;
-            max-height: 680px;
+            max-height: 720px;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 40px;
@@ -163,29 +161,35 @@
             background: #f0e8f8;
         }
 
-        /* ===== 分頁 ===== */
-        .tabs {
-            display: flex;
-            gap: 3px;
-            background: white;
-            padding: 3px 4px;
-            border-radius: 30px;
+        .tabs-wrapper {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
             flex-shrink: 0;
             margin-bottom: 4px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            flex-wrap: wrap;
+            scrollbar-width: none;
+        }
+        .tabs-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+        .tabs {
+            display: flex;
+            gap: 4px;
+            padding: 4px 2px;
+            min-width: max-content;
         }
         .tab-btn {
-            padding: 4px 10px;
+            padding: 8px 14px;
             border: none;
             border-radius: 30px;
-            font-size: 0.55rem;
+            font-size: 0.65rem;
             font-weight: 700;
             cursor: pointer;
             transition: 0.15s;
             background: transparent;
             color: #7a5a9a;
             white-space: nowrap;
+            flex-shrink: 0;
         }
         .tab-btn.active {
             background: #7a4a9a;
@@ -196,7 +200,6 @@
             background: #f0e8f8;
         }
 
-        /* ===== 統計 ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -270,7 +273,6 @@
             background: #d8c8e8;
         }
 
-        /* ===== 題目區 ===== */
         .question-area {
             background: white;
             border-radius: 20px;
@@ -291,7 +293,6 @@
             display: flex;
         }
 
-        /* ---------- 模式0: 名稱→符號 ---------- */
         .mode0-display {
             font-size: 1.2rem;
             font-weight: 600;
@@ -376,7 +377,6 @@
             outline: none;
         }
 
-        /* ---------- 模式1: 符號→名稱 ---------- */
         .mode1-display {
             font-size: 1.4rem;
             font-weight: 700;
@@ -432,7 +432,6 @@
             align-items: center;
         }
 
-        /* ---------- 模式2: 離子對照表 ---------- */
         .reference-container {
             flex: 1;
             min-height: 0;
@@ -522,12 +521,12 @@
         }
         .reference-table .color-dot {
             display: inline-block;
-            width: 12px;
-            height: 12px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             border: 1px solid #d0c0e0;
             vertical-align: middle;
-            margin-right: 4px;
+            margin-right: 6px;
             flex-shrink: 0;
         }
         .reference-table .ion-symbol {
@@ -543,7 +542,6 @@
             font-size: 0.75rem;
         }
 
-        /* ---------- 模式3: 名稱→化學式 ---------- */
         .pair-display {
             font-size: 1.2rem;
             font-weight: 600;
@@ -583,7 +581,6 @@
             min-height: 38px;
         }
 
-        /* ---------- 模式4: 化學式→名稱 ---------- */
         .pair-display-mode4 {
             font-size: 1.4rem;
             font-weight: 700;
@@ -594,7 +591,6 @@
             padding: 1px 0;
         }
 
-        /* ---------- 模式5: 溶解度與顏色 ---------- */
         .sol-display {
             font-size: 1.1rem;
             font-weight: 600;
@@ -680,7 +676,6 @@
             flex-shrink: 0;
         }
 
-        /* ===== 共用元件 ===== */
         .hint-row {
             text-align: center;
             font-size: 0.5rem;
@@ -867,16 +862,18 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
             margin-top: 3px;
             flex-shrink: 0;
-            max-height: 45px;
+            max-height: 55px;
             display: flex;
             flex-direction: column;
         }
         .history-section h3 {
-            font-size: 0.4rem;
+            font-size: 0.45rem;
             color: #7a5a9a;
             margin: 0 0 1px 0;
             font-weight: 600;
             flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
         }
         .history-list {
             display: flex;
@@ -888,13 +885,22 @@
         .history-item {
             display: flex;
             align-items: center;
-            gap: 4px;
-            font-size: 0.4rem;
+            gap: 6px;
+            font-size: 0.45rem;
             padding: 1px 6px;
             background: #f8f4fc;
             border-radius: 8px;
             border-left: 3px solid #d0c0e0;
             flex-shrink: 0;
+        }
+        .history-item .h-tag {
+            font-size: 0.35rem;
+            background: #d0c0e0;
+            color: #3a2a4a;
+            padding: 0 6px;
+            border-radius: 20px;
+            font-weight: 600;
+            white-space: nowrap;
         }
         .history-item .h-ion {
             font-weight: 600;
@@ -904,18 +910,23 @@
         }
         .history-item .h-answer {
             color: #7a5a9a;
-            font-size: 0.38rem;
+            font-size: 0.4rem;
         }
         .history-item .h-result {
             font-weight: 700;
             margin-left: auto;
-            font-size: 0.5rem;
+            font-size: 0.55rem;
         }
         .history-item .h-result.correct {
             color: #2a8a5a;
         }
         .history-item .h-result.wrong {
             color: #d9534f;
+        }
+        .history-item .h-time {
+            font-size: 0.35rem;
+            color: #aaa;
+            white-space: nowrap;
         }
 
         .footer-note {
@@ -930,7 +941,6 @@
             display: none !important;
         }
 
-        /* ===== 手機版專用 ===== */
         @media (max-width: 600px) {
             .card {
                 padding: 0.3rem 0.5rem;
@@ -949,16 +959,12 @@
                 font-size: 0.6rem;
             }
             .tab-btn {
-                padding: 3px 6px;
-                font-size: 0.45rem;
+                padding: 6px 10px;
+                font-size: 0.55rem;
             }
-            
-            /* 題目區 padding 減少 */
             .question-area {
                 padding: 0.2rem 0.4rem;
             }
-            
-            /* 顯示文字縮小 */
             .mode0-display {
                 font-size: 0.95rem;
             }
@@ -977,8 +983,6 @@
             .sol-display {
                 font-size: 0.9rem;
             }
-            
-            /* 輸入框和按鈕加大方便觸控 */
             .symbol-input-wrap input {
                 width: 60px;
                 height: 36px;
@@ -1010,8 +1014,6 @@
                 padding: 4px 8px;
                 min-height: 34px;
             }
-            
-            /* 所有按鈕加大 */
             .btn {
                 padding: 6px 14px;
                 font-size: 0.7rem;
@@ -1033,20 +1035,14 @@
                 font-size: 0.65rem;
                 padding: 3px 10px;
             }
-            
-            /* 狀態標籤 */
             .status-badge {
                 font-size: 0.5rem;
                 padding: 2px 8px;
                 min-height: 20px;
             }
-            
-            /* 統計數字 */
             .stat-item .number {
                 font-size: 0.7rem;
             }
-            
-            /* 顏色區 */
             .color-area {
                 padding: 2px 6px;
                 gap: 4px;
@@ -1064,30 +1060,24 @@
                 font-size: 0.5rem;
                 min-height: 22px;
             }
-            
-            /* 歷史記錄 */
             .history-section {
-                max-height: 35px;
+                max-height: 45px;
             }
             .history-item {
-                font-size: 0.35rem;
+                font-size: 0.4rem;
+                gap: 4px;
             }
             .history-item .h-ion {
-                font-size: 0.35rem;
+                font-size: 0.38rem;
                 min-width: 30px;
             }
-            
-            /* 分頁按鈕更密集 */
-            .tabs {
-                gap: 2px;
-                padding: 2px 3px;
+            .history-item .h-tag {
+                font-size: 0.3rem;
+                padding: 0 4px;
             }
-            .tab-btn {
-                padding: 2px 5px;
-                font-size: 0.4rem;
+            .history-item .h-time {
+                font-size: 0.3rem;
             }
-            
-            /* 統計列 */
             .stats-grid {
                 padding: 2px 6px;
                 gap: 4px;
@@ -1095,8 +1085,6 @@
             .stat-item .label {
                 font-size: 0.35rem;
             }
-            
-            /* 提示文字 */
             .hint-row {
                 font-size: 0.45rem;
             }
@@ -1106,8 +1094,6 @@
             .footer-note {
                 font-size: 0.35rem;
             }
-            
-            /* 離子對照表 */
             .reference-table {
                 font-size: 0.55rem;
             }
@@ -1128,8 +1114,6 @@
                 font-size: 0.45rem;
                 padding: 1px 6px;
             }
-            
-            /* toggle 按鈕 */
             .toggle-btn {
                 font-size: 0.45rem;
                 padding: 1px 8px;
@@ -1150,7 +1134,7 @@
                 padding: 0.15rem 0.4rem;
             }
             .history-section {
-                max-height: 30px;
+                max-height: 35px;
             }
             .mode0-display {
                 font-size: 0.9rem;
@@ -1256,14 +1240,16 @@
             </div>
         </div>
 
-        <!-- 分頁 (6個) -->
-        <div class="tabs" id="tabBar">
-            <button class="tab-btn active" data-tab="0" id="tab0">📝 名稱→符號</button>
-            <button class="tab-btn" data-tab="1" id="tab1">🔤 符號→名稱</button>
-            <button class="tab-btn" data-tab="2" id="tab2">📖 離子對照表</button>
-            <button class="tab-btn" data-tab="3" id="tab3">📝 名稱→化學式</button>
-            <button class="tab-btn" data-tab="4" id="tab4">🔄 化學式→名稱</button>
-            <button class="tab-btn" data-tab="5" id="tab5">🎨 溶解度與顏色</button>
+        <!-- 分頁 (滾動式) -->
+        <div class="tabs-wrapper">
+            <div class="tabs" id="tabBar">
+                <button class="tab-btn active" data-tab="0" id="tab0">📝 名稱→符號</button>
+                <button class="tab-btn" data-tab="1" id="tab1">🔤 符號→名稱</button>
+                <button class="tab-btn" data-tab="2" id="tab2">📖 離子對照表</button>
+                <button class="tab-btn" data-tab="3" id="tab3">📝 名稱→化學式</button>
+                <button class="tab-btn" data-tab="4" id="tab4">🔄 化學式→名稱</button>
+                <button class="tab-btn" data-tab="5" id="tab5">🎨 溶解度與顏色</button>
+            </div>
         </div>
 
         <!-- 統計 -->
@@ -1282,21 +1268,12 @@
             </div>
         </div>
 
-        <!-- 離子庫切換 -->
+        <!-- 離子庫切換 (Tab 0,1,2 顯示) -->
         <div class="toggle-row" id="toggleRowIon">
             <div class="toggle-group">
                 <span class="toggle-label">📚 離子庫：</span>
                 <button class="toggle-btn active" id="coreToggle">核心 (第七章)</button>
                 <button class="toggle-btn" id="extraToggle">額外 (公開試)</button>
-            </div>
-        </div>
-
-        <!-- 化合物庫切換 -->
-        <div class="toggle-row hidden" id="toggleRowCompound">
-            <div class="toggle-group">
-                <span class="toggle-label">📚 化合物庫：</span>
-                <button class="toggle-btn active" id="compoundAllToggle">全部</button>
-                <button class="toggle-btn" id="compoundSolToggle">溶解度篩選</button>
             </div>
         </div>
 
@@ -1322,7 +1299,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- 顏色 + 按鈕放在下方 -->
                 <div class="color-area" id="colorArea">
                     <label class="color-toggle">
                         <input type="checkbox" id="colorToggle"> 🎨 填寫顏色
@@ -1332,14 +1308,14 @@
                         <button class="btn-small" id="colorlessBtnIon">填上 colourless</button>
                     </div>
                 </div>
-                <div class="action-bar" id="actionBar">
+                <div class="action-bar" id="actionBar0">
                     <div class="btn-group">
-                        <button class="btn btn-check" id="checkBtn">✔ 檢查</button>
-                        <button class="btn btn-next" id="nextBtn" disabled>🎲 Next</button>
+                        <button class="btn btn-check check-btn" data-tab="0">✔ 檢查</button>
+                        <button class="btn btn-next next-btn" data-tab="0" disabled>🎲 Next</button>
                     </div>
-                    <span class="status-badge" id="statusBadge">✏️ 輸入後檢查</span>
+                    <span class="status-badge" id="statusBadge0">✏️ 輸入後檢查</span>
                 </div>
-                <div id="answerReveal"></div>
+                <div id="answerReveal0"></div>
             </div>
 
             <!-- Tab 1: 符號→名稱 -->
@@ -1349,14 +1325,14 @@
                     <input type="text" id="nameInput" placeholder="請輸入名稱..." autocomplete="off" spellcheck="false" inputmode="text">
                     <span class="mode1-input-suffix" id="nameSuffix"> ion</span>
                 </div>
-                <div class="action-bar">
+                <div class="action-bar" id="actionBar1">
                     <div class="btn-group">
-                        <button class="btn btn-check" id="checkBtn">✔ 檢查</button>
-                        <button class="btn btn-next" id="nextBtn" disabled>🎲 Next</button>
+                        <button class="btn btn-check check-btn" data-tab="1">✔ 檢查</button>
+                        <button class="btn btn-next next-btn" data-tab="1" disabled>🎲 Next</button>
                     </div>
-                    <span class="status-badge" id="statusBadge">✏️ 輸入後檢查</span>
+                    <span class="status-badge" id="statusBadge1">✏️ 輸入後檢查</span>
                 </div>
-                <div id="answerReveal"></div>
+                <div id="answerReveal1"></div>
             </div>
 
             <!-- Tab 2: 離子對照表 -->
@@ -1384,39 +1360,39 @@
                 </div>
             </div>
 
-            <!-- Tab 3: 名稱→化學式 -->
+            <!-- Tab 3: 名稱→化學式 (強制全部) -->
             <div class="tab-content" id="tabContent3">
                 <div class="pair-display" id="pairDisplay3">硫酸銅(II) <small>copper(II) sulphate</small></div>
                 <div class="pair-input-area">
                     <input type="text" id="pairInput3" placeholder="請輸入化學式..." autocomplete="off" spellcheck="false" inputmode="text">
                 </div>
-                <div class="action-bar">
+                <div class="action-bar" id="actionBar3">
                     <div class="btn-group">
-                        <button class="btn btn-check" id="checkBtn">✔ 檢查</button>
-                        <button class="btn btn-next" id="nextBtn" disabled>🎲 Next</button>
+                        <button class="btn btn-check check-btn" data-tab="3">✔ 檢查</button>
+                        <button class="btn btn-next next-btn" data-tab="3" disabled>🎲 Next</button>
                     </div>
-                    <span class="status-badge" id="statusBadge">✏️ 輸入後檢查</span>
+                    <span class="status-badge" id="statusBadge3">✏️ 輸入後檢查</span>
                 </div>
-                <div id="answerReveal"></div>
+                <div id="answerReveal3"></div>
             </div>
 
-            <!-- Tab 4: 化學式→名稱 -->
+            <!-- Tab 4: 化學式→名稱 (強制全部) -->
             <div class="tab-content" id="tabContent4">
                 <div class="pair-display-mode4" id="pairDisplay4">CuSO₄</div>
                 <div class="pair-input-area">
                     <input type="text" id="pairInput4" placeholder="請輸入名稱..." autocomplete="off" spellcheck="false" inputmode="text">
                 </div>
-                <div class="action-bar">
+                <div class="action-bar" id="actionBar4">
                     <div class="btn-group">
-                        <button class="btn btn-check" id="checkBtn">✔ 檢查</button>
-                        <button class="btn btn-next" id="nextBtn" disabled>🎲 Next</button>
+                        <button class="btn btn-check check-btn" data-tab="4">✔ 檢查</button>
+                        <button class="btn btn-next next-btn" data-tab="4" disabled>🎲 Next</button>
                     </div>
-                    <span class="status-badge" id="statusBadge">✏️ 輸入後檢查</span>
+                    <span class="status-badge" id="statusBadge4">✏️ 輸入後檢查</span>
                 </div>
-                <div id="answerReveal"></div>
+                <div id="answerReveal4"></div>
             </div>
 
-            <!-- Tab 5: 溶解度與顏色 -->
+            <!-- Tab 5: 溶解度與顏色 (強制溶解度篩選) -->
             <div class="tab-content" id="tabContent5">
                 <div class="sol-display" id="solDisplay">Loading...</div>
                 <div class="sol-question-sub" id="solQ1">1. 是否溶於水？</div>
@@ -1430,17 +1406,16 @@
                     <button class="btn-colourless" id="btnColourless">⬜ 無色</button>
                     <span class="colour-hint" style="font-size:0.55rem;color:#7a5a9a;">💡 可輸入: 無色, 藍色, 綠色, 黃色, 棕色, 粉紅色, 紫色, 橙色</span>
                 </div>
-                <div class="action-bar">
+                <div class="action-bar" id="actionBar5">
                     <div class="btn-group">
-                        <button class="btn btn-check" id="checkBtn">✔ 檢查</button>
-                        <button class="btn btn-next" id="nextBtn" disabled>🎲 Next</button>
+                        <button class="btn btn-check check-btn" data-tab="5">✔ 檢查</button>
+                        <button class="btn btn-next next-btn" data-tab="5" disabled>🎲 Next</button>
                     </div>
-                    <span class="status-badge" id="statusBadge">✏️ 先選溶解度，再輸入顏色（如適用）</span>
+                    <span class="status-badge" id="statusBadge5">✏️ 先選溶解度，再輸入顏色（如適用）</span>
                 </div>
-                <div id="answerReveal"></div>
+                <div id="answerReveal5"></div>
             </div>
 
-            <!-- ===== 共用元件（對照表以外） ===== -->
             <div class="hint-row" id="hintRow">
                 <span class="highlight">⚠️ 符號必須區分大小寫</span>
                 <span class="subscript-hint">｜先不用考慮下標，如 H₂O 請輸入 H2O</span>
@@ -1502,7 +1477,7 @@
                     display: "Hg<sup>2+</sup>" },
                 { name: "aluminium ion", chinese: "鋁離子", symbol: "Al", charge: "3+", color: "colourless",
                     display: "Al<sup>3+</sup>" },
-                { name: "iron(III) ion", chinese: "鐵(III)離子", symbol: "Fe", charge: "3+", color: "yellow",
+                { name: "iron(III) ion", chinese: "鐵(III)離子", symbol: "Fe", charge: "3+", color: "yellow/brown",
                     display: "Fe<sup>3+</sup>" },
                 { name: "chromium(III) ion", chinese: "鉻(III)離子", symbol: "Cr", charge: "3+", color: "green",
                     display: "Cr<sup>3+</sup>" },
@@ -1606,7 +1581,7 @@
             ];
 
             // ============================================================
-            //  2. 化合物資料庫 (精簡版，包含關鍵化合物)
+            //  2. 化合物資料庫
             // ============================================================
             const COMPOUNDS_FULL = [
                 { formula: 'NaCl', name_zh: '氯化鈉', name_en: 'sodium chloride', soluble: 'soluble', colour: '無色',
@@ -1713,7 +1688,6 @@
                     colour_en: 'colourless' },
                 { formula: '(CH3COO)2Pb', name_zh: '乙酸鉛(II)', name_en: 'lead(II) ethanoate', soluble: 'soluble',
                     colour: '無色', colour_en: 'colourless' },
-                // Na2O 等與水反應的排除
             ];
 
             const EXCLUDED_SOL = new Set(['Na2O', 'K2O', 'CaO', 'BaO', 'MgO', 'NaH', 'KH', 'CaH2', 'BaH2', 'MgH2', 'AlH3']);
@@ -1736,8 +1710,6 @@
             let currentCompound5 = null;
 
             let solSelectedSoluble = null;
-            let solCorrectCount = 0;
-            let solTotalCount = 0;
 
             let currentIon = null;
             let isAnsweredCorrectly = false;
@@ -1754,19 +1726,37 @@
             const welcomeZh = document.getElementById('welcomeZh');
             const welcomeEn = document.getElementById('welcomeEn');
 
-            // 所有分頁共用
             const totalCountEl = document.getElementById('totalCount');
             const correctCountEl = document.getElementById('correctCount');
             const percentCountEl = document.getElementById('percentCount');
             const historyList = document.getElementById('historyList');
-            const statusBadge = document.getElementById('statusBadge');
-            const answerReveal = document.getElementById('answerReveal');
-            const checkBtn = document.getElementById('checkBtn');
-            const nextBtn = document.getElementById('nextBtn');
+
+            // 分頁專用
+            const statusBadges = {
+                0: document.getElementById('statusBadge0'),
+                1: document.getElementById('statusBadge1'),
+                3: document.getElementById('statusBadge3'),
+                4: document.getElementById('statusBadge4'),
+                5: document.getElementById('statusBadge5')
+            };
+            const answerReveals = {
+                0: document.getElementById('answerReveal0'),
+                1: document.getElementById('answerReveal1'),
+                3: document.getElementById('answerReveal3'),
+                4: document.getElementById('answerReveal4'),
+                5: document.getElementById('answerReveal5')
+            };
+            const nextBtns = {
+                0: document.querySelector('.next-btn[data-tab="0"]'),
+                1: document.querySelector('.next-btn[data-tab="1"]'),
+                3: document.querySelector('.next-btn[data-tab="3"]'),
+                4: document.querySelector('.next-btn[data-tab="4"]'),
+                5: document.querySelector('.next-btn[data-tab="5"]')
+            };
+
             const hintRow = document.getElementById('hintRow');
             const footerNote = document.getElementById('footerNote');
 
-            // Tab 0
             const colorArea = document.getElementById('colorArea');
             const colorToggle = document.getElementById('colorToggle');
             const colorInputWrap = document.getElementById('colorInputWrap');
@@ -1776,29 +1766,23 @@
             const symbolInput = document.getElementById('symbolInput');
             const chargeInput = document.getElementById('chargeInput');
 
-            // Tab 1
             const mode1Display = document.getElementById('mode1Display');
             const nameInput = document.getElementById('nameInput');
             const nameSuffix = document.getElementById('nameSuffix');
 
-            // Tab 2
             const refTableContent = document.getElementById('refTableContent');
             const refCount = document.getElementById('refCount');
             const chargeFilter = document.getElementById('chargeFilter');
             const coreToggle = document.getElementById('coreToggle');
             const extraToggle = document.getElementById('extraToggle');
             const toggleRowIon = document.getElementById('toggleRowIon');
-            const toggleRowCompound = document.getElementById('toggleRowCompound');
 
-            // Tab 3
             const pairDisplay3 = document.getElementById('pairDisplay3');
             const pairInput3 = document.getElementById('pairInput3');
 
-            // Tab 4
             const pairDisplay4 = document.getElementById('pairDisplay4');
             const pairInput4 = document.getElementById('pairInput4');
 
-            // Tab 5
             const solDisplay = document.getElementById('solDisplay');
             const solQ1 = document.getElementById('solQ1');
             const solQ2 = document.getElementById('solQ2');
@@ -1807,10 +1791,6 @@
             const colourInput = document.getElementById('colourInput');
             const btnColourless = document.getElementById('btnColourless');
 
-            const compoundAllToggle = document.getElementById('compoundAllToggle');
-            const compoundSolToggle = document.getElementById('compoundSolToggle');
-
-            // 分頁按鈕
             const tabs = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
 
@@ -1835,14 +1815,29 @@
                 return currentLang === 'zh' ? m.zh : m.en;
             }
 
+            function getColorDotStyle(colorKey) {
+                const c = colorKey || 'colourless';
+                if (c === 'colourless') return 'background:white; border:1px solid #ccc;';
+                if (c === 'pale green') return 'background:#b8d9b0;';
+                if (c === 'yellow') return 'background:#f5e56b;';
+                if (c === 'green') return 'background:#5a9e5a;';
+                if (c === 'orange') return 'background:#f5a623;';
+                if (c === 'pink') return 'background:#f5b0c0;';
+                if (c === 'blue') return 'background:#4a8ab5;';
+                if (c === 'very pale pink') return 'background:#f8e0e8;';
+                if (c === 'purple') return 'background:#8a4aba;';
+                if (c === 'yellow/brown') return 'background:#c4a040;';
+                return 'background:#e0e0e0;';
+            }
+
             const COLOR_RULES = {
                 'pale green': ['pale green', '淺綠', '浅绿', '淡綠', '淡绿'],
-                'yellow': ['yellow', '黃', '黄', '黃色', '黄色', '黃棕', '黄棕', '黃棕色', '黄棕色', '棕黃', '棕黄', 'brown', '棕', '棕色'],
+                'yellow': ['yellow', '黃', '黄', '黃色', '黄色', '黃棕', '黄棕', '黃棕色', '黄棕色', '棕黃', '棕黄'],
                 'green': ['green', '綠', '绿', '綠色', '绿色'],
                 'orange': ['orange', '橙', '橙色', '橘', '橘色'],
                 'pink': ['pink', '粉紅', '粉红', '粉色', '粉紅色'],
                 'blue': ['blue', '藍', '蓝', '藍色', '蓝色'],
-                'very pale pink': ['very pale pink', '淡粉紅', '淡粉红', '淡粉色', '淡粉紅色', 'colourless', '無色', '无色'],
+                'very pale pink': ['very pale pink', '淡粉紅', '淡粉红', '淡粉色', '淡粉紅色'],
                 'purple': ['purple', '紫', '紫色'],
                 'colourless': ['colourless', '無色', '无色'],
                 'yellow/brown': ['yellow', 'brown', '黃色', '黄色', '棕色', '黃棕', '黄棕', 'yellow/brown'],
@@ -1857,7 +1852,7 @@
 
             function normalizeFormula(str) {
                 if (!str) return '';
-                return str.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, '').replace(/\s/g, '').replace(/\./g, '').replace(/⚠️/g, '');
+                return str.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, '').replace(/\s/g, '').replace(/\./g, '');
             }
 
             function getRandomItem(arr) {
@@ -1875,9 +1870,36 @@
                 percentCountEl.textContent = p + '%';
             }
 
+            function getTabLabel(tabIndex) {
+                const zh = ['📝 名稱→符號', '🔤 符號→名稱', '📖 離子對照表', '📝 名稱→化學式', '🔄 化學式→名稱', '🎨 溶解度與顏色'];
+                const en = ['📝 Name→Symbol', '🔤 Symbol→Name', '📖 Ion Table', '📝 Name→Formula', '🔄 Formula→Name',
+                    '🎨 Solubility'
+                ];
+                return currentLang === 'zh' ? zh[tabIndex] : en[tabIndex];
+            }
+
+            function updateTabLabels() {
+                for (let i = 0; i < tabs.length; i++) {
+                    tabs[i].textContent = getTabLabel(i);
+                }
+            }
+
+            function getTagName(tabIndex) {
+                const tags = ['離子→符號', '符號→離子', '對照表', '名稱→化學式', '化學式→名稱', '溶解度'];
+                const tagsEn = ['Ion→Sym', 'Sym→Ion', 'Table', 'Name→Fml', 'Fml→Name', 'Solubility'];
+                return currentLang === 'zh' ? tags[tabIndex] : tagsEn[tabIndex];
+            }
+
+            function getTimeStr() {
+                const d = new Date();
+                return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
+            }
+
             function addHistory(ionName, userAnswer, correctAnswer, isCorrect) {
-                history.unshift({ ionName, userAnswer, correctAnswer, isCorrect });
-                if (history.length > 10) history.pop();
+                const tag = getTagName(currentTab);
+                const time = getTimeStr();
+                history.unshift({ ionName, userAnswer, correctAnswer, isCorrect, tag, time });
+                if (history.length > 15) history.pop();
                 renderHistory();
             }
 
@@ -1892,10 +1914,12 @@
                     const cls = item.isCorrect ? 'correct' : 'wrong';
                     const sym = item.isCorrect ? '✓' : '✗';
                     html += `<div class="history-item">
+                        <span class="h-tag">${item.tag}</span>
                         <span class="h-ion">${item.ionName}</span>
                         <span class="h-answer">${item.userAnswer}</span>
                         <span class="h-answer" style="color:#8a6aaa;">→ ${item.correctAnswer}</span>
                         <span class="h-result ${cls}">${sym}</span>
+                        <span class="h-time">${item.time}</span>
                     </div>`;
                 });
                 historyList.innerHTML = html;
@@ -1909,12 +1933,14 @@
                 pairInput4.disabled = lock;
                 colourInput.disabled = lock;
                 colorInputIon.disabled = lock;
-                if (lock) {
-                    document.querySelectorAll('.sol-options button').forEach(b => b.disabled = true);
-                } else {
-                    document.querySelectorAll('.sol-options button').forEach(b => b.disabled = false);
-                }
+                document.querySelectorAll('.sol-options button').forEach(b => b.disabled = lock);
             }
+
+            function getStatusBadge(tab) { return statusBadges[tab] || document.getElementById('statusBadge0'); }
+
+            function getAnswerReveal(tab) { return answerReveals[tab] || document.getElementById('answerReveal0'); }
+
+            function getNextBtn(tab) { return nextBtns[tab] || document.querySelector('.next-btn[data-tab="0"]'); }
 
             function getHintText() {
                 if (currentTab === 0) {
@@ -1966,18 +1992,7 @@
                     `<table class="reference-table"><thead><tr><th>${currentLang === 'zh' ? '英文名稱' : 'English Name'}</th><th>${currentLang === 'zh' ? '中文名稱' : 'Chinese Name'}</th><th>${currentLang === 'zh' ? '符號' : 'Symbol'}</th><th>${currentLang === 'zh' ? '顏色' : 'Colour'}</th></tr></thead><tbody>`;
                 db.forEach((ion) => {
                     const colorDisplay = getColorDisplay(ion.color);
-                    let dotStyle = '';
-                    const c = ion.color;
-                    if (c === 'colourless' || !c) dotStyle = 'background:white; border:1px solid #ccc;';
-                    else if (c === 'pale green') dotStyle = 'background:#b8d9b0;';
-                    else if (c === 'yellow') dotStyle = 'background:#f5e56b;';
-                    else if (c === 'green') dotStyle = 'background:#5a9e5a;';
-                    else if (c === 'orange') dotStyle = 'background:#f5a623;';
-                    else if (c === 'pink') dotStyle = 'background:#f5b0c0;';
-                    else if (c === 'blue') dotStyle = 'background:#4a8ab5;';
-                    else if (c === 'very pale pink') dotStyle = 'background:#f8e0e8;';
-                    else if (c === 'purple') dotStyle = 'background:#8a4aba;';
-                    else if (c === 'yellow/brown') dotStyle = 'background:#c4a040;';
+                    const dotStyle = getColorDotStyle(ion.color);
                     html += `<tr><td>${ion.name}</td><td>${ion.chinese}</td><td class="ion-symbol">${ion.display}</td><td><span class="color-dot" style="${dotStyle}"></span><span class="color-label">${colorDisplay}</span></td></tr>`;
                 });
                 html += `</tbody></table>`;
@@ -1996,8 +2011,8 @@
 
             function loadIonQuestion() {
                 if (ION_DB.length === 0) {
-                    statusBadge.textContent = '⚠️ 離子庫為空';
-                    statusBadge.className = 'status-badge error';
+                    getStatusBadge(currentTab).textContent = '⚠️ 離子庫為空';
+                    getStatusBadge(currentTab).className = 'status-badge error';
                     return;
                 }
                 currentIon = pickRandomIon();
@@ -2015,6 +2030,7 @@
                     if (colorEnabled) {
                         colorInputWrap.classList.remove('hidden');
                         colorInputIon.disabled = false;
+                        colorInputIon.value = '';
                     } else {
                         colorInputWrap.classList.add('hidden');
                     }
@@ -2033,21 +2049,26 @@
                 hintRow.innerHTML = getHintText();
                 footerNote.textContent = getFooterText();
                 isAnsweredCorrectly = false;
-                nextBtn.disabled = true;
-                statusBadge.textContent = '✏️ 輸入後檢查';
-                statusBadge.className = 'status-badge';
-                answerReveal.innerHTML = '';
+                getNextBtn(currentTab).disabled = true;
+                getStatusBadge(currentTab).textContent = '✏️ 輸入後檢查';
+                getStatusBadge(currentTab).className = 'status-badge';
+                getAnswerReveal(currentTab).innerHTML = '';
                 lockInputs(false);
                 statsGrid.style.display = 'grid';
-                toggleRowIon.classList.remove('hidden');
-                toggleRowCompound.classList.add('hidden');
+                toggleRowIon.style.display = 'flex';
             }
 
             function checkIonAnswer() {
-                if (!currentIon) { statusBadge.textContent = '⚠️ 請先載入題目';
-                    statusBadge.className = 'status-badge error'; return; }
-                if (isAnsweredCorrectly) { statusBadge.textContent = '✅ 已答對，請點「Next」';
-                    statusBadge.className = 'status-badge success'; return; }
+                if (!currentIon) {
+                    getStatusBadge(currentTab).textContent = '⚠️ 請先載入題目';
+                    getStatusBadge(currentTab).className = 'status-badge error';
+                    return;
+                }
+                if (isAnsweredCorrectly) {
+                    getStatusBadge(currentTab).textContent = '✅ 已答對，請點「Next」';
+                    getStatusBadge(currentTab).className = 'status-badge success';
+                    return;
+                }
 
                 let mainRaw, expected, mainCorrect;
                 let colorRaw = '',
@@ -2066,6 +2087,21 @@
                         colorCorrect = isColorMatch(colorRaw, currentIon.color);
                         colorInputIon.className = colorRaw === '' ? '' : (colorCorrect ? 'correct' : 'incorrect');
                     }
+                    if (!mainCorrect && s !== currentIon.symbol && c === currentIon.charge) {
+                        getStatusBadge(currentTab).textContent = `❌ 符號大小寫錯誤：應為 ${currentIon.symbol}，你輸入 ${s}`;
+                        getStatusBadge(currentTab).className = 'status-badge error';
+                        return;
+                    }
+                    if (!mainCorrect && s === currentIon.symbol && c !== currentIon.charge) {
+                        getStatusBadge(currentTab).textContent = `❌ 電荷格式錯誤：應為 ${currentIon.charge}，你輸入 ${c}`;
+                        getStatusBadge(currentTab).className = 'status-badge error';
+                        return;
+                    }
+                    if (!mainCorrect && s !== currentIon.symbol && c !== currentIon.charge) {
+                        getStatusBadge(currentTab).textContent = `❌ 符號應為 ${currentIon.symbol}，電荷應為 ${currentIon.charge}`;
+                        getStatusBadge(currentTab).className = 'status-badge error';
+                        return;
+                    }
                 } else {
                     const user = nameInput.value.trim();
                     const suffix = getSuffix();
@@ -2078,6 +2114,11 @@
                         mainCorrect = (mainRaw.toLowerCase() === expected.toLowerCase());
                     }
                     nameInput.className = user === '' ? '' : (mainCorrect ? 'correct' : 'incorrect');
+                    if (!mainCorrect) {
+                        getStatusBadge(currentTab).textContent = `❌ 正確名稱應為 ${expected}`;
+                        getStatusBadge(currentTab).className = 'status-badge error';
+                        return;
+                    }
                 }
 
                 const allCorrect = mainCorrect && colorCorrect;
@@ -2087,21 +2128,21 @@
                     totalAttempts++;
                     correctAttempts++;
                     lockInputs(true);
-                    statusBadge.textContent = '✅ 完全正確！';
-                    statusBadge.className = 'status-badge success';
-                    nextBtn.disabled = false;
-                    answerReveal.innerHTML =
+                    getStatusBadge(currentTab).textContent = '✅ 完全正確！';
+                    getStatusBadge(currentTab).className = 'status-badge success';
+                    getNextBtn(currentTab).disabled = false;
+                    getAnswerReveal(currentTab).innerHTML =
                         `<div class="answer-hint" style="border-color:#2a8a5a; background:#ecfdf5;">🎉 正確！點「Next」繼續</div>`;
                 } else {
                     totalAttempts++;
-                    nextBtn.disabled = true;
+                    getNextBtn(currentTab).disabled = true;
                     lockInputs(false);
-                    let errors = [];
-                    if (!mainCorrect) errors.push(`正確答案為 ${expected}`);
-                    if (currentTab === 0 && colorEnabled && !colorCorrect) errors.push(`顏色需為 ${getColorDisplay(currentIon.color)}`);
-                    statusBadge.textContent = `❌ ${errors.join('；')}`;
-                    statusBadge.className = 'status-badge error';
-                    answerReveal.innerHTML = '';
+                    if (currentTab === 0 && colorEnabled && !colorCorrect) {
+                        getStatusBadge(currentTab).textContent =
+                            `❌ 顏色應為 ${getColorDisplay(currentIon.color)}，你輸入 ${colorRaw || '(空)'}`;
+                        getStatusBadge(currentTab).className = 'status-badge error';
+                        return;
+                    }
                 }
 
                 const displayAns = mainRaw || '(空)';
@@ -2126,15 +2167,14 @@
                 pairInput3.className = '';
                 pairInput3.placeholder = currentLang === 'zh' ? '請輸入化學式...' : 'Enter formula...';
                 isAnsweredCorrectly = false;
-                nextBtn.disabled = true;
-                statusBadge.textContent = '✏️ 輸入後檢查';
-                statusBadge.className = 'status-badge';
-                answerReveal.innerHTML = '';
+                getNextBtn(3).disabled = true;
+                getStatusBadge(3).textContent = '✏️ 輸入後檢查';
+                getStatusBadge(3).className = 'status-badge';
+                getAnswerReveal(3).innerHTML = '';
                 lockInputs(false);
                 pairInput3.focus();
                 statsGrid.style.display = 'grid';
-                toggleRowIon.classList.add('hidden');
-                toggleRowCompound.classList.remove('hidden');
+                toggleRowIon.style.display = 'none';
                 hintRow.innerHTML = getHintText();
                 footerNote.textContent = getFooterText();
                 colorArea.classList.add('hidden');
@@ -2146,13 +2186,12 @@
                 currentCompound4 = getRandomItem(pairPool4);
                 if (!currentCompound4) { pairPool4 = [...COMPOUNDS_FULL];
                     currentCompound4 = getRandomItem(pairPool4); }
-                // 轉下標 (用簡單迴圈)
-                var formula = currentCompound4.formula;
-                var sub = '';
-                var map = { '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈',
+                let formula = currentCompound4.formula;
+                let sub = '';
+                let map = { '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈',
                     '9': '₉' };
-                for (var i = 0; i < formula.length; i++) {
-                    var ch = formula.charAt(i);
+                for (let i = 0; i < formula.length; i++) {
+                    let ch = formula.charAt(i);
                     sub += map[ch] || ch;
                 }
                 pairDisplay4.innerHTML = sub;
@@ -2160,15 +2199,14 @@
                 pairInput4.className = '';
                 pairInput4.placeholder = currentLang === 'zh' ? '請輸入名稱...' : 'Enter name...';
                 isAnsweredCorrectly = false;
-                nextBtn.disabled = true;
-                statusBadge.textContent = '✏️ 輸入後檢查';
-                statusBadge.className = 'status-badge';
-                answerReveal.innerHTML = '';
+                getNextBtn(4).disabled = true;
+                getStatusBadge(4).textContent = '✏️ 輸入後檢查';
+                getStatusBadge(4).className = 'status-badge';
+                getAnswerReveal(4).innerHTML = '';
                 lockInputs(false);
                 pairInput4.focus();
                 statsGrid.style.display = 'grid';
-                toggleRowIon.classList.add('hidden');
-                toggleRowCompound.classList.remove('hidden');
+                toggleRowIon.style.display = 'none';
                 hintRow.innerHTML = getHintText();
                 footerNote.textContent = getFooterText();
                 colorArea.classList.add('hidden');
@@ -2176,13 +2214,22 @@
             }
 
             function checkCompound3() {
-                if (!currentCompound3) { statusBadge.textContent = '⚠️ 請先載入題目';
-                    statusBadge.className = 'status-badge error'; return; }
-                if (isAnsweredCorrectly) { statusBadge.textContent = '✅ 已答對，請點「Next」';
-                    statusBadge.className = 'status-badge success'; return; }
+                if (!currentCompound3) {
+                    getStatusBadge(3).textContent = '⚠️ 請先載入題目';
+                    getStatusBadge(3).className = 'status-badge error';
+                    return;
+                }
+                if (isAnsweredCorrectly) {
+                    getStatusBadge(3).textContent = '✅ 已答對，請點「Next」';
+                    getStatusBadge(3).className = 'status-badge success';
+                    return;
+                }
                 const ans = pairInput3.value.trim();
-                if (ans === '') { statusBadge.textContent = '✏️ 請輸入答案';
-                    statusBadge.className = 'status-badge error'; return; }
+                if (ans === '') {
+                    getStatusBadge(3).textContent = '✏️ 請輸入答案';
+                    getStatusBadge(3).className = 'status-badge error';
+                    return;
+                }
                 const correct = currentCompound3.formula;
                 const normAns = normalizeFormula(ans);
                 const normCorrect = normalizeFormula(correct);
@@ -2193,17 +2240,17 @@
                     isAnsweredCorrectly = true;
                     correctAttempts++;
                     lockInputs(true);
-                    statusBadge.textContent = '✅ 完全正確！';
-                    statusBadge.className = 'status-badge success';
-                    nextBtn.disabled = false;
-                    answerReveal.innerHTML =
+                    getStatusBadge(3).textContent = '✅ 完全正確！';
+                    getStatusBadge(3).className = 'status-badge success';
+                    getNextBtn(3).disabled = false;
+                    getAnswerReveal(3).innerHTML =
                         `<div class="answer-hint" style="border-color:#2a8a5a; background:#ecfdf5;">🎉 正確！點「Next」繼續</div>`;
                 } else {
-                    nextBtn.disabled = true;
+                    getNextBtn(3).disabled = true;
                     lockInputs(false);
-                    statusBadge.textContent = `❌ 正確答案為 ${correct}`;
-                    statusBadge.className = 'status-badge error';
-                    answerReveal.innerHTML = '';
+                    getStatusBadge(3).textContent = `❌ 正確答案為 ${correct}`;
+                    getStatusBadge(3).className = 'status-badge error';
+                    getAnswerReveal(3).innerHTML = '';
                 }
                 const displayAns = ans || '(空)';
                 const ionName = currentLang === 'zh' ? currentCompound3.name_zh : currentCompound3.name_en;
@@ -2212,13 +2259,22 @@
             }
 
             function checkCompound4() {
-                if (!currentCompound4) { statusBadge.textContent = '⚠️ 請先載入題目';
-                    statusBadge.className = 'status-badge error'; return; }
-                if (isAnsweredCorrectly) { statusBadge.textContent = '✅ 已答對，請點「Next」';
-                    statusBadge.className = 'status-badge success'; return; }
+                if (!currentCompound4) {
+                    getStatusBadge(4).textContent = '⚠️ 請先載入題目';
+                    getStatusBadge(4).className = 'status-badge error';
+                    return;
+                }
+                if (isAnsweredCorrectly) {
+                    getStatusBadge(4).textContent = '✅ 已答對，請點「Next」';
+                    getStatusBadge(4).className = 'status-badge success';
+                    return;
+                }
                 const ans = pairInput4.value.trim();
-                if (ans === '') { statusBadge.textContent = '✏️ 請輸入答案';
-                    statusBadge.className = 'status-badge error'; return; }
+                if (ans === '') {
+                    getStatusBadge(4).textContent = '✏️ 請輸入答案';
+                    getStatusBadge(4).className = 'status-badge error';
+                    return;
+                }
                 const correct = currentLang === 'zh' ? currentCompound4.name_zh : currentCompound4.name_en;
                 let ok = false;
                 if (currentLang === 'zh') {
@@ -2232,17 +2288,17 @@
                     isAnsweredCorrectly = true;
                     correctAttempts++;
                     lockInputs(true);
-                    statusBadge.textContent = '✅ 完全正確！';
-                    statusBadge.className = 'status-badge success';
-                    nextBtn.disabled = false;
-                    answerReveal.innerHTML =
+                    getStatusBadge(4).textContent = '✅ 完全正確！';
+                    getStatusBadge(4).className = 'status-badge success';
+                    getNextBtn(4).disabled = false;
+                    getAnswerReveal(4).innerHTML =
                         `<div class="answer-hint" style="border-color:#2a8a5a; background:#ecfdf5;">🎉 正確！點「Next」繼續</div>`;
                 } else {
-                    nextBtn.disabled = true;
+                    getNextBtn(4).disabled = true;
                     lockInputs(false);
-                    statusBadge.textContent = `❌ 正確答案為 ${correct}`;
-                    statusBadge.className = 'status-badge error';
-                    answerReveal.innerHTML = '';
+                    getStatusBadge(4).textContent = `❌ 正確答案為 ${correct}`;
+                    getStatusBadge(4).className = 'status-badge error';
+                    getAnswerReveal(4).innerHTML = '';
                 }
                 const displayAns = ans || '(空)';
                 const ionName = currentLang === 'zh' ? currentCompound4.name_zh : currentCompound4.name_en;
@@ -2260,18 +2316,18 @@
                     currentCompound5 = getRandomItem(solPool); }
                 const showFormula = Math.random() < 0.5;
                 if (showFormula) {
-                    var formula = currentCompound5.formula;
-                    var sub = '';
-                    var map = { '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈',
+                    let formula = currentCompound5.formula;
+                    let sub = '';
+                    let map = { '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈',
                         '9': '₉' };
-                    for (var i = 0; i < formula.length; i++) {
-                        var ch = formula.charAt(i);
+                    for (let i = 0; i < formula.length; i++) {
+                        let ch = formula.charAt(i);
                         sub += map[ch] || ch;
                     }
-                    var name = currentLang === 'zh' ? currentCompound5.name_zh : currentCompound5.name_en;
+                    let name = currentLang === 'zh' ? currentCompound5.name_zh : currentCompound5.name_en;
                     solDisplay.innerHTML = sub + ' <small>' + name + '</small>';
                 } else {
-                    var name = currentLang === 'zh' ? currentCompound5.name_zh : currentCompound5.name_en;
+                    let name = currentLang === 'zh' ? currentCompound5.name_zh : currentCompound5.name_en;
                     solDisplay.innerHTML = name + ' <small>' + currentCompound5.formula + '</small>';
                 }
                 solSelectedSoluble = null;
@@ -2285,15 +2341,14 @@
                 document.querySelector('#solSoluble').textContent = currentLang === 'zh' ? '✅ 溶' : '✅ Soluble';
                 document.querySelector('#solInsoluble').textContent = currentLang === 'zh' ? '❌ 不溶' : '❌ Insoluble';
                 btnColourless.textContent = '⬜ ' + getColorlessText();
-                statusBadge.textContent = '✏️ 先選溶解度，再輸入顏色（如適用）';
-                statusBadge.className = 'status-badge';
-                answerReveal.innerHTML = '';
+                getStatusBadge(5).textContent = '✏️ 先選溶解度，再輸入顏色（如適用）';
+                getStatusBadge(5).className = 'status-badge';
+                getAnswerReveal(5).innerHTML = '';
                 isAnsweredCorrectly = false;
-                nextBtn.disabled = true;
+                getNextBtn(5).disabled = true;
                 lockInputs(false);
                 statsGrid.style.display = 'grid';
-                toggleRowIon.classList.add('hidden');
-                toggleRowCompound.classList.remove('hidden');
+                toggleRowIon.style.display = 'none';
                 hintRow.innerHTML = getHintText();
                 footerNote.textContent = getFooterText();
             }
@@ -2314,17 +2369,26 @@
             }
 
             function checkSolAnswer() {
-                if (!currentCompound5) { statusBadge.textContent = '⚠️ 請先載入題目';
-                    statusBadge.className = 'status-badge error'; return; }
-                if (isAnsweredCorrectly) { statusBadge.textContent = '✅ 已答對，請點「Next」';
-                    statusBadge.className = 'status-badge success'; return; }
-                if (!solSelectedSoluble) { statusBadge.textContent = '⚠️ 請先選擇溶解度';
-                    statusBadge.className = 'status-badge error'; return; }
+                if (!currentCompound5) {
+                    getStatusBadge(5).textContent = '⚠️ 請先載入題目';
+                    getStatusBadge(5).className = 'status-badge error';
+                    return;
+                }
+                if (isAnsweredCorrectly) {
+                    getStatusBadge(5).textContent = '✅ 已答對，請點「Next」';
+                    getStatusBadge(5).className = 'status-badge success';
+                    return;
+                }
+                if (!solSelectedSoluble) {
+                    getStatusBadge(5).textContent = '⚠️ 請先選擇溶解度';
+                    getStatusBadge(5).className = 'status-badge error';
+                    return;
+                }
 
-                var expected = currentCompound5.soluble;
-                var isSolubleExpected = (expected === 'soluble' || expected === 'slightly');
-                var solOk = false;
-                var solDisplay = '';
+                let expected = currentCompound5.soluble;
+                let isSolubleExpected = (expected === 'soluble' || expected === 'slightly');
+                let solOk = false;
+                let solDisplay = '';
 
                 if (solSelectedSoluble === 'soluble' && isSolubleExpected) {
                     solOk = true;
@@ -2336,22 +2400,20 @@
                     if (expected === 'sparingly') solDisplay += currentLang === 'zh' ? '（難溶）' : ' (sparingly soluble)';
                 }
 
-                solTotalCount++;
-
-                var colourOk = true;
-                var colourDisplay = '';
+                let colourOk = true;
+                let colourDisplay = '';
                 if (solOk && isSolubleExpected) {
-                    var inputColour = colourInput.value.trim().toLowerCase();
+                    let inputColour = colourInput.value.trim().toLowerCase();
                     if (inputColour === '') {
-                        statusBadge.textContent = '⚠️ 請輸入顏色';
-                        statusBadge.className = 'status-badge error';
+                        getStatusBadge(5).textContent = '⚠️ 請輸入顏色';
+                        getStatusBadge(5).className = 'status-badge error';
                         return;
                     }
-                    // 特別處理 Fe³⁺ 接受 yellow / brown
-                    var isFe3 = currentCompound5.formula.indexOf('Fe') !== -1 &&
-                        (currentCompound5.formula.indexOf('Fe2') !== -1 || currentCompound5.formula.indexOf('FeCl3') !== -1 ||
-                            currentCompound5.formula.indexOf('Fe(NO3)3') !== -1 || currentCompound5.formula.indexOf('Fe2(SO4)3') !==
-                            -1);
+                    let isFe3 = currentCompound5.formula.indexOf('Fe') !== -1 &&
+                        (currentCompound5.formula.indexOf('FeCl3') !== -1 ||
+                            currentCompound5.formula.indexOf('Fe(NO3)3') !== -1 ||
+                            currentCompound5.formula.indexOf('Fe2(SO4)3') !== -1 ||
+                            currentCompound5.formula.indexOf('Fe(OH)3') !== -1);
                     if (isFe3) {
                         colourOk = (inputColour === 'yellow' || inputColour === 'brown' ||
                             inputColour === '黃色' || inputColour === '棕色');
@@ -2360,47 +2422,46 @@
                         colourOk = isColorMatch(inputColour, currentCompound5.colour_en);
                         colourDisplay = getColorDisplay(currentCompound5.colour);
                     }
+                    if (!colourOk) {
+                        getStatusBadge(5).textContent = `❌ 顏色應為 ${colourDisplay}，你輸入 ${colourInput.value || '(空)'}`;
+                        getStatusBadge(5).className = 'status-badge error';
+                        return;
+                    }
                 }
 
-                var allOk = solOk && colourOk;
+                let allOk = solOk && colourOk;
 
                 if (allOk) {
                     isAnsweredCorrectly = true;
-                    solCorrectCount++;
                     totalAttempts++;
                     correctAttempts++;
                     lockInputs(true);
-                    statusBadge.textContent = '✅ 完全正確！';
-                    statusBadge.className = 'status-badge success';
-                    nextBtn.disabled = false;
-                    var msg = currentLang === 'zh' ? '🎉 正確！' : '🎉 Correct!';
+                    getStatusBadge(5).textContent = '✅ 完全正確！';
+                    getStatusBadge(5).className = 'status-badge success';
+                    getNextBtn(5).disabled = false;
+                    let msg = currentLang === 'zh' ? '🎉 正確！' : '🎉 Correct!';
                     msg += ' ' + currentCompound5.formula + ' ' + solDisplay;
                     if (isSolubleExpected) msg += '，' + (currentLang === 'zh' ? '顏色為' : 'colour: ') + colourDisplay;
-                    answerReveal.innerHTML =
+                    getAnswerReveal(5).innerHTML =
                         '<div class="answer-hint" style="border-color:#2a8a5a; background:#ecfdf5;">' + msg + '</div>';
                 } else {
                     totalAttempts++;
-                    nextBtn.disabled = true;
+                    getNextBtn(5).disabled = true;
                     lockInputs(false);
-                    var errMsg = currentLang === 'zh' ? '❌ 不太對喔。' : '❌ Not quite.';
                     if (!solOk) {
-                        var exp = isSolubleExpected ? (currentLang === 'zh' ? '溶' : 'soluble') : (currentLang === 'zh' ?
+                        let exp = isSolubleExpected ? (currentLang === 'zh' ? '溶' : 'soluble') : (currentLang === 'zh' ?
                             '不溶' : 'insoluble');
-                        errMsg += ' ' + (currentLang === 'zh' ? '應為' : 'It should be ') + exp;
-                        if (expected === 'slightly') errMsg += currentLang === 'zh' ? '（微溶）' : ' (slightly soluble)';
-                        if (expected === 'sparingly') errMsg += currentLang === 'zh' ? '（難溶）' : ' (sparingly soluble)';
+                        getStatusBadge(5).textContent =
+                            `❌ ${currentLang === 'zh' ? '溶解度應為' : 'Solubility should be'} ${exp}` +
+                            (expected === 'slightly' ? (currentLang === 'zh' ? '（微溶）' : ' (slightly soluble)') : '') +
+                            (expected === 'sparingly' ? (currentLang === 'zh' ? '（難溶）' : ' (sparingly soluble)') : '');
+                        getStatusBadge(5).className = 'status-badge error';
+                        return;
                     }
-                    if (solOk && isSolubleExpected && !colourOk) {
-                        errMsg += '，' + (currentLang === 'zh' ? '顏色應為' : 'colour should be ') + colourDisplay;
-                    }
-                    if (currentLang === 'en' && errMsg.indexOf('.') === -1) errMsg += '.';
-                    statusBadge.textContent = errMsg;
-                    statusBadge.className = 'status-badge error';
-                    answerReveal.innerHTML = '';
                 }
-                var displayAns = solSelectedSoluble + (isSolubleExpected ? ' (' + (colourInput.value || '未填') + ')' : '');
-                var correctAns = solDisplay + (isSolubleExpected ? ' (' + colourDisplay + ')' : '');
-                var ionName = currentLang === 'zh' ? currentCompound5.name_zh : currentCompound5.name_en;
+                let displayAns = solSelectedSoluble + (isSolubleExpected ? ' (' + (colourInput.value || '未填') + ')' : '');
+                let correctAns = solDisplay + (isSolubleExpected ? ' (' + colourDisplay + ')' : '');
+                let ionName = currentLang === 'zh' ? currentCompound5.name_zh : currentCompound5.name_en;
                 addHistory(ionName, displayAns, correctAns, allOk);
                 updateStats();
             }
@@ -2410,26 +2471,27 @@
             // ============================================================
             function switchTab(tabIndex) {
                 currentTab = tabIndex;
-                for (var i = 0; i < tabs.length; i++) {
+                for (let i = 0; i < tabs.length; i++) {
                     tabs[i].classList.toggle('active', i === tabIndex);
                     tabContents[i].classList.toggle('active', i === tabIndex);
                 }
 
-                var isIonTab = (tabIndex === 0 || tabIndex === 1);
-                var isRefTab = (tabIndex === 2);
-                var isPairTab = (tabIndex === 3 || tabIndex === 4);
-                var isSolTab = (tabIndex === 5);
+                let isIonTab = (tabIndex === 0 || tabIndex === 1 || tabIndex === 2);
+                if (tabIndex === 2) {
+                    toggleRowIon.style.display = 'flex';
+                } else if (isIonTab) {
+                    toggleRowIon.style.display = 'flex';
+                } else {
+                    toggleRowIon.style.display = 'none';
+                }
 
-                toggleRowIon.style.display = isIonTab ? 'flex' : 'none';
-                toggleRowCompound.style.display = (isPairTab || isSolTab) ? 'flex' : 'none';
-                statsGrid.style.display = isRefTab ? 'none' : 'grid';
+                statsGrid.style.display = (tabIndex === 2) ? 'none' : 'grid';
                 colorArea.style.display = (tabIndex === 0) ? 'flex' : 'none';
                 if (tabIndex !== 0) colorInputWrap.classList.add('hidden');
 
                 hintRow.innerHTML = getHintText();
                 footerNote.textContent = getFooterText();
 
-                // 更新分頁按鈕文字 (英文版)
                 updateTabLabels();
 
                 if (tabIndex === 0 || tabIndex === 1) {
@@ -2451,41 +2513,22 @@
             // ============================================================
             //  11. 語言與初始化
             // ============================================================
-            function updateTabLabels() {
-                var isZh = currentLang === 'zh';
-                var labels = [
-                    isZh ? '📝 名稱→符號' : '📝 Name→Symbol',
-                    isZh ? '🔤 符號→名稱' : '🔤 Symbol→Name',
-                    isZh ? '📖 離子對照表' : '📖 Ion Table',
-                    isZh ? '📝 名稱→化學式' : '📝 Name→Formula',
-                    isZh ? '🔄 化學式→名稱' : '🔄 Formula→Name',
-                    isZh ? '🎨 溶解度與顏色' : '🎨 Solubility'
-                ];
-                for (var i = 0; i < tabs.length; i++) {
-                    tabs[i].textContent = labels[i];
-                }
-            }
-
             function setLanguage(lang) {
                 currentLang = lang;
-                var btns = document.querySelectorAll('.lang-btn');
-                for (var i = 0; i < btns.length; i++) {
+                let btns = document.querySelectorAll('.lang-btn');
+                for (let i = 0; i < btns.length; i++) {
                     btns[i].classList.toggle('active', btns[i].dataset.lang === lang);
                 }
                 colorlessBtnIon.textContent = '填上 ' + getColorlessText();
                 btnColourless.textContent = '⬜ ' + getColorlessText();
-                // 更新分頁標籤
                 updateTabLabels();
-                // 更新當前內容
                 if (currentTab === 2) renderReferenceTable();
                 else {
-                    // 重新載入當前分頁內容
                     if (currentTab === 0 || currentTab === 1) loadIonQuestion();
                     else if (currentTab === 3) loadCompoundQuestion3();
                     else if (currentTab === 4) loadCompoundQuestion4();
                     else if (currentTab === 5) loadSolQuestion();
                 }
-                // 更新提示
                 hintRow.innerHTML = getHintText();
                 footerNote.textContent = getFooterText();
             }
@@ -2496,8 +2539,8 @@
                 mainCard.style.display = 'flex';
                 mainCard.classList.add('active');
 
-                var btns = document.querySelectorAll('.lang-btn');
-                for (var i = 0; i < btns.length; i++) {
+                let btns = document.querySelectorAll('.lang-btn');
+                for (let i = 0; i < btns.length; i++) {
                     btns[i].classList.toggle('active', btns[i].dataset.lang === lang);
                 }
 
@@ -2505,19 +2548,17 @@
                 coreToggle.classList.add('active');
                 extraToggle.classList.remove('active');
 
-                // 初始化電荷篩選
-                var options = ['all', '+', '2+', '3+', '-', '2-', '3-'];
+                let options = ['all', '+', '2+', '3+', '-', '2-', '3-'];
                 chargeFilter.innerHTML = '';
-                var labels = { 'all': '全部', '+': '+', '2+': '2+', '3+': '3+', '-': '-', '2-': '2-', '3-': '3-' };
-                for (var i = 0; i < options.length; i++) {
-                    var opt = document.createElement('option');
+                let labels = { 'all': '全部', '+': '+', '2+': '2+', '3+': '3+', '-': '-', '2-': '2-', '3-': '3-' };
+                for (let i = 0; i < options.length; i++) {
+                    let opt = document.createElement('option');
                     opt.value = options[i];
                     opt.textContent = labels[options[i]] || options[i];
                     chargeFilter.appendChild(opt);
                 }
                 chargeFilter.value = 'all';
 
-                // 更新分頁標籤
                 updateTabLabels();
                 switchTab(0);
             }
@@ -2528,15 +2569,15 @@
                 coreToggle.classList.toggle('active', dbType === 'core');
                 extraToggle.classList.toggle('active', dbType === 'extra');
 
-                var options = dbType === 'core' ? ['all', '+', '2+', '3+', '-', '2-', '3-'] : ['all', '+', '2+', '3+',
+                let options = dbType === 'core' ? ['all', '+', '2+', '3+', '-', '2-', '3-'] : ['all', '+', '2+', '3+',
                     '4+', '-', '2-', '3-'
                 ];
-                var currentVal = chargeFilter.value;
+                let currentVal = chargeFilter.value;
                 chargeFilter.innerHTML = '';
-                var labels = { 'all': '全部', '+': '+', '2+': '2+', '3+': '3+', '4+': '4+', '-': '-', '2-': '2-',
+                let labels = { 'all': '全部', '+': '+', '2+': '2+', '3+': '3+', '4+': '4+', '-': '-', '2-': '2-',
                     '3-': '3-' };
-                for (var i = 0; i < options.length; i++) {
-                    var opt = document.createElement('option');
+                for (let i = 0; i < options.length; i++) {
+                    let opt = document.createElement('option');
                     opt.value = options[i];
                     opt.textContent = labels[options[i]] || options[i];
                     chargeFilter.appendChild(opt);
@@ -2549,17 +2590,17 @@
             }
 
             // ============================================================
-            //  12. 事件綁定
+            //  12. 事件綁定 (使用事件委託)
             // ============================================================
             welcomeZh.addEventListener('click', function() { initApp('zh'); });
             welcomeEn.addEventListener('click', function() { initApp('en'); });
 
-            var langBtns = document.querySelectorAll('.lang-btn');
-            for (var i = 0; i < langBtns.length; i++) {
+            let langBtns = document.querySelectorAll('.lang-btn');
+            for (let i = 0; i < langBtns.length; i++) {
                 langBtns[i].addEventListener('click', function() { setLanguage(this.dataset.lang); });
             }
 
-            for (var i = 0; i < tabs.length; i++) {
+            for (let i = 0; i < tabs.length; i++) {
                 (function(index) {
                     tabs[index].addEventListener('click', function() {
                         if (index !== currentTab) switchTab(index);
@@ -2570,54 +2611,39 @@
             coreToggle.addEventListener('click', function() { if (currentIonDb !== 'core') switchDb('core'); });
             extraToggle.addEventListener('click', function() { if (currentIonDb !== 'extra') switchDb('extra'); });
 
-            compoundAllToggle.addEventListener('click', function() {
-                if (!this.classList.contains('active')) {
-                    compoundAllToggle.classList.add('active');
-                    compoundSolToggle.classList.remove('active');
-                    if (currentTab === 3) { pairPool3 = [...COMPOUNDS_FULL];
-                        loadCompoundQuestion3(); }
-                    if (currentTab === 4) { pairPool4 = [...COMPOUNDS_FULL];
-                        loadCompoundQuestion4(); }
-                    if (currentTab === 5) { solPool = [...COMPOUNDS_SOL];
-                        loadSolQuestion(); }
+            // 事件委託：檢查按鈕
+            document.addEventListener('click', function(e) {
+                const checkBtn = e.target.closest('.check-btn');
+                if (checkBtn) {
+                    const tab = parseInt(checkBtn.dataset.tab);
+                    if (tab === 0 || tab === 1) checkIonAnswer();
+                    else if (tab === 3) checkCompound3();
+                    else if (tab === 4) checkCompound4();
+                    else if (tab === 5) checkSolAnswer();
                 }
-            });
-            compoundSolToggle.addEventListener('click', function() {
-                if (!this.classList.contains('active')) {
-                    compoundSolToggle.classList.add('active');
-                    compoundAllToggle.classList.remove('active');
-                    if (currentTab === 3) { pairPool3 = [...COMPOUNDS_SOL];
-                        loadCompoundQuestion3(); }
-                    if (currentTab === 4) { pairPool4 = [...COMPOUNDS_SOL];
-                        loadCompoundQuestion4(); }
-                    if (currentTab === 5) { solPool = [...COMPOUNDS_SOL];
-                        loadSolQuestion(); }
+
+                const nextBtn = e.target.closest('.next-btn');
+                if (nextBtn) {
+                    const tab = parseInt(nextBtn.dataset.tab);
+                    if (tab === 0 || tab === 1) loadIonQuestion();
+                    else if (tab === 3) loadCompoundQuestion3();
+                    else if (tab === 4) loadCompoundQuestion4();
+                    else if (tab === 5) loadSolQuestion();
                 }
             });
 
-            checkBtn.addEventListener('click', function() {
-                if (currentTab === 0 || currentTab === 1) checkIonAnswer();
-                else if (currentTab === 3) checkCompound3();
-                else if (currentTab === 4) checkCompound4();
-                else if (currentTab === 5) checkSolAnswer();
-            });
-
-            nextBtn.addEventListener('click', function() {
-                if (currentTab === 0 || currentTab === 1) loadIonQuestion();
-                else if (currentTab === 3) loadCompoundQuestion3();
-                else if (currentTab === 4) loadCompoundQuestion4();
-                else if (currentTab === 5) loadSolQuestion();
-            });
-
+            // Enter 鍵
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
-                    var active = document.activeElement;
+                    let active = document.activeElement;
                     if (active && (active.id === 'symbolInput' || active.id === 'chargeInput' ||
                             active.id === 'nameInput' || active.id === 'pairInput3' ||
                             active.id === 'pairInput4' || active.id === 'colourInput' ||
                             active.id === 'colorInputIon')) {
                         e.preventDefault();
-                        checkBtn.click();
+                        // 找出當前分頁的檢查按鈕
+                        const checkBtn = document.querySelector(`.check-btn[data-tab="${currentTab}"]`);
+                        if (checkBtn) checkBtn.click();
                     }
                 }
             });
@@ -2638,9 +2664,9 @@
                     symbolInput.className = '';
                     chargeInput.className = '';
                     colorInputIon.className = '';
-                    statusBadge.textContent = '✏️ 輸入後檢查';
-                    statusBadge.className = 'status-badge';
-                    answerReveal.innerHTML = '';
+                    getStatusBadge(currentTab).textContent = '✏️ 輸入後檢查';
+                    getStatusBadge(currentTab).className = 'status-badge';
+                    getAnswerReveal(currentTab).innerHTML = '';
                 }
             });
 
@@ -2659,24 +2685,24 @@
                 if (currentTab === 2) renderReferenceTable();
             });
 
-            var solBtns = document.querySelectorAll('.sol-options button');
-            for (var i = 0; i < solBtns.length; i++) {
+            let solBtns = document.querySelectorAll('.sol-options button');
+            for (let i = 0; i < solBtns.length; i++) {
                 solBtns[i].addEventListener('click', function() { onSolSelected(this.dataset.value); });
             }
 
-            var inputs = [symbolInput, chargeInput, nameInput, pairInput3, pairInput4, colourInput, colorInputIon];
-            for (var i = 0; i < inputs.length; i++) {
+            let inputs = [symbolInput, chargeInput, nameInput, pairInput3, pairInput4, colourInput, colorInputIon];
+            for (let i = 0; i < inputs.length; i++) {
                 inputs[i].addEventListener('input', function() {
                     if (this.disabled || isAnsweredCorrectly) return;
                     this.className = '';
                     if (colorEnabled && currentTab === 0) colorInputIon.className = '';
-                    statusBadge.textContent = '✏️ 修改中，再檢查';
-                    statusBadge.className = 'status-badge';
-                    answerReveal.innerHTML = '';
+                    getStatusBadge(currentTab).textContent = '✏️ 修改中，再檢查';
+                    getStatusBadge(currentTab).className = 'status-badge';
+                    getAnswerReveal(currentTab).innerHTML = '';
                 });
             }
 
-            console.log('🧪 離子與化合物練習已啟動！');
+            console.log('🧪 離子與化合物練習已啟動 (檢查功能已修復！)');
         })();
     </script>
 </body>
