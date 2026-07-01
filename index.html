@@ -20,8 +20,9 @@
             background: linear-gradient(145deg, #f3edff 0%, #d5c8e8 100%);
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             padding: 10px;
+            padding-top: 10px;
         }
 
         .welcome-screen {
@@ -34,6 +35,7 @@
             text-align: center;
             box-shadow: 0 30px 60px rgba(80, 40, 120, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.5);
+            margin-top: 0;
         }
         .welcome-screen.hidden {
             display: none;
@@ -90,10 +92,10 @@
         }
 
         .card {
-            max-width: 860px;
+            max-width: 900px;
             width: 100%;
-            height: 95vh;
-            max-height: 780px;
+            height: auto;
+            max-height: 95vh;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 40px;
@@ -103,6 +105,7 @@
             flex-direction: column;
             overflow: hidden;
             border: 1px solid rgba(180, 120, 220, 0.2);
+            margin-top: 0;
         }
         .card.active {
             display: flex;
@@ -113,39 +116,56 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            gap: 6px;
         }
         .header h1 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #4a2a6a;
             display: flex;
             align-items: center;
             gap: 6px;
             flex-wrap: wrap;
+            flex-shrink: 0;
         }
-        .header h1 small {
-            font-size: 0.5rem;
-            font-weight: 400;
-            color: #7a5a9a;
-            background: rgba(120, 80, 180, 0.12);
-            padding: 2px 10px;
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .btn-ref {
+            background: #6bcb77;
+            color: white;
+            border: none;
+            padding: 4px 12px;
             border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.15s;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(107, 203, 119, 0.3);
+        }
+        .btn-ref:hover {
+            background: #5ab868;
+            transform: scale(1.02);
         }
         .lang-toggle {
             display: flex;
-            gap: 4px;
+            gap: 3px;
             background: white;
-            padding: 3px;
+            padding: 2px;
             border-radius: 30px;
             flex-shrink: 0;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
         }
         .lang-btn {
-            padding: 4px 14px;
+            padding: 3px 12px;
             border: none;
             border-radius: 30px;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             font-weight: 700;
             cursor: pointer;
             transition: 0.15s;
@@ -161,128 +181,302 @@
             background: #f0e8f8;
         }
 
-        /* ===== 分頁: 2x3 網格 ===== */
-        .tabs-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
-            flex-shrink: 0;
-            margin-bottom: 6px;
-        }
-        .tab-btn {
-            padding: 10px 4px;
-            border: 2px solid #d0c0e0;
-            border-radius: 16px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.15s;
-            background: white;
-            color: #7a5a9a;
-            text-align: center;
-            line-height: 1.3;
-            min-height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .tab-btn.active {
-            background: #7a4a9a;
-            color: white;
-            border-color: #7a4a9a;
-            box-shadow: 0 2px 10px rgba(120, 60, 160, 0.25);
-        }
-        .tab-btn:hover:not(.active) {
-            background: #f0e8f8;
-            border-color: #b090d0;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            background: white;
-            padding: 3px 12px;
-            border-radius: 16px;
-            flex-shrink: 0;
-            margin-bottom: 4px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-        }
-        .stat-item {
-            text-align: center;
-        }
-        .stat-item .number {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #4a2a6a;
-        }
-        .stat-item .label {
-            font-size: 0.4rem;
-            color: #8a6aaa;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        /* ===== 離子庫切換 (加大) ===== */
-        .toggle-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            flex-shrink: 0;
-            margin: 2px 0 6px 0;
-            flex-wrap: wrap;
-        }
-        .toggle-row.hidden {
+        /* ===== Modal 彈窗 ===== */
+        .modal-overlay {
             display: none;
-        }
-        .toggle-group {
-            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
             align-items: center;
-            gap: 6px;
-            background: #f8f4fc;
-            padding: 4px 14px;
-            border-radius: 40px;
-            border: 2px solid #e8e0f0;
+            padding: 20px;
         }
-        .toggle-group .toggle-label {
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: #5a3a7a;
+        .modal-overlay.active {
+            display: flex;
         }
-        .toggle-btn {
-            padding: 6px 18px;
-            border: none;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.15s;
-            background: #e8e0f0;
-            color: #7a5a9a;
-            min-height: 36px;
-        }
-        .toggle-btn.active {
-            background: #7a4a9a;
-            color: white;
-            box-shadow: 0 2px 8px rgba(120, 60, 160, 0.25);
-        }
-        .toggle-btn:hover:not(.active) {
-            background: #d8c8e8;
-        }
-
-        /* ===== 題目區 (左右分欄) ===== */
-        .question-area {
+        .modal-box {
             background: white;
-            border-radius: 20px;
-            padding: 0.4rem 0.8rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
-            flex: 1;
-            min-height: 0;
+            border-radius: 32px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            padding: 24px 28px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
+            position: relative;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .modal-header h2 {
+            font-size: 1.2rem;
+            color: #4a2a6a;
+        }
+        .modal-close {
+            background: #f0e8f8;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #4a2a6a;
+            font-weight: 700;
+            transition: 0.15s;
+        }
+        .modal-close:hover {
+            background: #e0d0f0;
+        }
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+        }
+        .modal-body .ref-top-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 12px;
+            margin-bottom: 10px;
+        }
+        .modal-body .ref-sort-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .modal-body .ref-sort-group label {
+            font-size: 0.55rem;
+            font-weight: 600;
+            color: #7a5a9a;
+        }
+        .modal-body .ref-sort-group select {
+            padding: 3px 10px;
+            border: 1px solid #d0c0e0;
+            border-radius: 30px;
+            background: #f5f0fa;
+            font-size: 0.55rem;
+            font-weight: 600;
+            color: #4a2a6a;
+            outline: none;
+            cursor: pointer;
+        }
+        .modal-body .ref-db-toggle {
+            display: flex;
+            gap: 4px;
+            background: #f0e8f8;
+            padding: 3px;
+            border-radius: 30px;
+            flex-shrink: 0;
+        }
+        .modal-body .ref-db-btn {
+            padding: 3px 14px;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.55rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.15s;
+            background: transparent;
+            color: #7a5a9a;
+        }
+        .modal-body .ref-db-btn.active {
+            background: #7a4a9a;
+            color: white;
+            box-shadow: 0 2px 8px rgba(120, 60, 160, 0.3);
+        }
+        .modal-body .ref-db-btn:hover:not(.active) {
+            background: #e0d0f0;
+        }
+        .modal-body .ref-count {
+            font-size: 0.6rem;
+            color: #8a6aaa;
+            font-weight: 500;
+            margin-left: auto;
+        }
+        .modal-body .reference-table-wrap {
+            border: 1px solid #e8e0f0;
+            border-radius: 12px;
+            overflow-y: auto;
+            max-height: 50vh;
+        }
+        .modal-body .reference-table-wrap::-webkit-scrollbar {
+            width: 4px;
+        }
+        .modal-body .reference-table-wrap::-webkit-scrollbar-thumb {
+            background: #c8b8d8;
+            border-radius: 10px;
+        }
+        .modal-body .reference-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+        }
+        .modal-body .reference-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        .modal-body .reference-table th {
+            background: #7a4a9a;
+            color: white;
+            padding: 6px 10px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.6rem;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+        .modal-body .reference-table td {
+            padding: 5px 10px;
+            border-bottom: 1px solid #f0eaf5;
+            color: #2a1a3a;
+            vertical-align: middle;
+        }
+        .modal-body .reference-table .color-dot {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid #d0c0e0;
+            vertical-align: middle;
+            margin-right: 6px;
+            flex-shrink: 0;
+        }
+        .modal-body .reference-table .ion-symbol {
+            font-weight: 700;
+            color: #4a2a6a;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+        .modal-body .ref-empty {
+            text-align: center;
+            color: #8a6aaa;
+            padding: 30px 0;
+            font-size: 0.8rem;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+            min-height: 0;
             overflow: hidden;
+        }
+
+        .left-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 0 0 auto;
+            min-width: 200px;
+            padding: 0 12px 0 0;
+            border-right: 2px solid #e8e0f0;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+        .left-sidebar::-webkit-scrollbar {
+            width: 3px;
+        }
+        .left-sidebar::-webkit-scrollbar-thumb {
+            background: #c8b8d8;
+            border-radius: 10px;
+        }
+
+        .tab-btn {
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            background: white;
+            color: #7a5a9a;
+            border: 2px solid #d0c0e0;
+            text-align: left;
+            min-height: 42px;
+            width: 100%;
+            white-space: nowrap;
+        }
+        .tab-btn[data-tab="0"].active { background: #ff6b6b; color: white; border-color: #ff6b6b; }
+        .tab-btn[data-tab="1"].active { background: #ffd93d; color: #4a2a6a; border-color: #ffd93d; }
+        .tab-btn[data-tab="2"].active { background: #4d96ff; color: white; border-color: #4d96ff; }
+        .tab-btn[data-tab="3"].active { background: #9b59b6; color: white; border-color: #9b59b6; }
+        .tab-btn[data-tab="4"].active { background: #ff6b6b; color: white; border-color: #ff6b6b; }
+        .tab-btn:hover:not(.active) {
+            background: #f0e8f8;
+        }
+
+        .toggle-row {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 3px !important;
+            margin: 6px 0 0 0 !important;
+        }
+        .toggle-row.hidden {
+            display: none !important;
+        }
+        .toggle-group {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 3px !important;
+            padding: 6px 8px !important;
+            border-radius: 14px !important;
+            border: 2px solid #ffd93d !important;
+            background: white !important;
+        }
+        .toggle-group .toggle-label {
+            font-size: 0.7rem !important;
+            text-align: center !important;
+            display: block !important;
+            font-weight: 700 !important;
+            color: #5a3a7a !important;
+            margin-bottom: 2px !important;
+        }
+        .toggle-btn {
+            padding: 4px 10px !important;
+            border: none !important;
+            border-radius: 30px !important;
+            font-size: 0.7rem !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
+            transition: 0.15s !important;
+            background: #f0e8f8 !important;
+            color: #7a5a9a !important;
+            min-height: 28px !important;
+            width: 100% !important;
+        }
+        .toggle-btn.active {
+            background: #ffd93d !important;
+            color: #4a2a6a !important;
+            box-shadow: 0 2px 6px rgba(255, 217, 61, 0.4) !important;
+        }
+        .toggle-btn:hover:not(.active) {
+            background: #e8d8f8 !important;
+        }
+
+        .question-area {
+            flex: 1;
+            min-width: 0;
+            padding: 0.2rem 0.6rem;
+            overflow: hidden;
+            border-radius: 16px;
+            background: white;
+            display: flex;
+            flex-direction: column;
         }
         .question-area .tab-content {
             display: none;
@@ -293,42 +487,95 @@
             display: flex;
         }
 
-        /* ===== 左右分欄容器 ===== */
         .split-panel {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             flex: 1;
             min-height: 0;
+            align-items: flex-start;
         }
         .split-left {
-            flex: 7;
+            flex: 1;
             display: flex;
             flex-direction: column;
+            gap: 1px;
             min-width: 0;
         }
         .split-right {
-            flex: 3;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
-            gap: 8px;
-            min-width: 0;
+            gap: 4px;
+            flex: 0 0 120px;
+            padding-top: 2px;
+        }
+
+        /* ----- 右欄：垂直按鈕 (手機版會調整) ----- */
+        .right-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: stretch;
+            width: 100%;
+            max-width: 150px;
+        }
+        .right-buttons .btn {
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 100%;
+            font-size: 1.2rem;
+            padding: 10px 16px;
+            min-height: 44px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+        }
+        .right-buttons .btn-check {
+            background: linear-gradient(145deg, #f5a623, #e0941a);
+            color: white;
+            box-shadow: 0 4px 20px rgba(245, 166, 35, 0.4);
+        }
+        .right-buttons .btn-check:hover:not(:disabled) {
+            background: linear-gradient(145deg, #f7b840, #d4880a);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(245, 166, 35, 0.5);
+        }
+        .right-buttons .btn-next {
+            background: linear-gradient(145deg, #4d96ff, #3a7ad4);
+            color: white;
+            box-shadow: 0 4px 20px rgba(77, 150, 255, 0.4);
+        }
+        .right-buttons .btn-next:hover:not(:disabled) {
+            background: linear-gradient(145deg, #60a8ff, #2a6ab4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(77, 150, 255, 0.5);
+        }
+        .right-buttons .btn:disabled {
+            opacity: 0.4;
+            filter: grayscale(0.5);
+            transform: none !important;
+            box-shadow: none !important;
+            cursor: not-allowed !important;
+        }
+        .right-buttons .btn:active:not(:disabled) {
+            transform: translateY(0px) !important;
         }
 
         .mode0-display {
-            font-size: 1.2rem;
+            font-size: 1.8rem;
             font-weight: 600;
             color: #4a2a6a;
             text-align: center;
-            line-height: 1.2;
-            flex-shrink: 0;
             padding: 1px 0;
+            flex-shrink: 0;
         }
         .mode0-display .chinese {
             font-weight: 400;
             color: #7a5a9a;
-            font-size: 0.85rem;
+            font-size: 1.5rem;
         }
 
         .mode0-input-area {
@@ -336,11 +583,11 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: flex-end;
-            gap: 4px;
-            margin: 2px 0 4px 0;
+            gap: 2px;
+            margin: 1px 0 2px 0;
+            min-height: 34px;
+            padding: 0;
             flex-shrink: 0;
-            padding: 2px 0;
-            min-height: 55px;
         }
         .symbol-group {
             display: flex;
@@ -348,20 +595,20 @@
             align-items: center;
         }
         .symbol-group label {
-            font-size: 0.45rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #7a5a9a;
-            letter-spacing: 1px;
-            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+            margin-bottom: 1px;
         }
         .symbol-input-wrap input {
-            width: 112px;
-            height: 40px;
-            padding: 0 8px;
-            font-size: 1.2rem;
+            width: 180px;
+            height: 68px;
+            padding: 0 6px;
+            font-size: 2rem;
             font-weight: 700;
             border: 3px solid #d0c0e0;
-            border-radius: 14px;
+            border-radius: 12px;
             background: white;
             text-align: center;
             transition: 0.15s;
@@ -370,11 +617,11 @@
             letter-spacing: 2px;
         }
         .symbol-input-wrap input.correct {
-            border-color: #2a8a5a;
+            border-color: #6bcb77;
             background: #ecfdf5;
         }
         .symbol-input-wrap input.incorrect {
-            border-color: #d9534f;
+            border-color: #ff6b6b;
             background: #fce4e7;
         }
 
@@ -382,24 +629,26 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-left: -6px;
+            margin-left: -12px;
         }
         .charge-group label {
-            font-size: 0.45rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: #7a5a9a;
-            letter-spacing: 1px;
-            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+            margin-bottom: 1px;
+            opacity: 0;
+            pointer-events: none;
         }
         .charge-input-wrap {
             position: relative;
-            transform: translateY(-20px);
+            transform: translateY(-22px);
         }
         .charge-input-wrap input {
-            width: 36px;
-            height: 30px;
+            width: 50px;
+            height: 40px;
             padding: 0 4px;
-            font-size: 0.85rem;
+            font-size: 1.2rem;
             font-weight: 700;
             border: 3px solid #d0c0e0;
             border-radius: 10px;
@@ -410,28 +659,175 @@
             outline: none;
         }
         .charge-input-wrap input.correct {
-            border-color: #2a8a5a;
+            border-color: #6bcb77;
             background: #ecfdf5;
         }
         .charge-input-wrap input.incorrect {
-            border-color: #d9534f;
+            border-color: #ff6b6b;
             background: #fce4e7;
         }
 
+        .color-area {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            margin: 2px 0;
+            padding: 2px 6px;
+            background: #f8f4fc;
+            border-radius: 10px;
+            border: 1px solid #c8b0e0;
+            flex-wrap: wrap;
+        }
+        .color-area.hidden {
+            display: none !important;
+        }
+        .color-toggle {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #5a3a7a;
+            cursor: pointer;
+        }
+        .color-toggle input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+            accent-color: #ffd93d;
+        }
+        .color-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .color-input-wrap.hidden {
+            display: none !important;
+        }
+        .color-input-wrap input {
+            width: 130px;
+            height: 38px;
+            padding: 0 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            border: 2px solid #c8b0e0;
+            border-radius: 8px;
+            background: white;
+            text-align: center;
+            outline: none;
+            color: #2a1a3a;
+        }
+        .color-input-wrap input.correct {
+            border-color: #6bcb77;
+            background: #ecfdf5;
+        }
+        .color-input-wrap input.incorrect {
+            border-color: #ff6b6b;
+            background: #fce4e7;
+        }
+        .btn-small {
+            padding: 4px 14px;
+            font-size: 0.9rem;
+            border-radius: 30px;
+            border: 1px solid #c8b0e0;
+            background: #f0e8f8;
+            font-weight: 600;
+            color: #5a3a7a;
+            cursor: pointer;
+            transition: 0.15s;
+            white-space: nowrap;
+            min-height: 34px;
+        }
+
+        .hint-row {
+            margin: 2px 0;
+            font-size: 0.85rem;
+            color: #8a6aaa;
+            flex-shrink: 0;
+            text-align: center;
+            padding: 0;
+            line-height: 1.5;
+        }
+        .hint-row .highlight {
+            color: #ff6b6b;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: block;
+        }
+        .hint-row .subscript-hint {
+            color: #7a5a9a;
+            font-weight: 500;
+            font-size: 0.85rem;
+            display: block;
+        }
+
+        .feedback-area {
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: #d4f5d4;
+            border: 2px solid #6bcb77;
+            color: #0d553a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            width: 100%;
+            min-height: 48px;
+            transition: 0.2s;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+        .feedback-area.error {
+            background: #fce4e7;
+            border-color: #ff6b6b;
+            color: #9d3340;
+        }
+        .feedback-area .fb-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .feedback-area .fb-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .feedback-area .fb-detail {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #5a3a7a;
+        }
+        .feedback-area.error .fb-detail {
+            color: #7a3a3a;
+        }
+
+        #answerReveal {
+            margin-top: 2px;
+            min-height: 14px;
+            flex-shrink: 0;
+            text-align: center;
+        }
+        #answerReveal:empty {
+            display: none;
+        }
+        .answer-hint {
+            font-size: 0.5rem;
+            background: #f0e8f8;
+            padding: 2px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 2px solid #b090d0;
+            color: #4a2a6a;
+            font-weight: 600;
+        }
+
         .mode1-display {
-            font-size: 1.4rem;
+            font-size: 2.4rem;
             font-weight: 700;
             color: #4a2a6a;
             text-align: center;
-            line-height: 1.2;
-            flex-shrink: 0;
             padding: 1px 0;
-        }
-        .mode1-display sub {
-            font-size: 0.85rem;
-        }
-        .mode1-display sup {
-            font-size: 0.85rem;
+            flex-shrink: 0;
         }
         .mode1-input-wrapper {
             display: flex;
@@ -443,954 +839,406 @@
             margin: 2px 0 4px 0;
         }
         .mode1-input-wrapper input {
-            padding: 5px 12px;
-            font-size: 0.9rem;
+            padding: 4px 10px;
+            font-size: 1.6rem;
             font-weight: 600;
             border: 3px solid #d0c0e0;
-            border-radius: 12px 0 0 12px;
+            border-radius: 10px 0 0 10px;
             background: white;
             text-align: center;
             transition: 0.15s;
             color: #2a1a3a;
             outline: none;
-            width: 140px;
-            min-height: 38px;
+            width: 240px;
+            height: 60px;
         }
         .mode1-input-wrapper input.correct {
-            border-color: #2a8a5a;
+            border-color: #6bcb77;
             background: #ecfdf5;
         }
         .mode1-input-wrapper input.incorrect {
-            border-color: #d9534f;
+            border-color: #ff6b6b;
             background: #fce4e7;
         }
         .mode1-input-suffix {
-            padding: 5px 12px;
-            font-size: 0.9rem;
+            padding: 0 18px;
+            font-size: 1.5rem;
             font-weight: 700;
             color: #7a4a9a;
             background: #f0e8f8;
             border: 3px solid #d0c0e0;
             border-left: none;
-            border-radius: 0 12px 12px 0;
+            border-radius: 0 10px 10px 0;
             white-space: nowrap;
-            min-width: 30px;
+            min-width: 25px;
             text-align: center;
-            min-height: 38px;
+            height: 60px;
             display: flex;
             align-items: center;
-        }
-
-        .reference-container {
-            flex: 1;
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .reference-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-            margin-bottom: 3px;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .reference-header .ref-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #4a2a6a;
-        }
-        .reference-header .ref-count {
-            font-size: 0.6rem;
-            color: #8a6aaa;
-            font-weight: 500;
-        }
-        .ref-sort-group {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .ref-sort-group label {
-            font-size: 0.5rem;
-            font-weight: 600;
-            color: #7a5a9a;
-        }
-        .ref-sort-group select {
-            padding: 2px 8px;
-            border: 1px solid #d0c0e0;
-            border-radius: 30px;
-            background: #f5f0fa;
-            font-size: 0.5rem;
-            font-weight: 600;
-            color: #4a2a6a;
-            outline: none;
-            cursor: pointer;
-        }
-        .reference-table-wrap {
-            flex: 1;
-            min-height: 0;
-            overflow-y: auto;
-            border-radius: 10px;
-            border: 1px solid #e8e0f0;
-            background: #fcfaff;
-        }
-        .reference-table-wrap::-webkit-scrollbar {
-            width: 5px;
-        }
-        .reference-table-wrap::-webkit-scrollbar-thumb {
-            background: #c8b8d8;
-            border-radius: 10px;
-        }
-        .reference-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.65rem;
-        }
-        .reference-table thead {
-            position: sticky;
-            top: 0;
-            z-index: 5;
-        }
-        .reference-table th {
-            background: #7a4a9a;
-            color: white;
-            padding: 4px 8px;
-            text-align: left;
-            font-weight: 700;
-            font-size: 0.55rem;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-        .reference-table td {
-            padding: 4px 8px;
-            border-bottom: 1px solid #f0eaf5;
-            color: #2a1a3a;
-            vertical-align: middle;
-        }
-        .reference-table .color-dot {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 1px solid #d0c0e0;
-            vertical-align: middle;
-            margin-right: 6px;
-            flex-shrink: 0;
-        }
-        .reference-table .ion-symbol {
-            font-weight: 700;
-            color: #4a2a6a;
-            font-size: 0.8rem;
-            white-space: nowrap;
-        }
-        .ref-empty {
-            text-align: center;
-            color: #8a6aaa;
-            padding: 20px 0;
-            font-size: 0.75rem;
         }
 
         .pair-display {
-            font-size: 1.2rem;
+            font-size: 1.8rem;
             font-weight: 600;
             color: #4a2a6a;
             text-align: center;
-            line-height: 1.2;
-            flex-shrink: 0;
             padding: 1px 0;
+            flex-shrink: 0;
         }
         .pair-display small {
             font-weight: 300;
-            font-size: 0.75rem;
+            font-size: 1.4rem;
             color: #7a5a9a;
             margin-left: 6px;
+        }
+        .pair-display-mode4 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #4a2a6a;
+            text-align: center;
+            padding: 1px 0;
+            flex-shrink: 0;
         }
         .pair-input-area {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             flex-shrink: 0;
             margin: 2px 0 4px 0;
         }
         .pair-input-area input {
-            padding: 5px 12px;
-            font-size: 0.9rem;
+            padding: 4px 10px;
+            font-size: 1.6rem;
             font-weight: 600;
             border: 3px solid #d0c0e0;
-            border-radius: 12px;
+            border-radius: 10px;
             background: white;
             text-align: center;
             transition: 0.15s;
             color: #2a1a3a;
             outline: none;
-            width: 160px;
-            min-height: 38px;
+            width: 260px;
+            height: 60px;
         }
         .pair-input-area input.correct {
-            border-color: #2a8a5a;
+            border-color: #6bcb77;
             background: #ecfdf5;
         }
         .pair-input-area input.incorrect {
-            border-color: #d9534f;
+            border-color: #ff6b6b;
             background: #fce4e7;
-        }
-
-        .pair-display-mode4 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #4a2a6a;
-            text-align: center;
-            line-height: 1.2;
-            flex-shrink: 0;
-            padding: 1px 0;
         }
 
         .sol-display {
-            font-size: 1.1rem;
+            font-size: 1.8rem;
             font-weight: 600;
             color: #4a2a6a;
             text-align: center;
-            line-height: 1.2;
-            flex-shrink: 0;
             padding: 1px 0;
+            flex-shrink: 0;
         }
         .sol-display small {
             font-weight: 300;
-            font-size: 0.75rem;
+            font-size: 1.4rem;
             color: #7a5a9a;
             margin-left: 6px;
         }
-        .sol-options {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 3px 0 4px 0;
-            flex-shrink: 0;
-        }
-        .sol-options button {
-            border: 2px solid #d0c0e0;
-            background: white;
-            padding: 6px 20px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: 0.2s;
-            color: #4a2a6a;
-            min-height: 38px;
-        }
-        .sol-options button.selected {
-            border-color: #7a4a9a;
-            background: #e8d8f8;
-        }
-
-        .colour-input-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin: 3px 0 4px 0;
-            flex-shrink: 0;
-        }
-        .colour-input-row input {
-            padding: 4px 12px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            border: 2px solid #d0c0e0;
-            border-radius: 30px;
-            background: white;
-            text-align: center;
-            outline: none;
-            color: #2a1a3a;
-            width: 120px;
-            min-height: 34px;
-        }
-        .colour-input-row input.correct {
-            border-color: #2a8a5a;
-            background: #ecfdf5;
-        }
-        .colour-input-row input.incorrect {
-            border-color: #d9534f;
-            background: #fce4e7;
-        }
-        .colour-input-row .btn-colourless {
-            background: #f0e8f8;
-            border: 2px solid #d0c0e0;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: 0.2s;
-            color: #4a2a6a;
-            white-space: nowrap;
-            min-height: 34px;
-        }
-
         .sol-question-sub {
-            font-size: 0.8rem;
+            font-size: 1.3rem;
             color: #7a5a9a;
             margin: 2px 0 1px 0;
             font-weight: 500;
             text-align: center;
             flex-shrink: 0;
         }
-
-        .hint-row {
-            text-align: center;
-            font-size: 0.55rem;
-            color: #8a6aaa;
-            flex-shrink: 0;
-            margin-bottom: 2px;
-            padding: 0 4px;
-        }
-        .hint-row .highlight {
-            color: #d9534f;
-            font-weight: 700;
-        }
-        .hint-row .subscript-hint {
-            color: #7a5a9a;
-            font-weight: 500;
-        }
-
-        .color-area {
+        .sol-options {
             display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2px 0 3px 0;
+            flex-shrink: 0;
+        }
+        .sol-options button {
+            border: 2px solid #d0c0e0;
+            background: white;
+            padding: 8px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #4a2a6a;
+            min-height: 52px;
+        }
+        .sol-options button.selected {
+            border-color: #ffd93d;
+            background: #fff8e0;
+        }
+        .colour-input-row {
+            display: flex;
+            flex-wrap: wrap;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            flex-shrink: 0;
+            gap: 4px;
             margin: 2px 0 3px 0;
-            flex-wrap: wrap;
-            background: #f8f4fc;
+            flex-shrink: 0;
+        }
+        .colour-input-row input {
             padding: 3px 10px;
-            border-radius: 14px;
-            border: 2px solid #c8b0e0;
-        }
-        .color-area.hidden {
-            display: none;
-        }
-        .color-toggle {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: #5a3a7a;
-            cursor: pointer;
-        }
-        .color-toggle input[type="checkbox"] {
-            width: 14px;
-            height: 14px;
-            cursor: pointer;
-            accent-color: #7a4a9a;
-        }
-        .color-input-wrap {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .color-input-wrap.hidden {
-            display: none;
-        }
-        .color-input-wrap input {
-            width: 90px;
-            height: 26px;
-            padding: 0 8px;
-            font-size: 0.65rem;
+            font-size: 1.3rem;
             font-weight: 500;
-            border: 2px solid #c8b0e0;
-            border-radius: 10px;
+            border: 2px solid #d0c0e0;
+            border-radius: 30px;
             background: white;
             text-align: center;
             outline: none;
             color: #2a1a3a;
+            width: 190px;
+            height: 50px;
         }
-        .color-input-wrap input.correct {
-            border-color: #2a8a5a;
+        .colour-input-row input.correct {
+            border-color: #6bcb77;
             background: #ecfdf5;
         }
-        .color-input-wrap input.incorrect {
-            border-color: #d9534f;
+        .colour-input-row input.incorrect {
+            border-color: #ff6b6b;
             background: #fce4e7;
         }
-        .btn-small {
-            padding: 2px 10px;
-            font-size: 0.6rem;
-            border-radius: 30px;
-            border: 1px solid #c8b0e0;
-            background: #e8d8f8;
-            font-weight: 600;
-            color: #5a3a7a;
-            cursor: pointer;
-            transition: 0.15s;
-            white-space: nowrap;
-            min-height: 26px;
-        }
-
-        /* ===== 右欄按鈕 ===== */
-        .right-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            width: 100%;
-            align-items: center;
-            padding: 4px 0;
-        }
-        .right-buttons .btn {
-            width: 100%;
-            max-width: 120px;
-            border: none;
-            padding: 10px 12px;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.15s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-            min-height: 44px;
-        }
-        .right-buttons .btn-check {
-            background: #f5a623;
-            color: white;
-            border: 1px solid #f5a623;
-        }
-        .right-buttons .btn-check:hover:not(:disabled) {
-            background: #d48f1a;
-            transform: scale(0.97);
-        }
-        .right-buttons .btn-next {
-            background: #d9534f;
-            color: white;
-            border: 1px solid #d9534f;
-        }
-        .right-buttons .btn-next:hover:not(:disabled) {
-            background: #c0392b;
-            transform: scale(0.97);
-        }
-        .right-buttons .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* ===== 回饋區域 ===== */
-        .feedback-area {
-            margin-top: 4px;
-            padding: 8px 14px;
-            border-radius: 16px;
-            flex-shrink: 0;
-            text-align: center;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: 0.2s;
+        .colour-input-row .btn-colourless {
             background: #f0e8f8;
             border: 2px solid #d0c0e0;
-            width: 100%;
-        }
-        .feedback-area.correct {
-            background: #d1f0e3;
-            border-color: #2a8a5a;
-        }
-        .feedback-area.error {
-            background: #fce4e7;
-            border-color: #d9534f;
-        }
-        .feedback-area .fb-icon {
-            font-size: 1.6rem;
-            flex-shrink: 0;
-        }
-        .feedback-area .fb-text {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #2a1a3a;
-        }
-        .feedback-area .fb-detail {
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: #5a3a7a;
-        }
-        .feedback-area.correct .fb-text {
-            color: #0d553a;
-        }
-        .feedback-area.error .fb-text {
-            color: #9d3340;
-        }
-
-        #answerReveal {
-            margin-top: 2px;
-            min-height: 18px;
-            flex-shrink: 0;
-            text-align: center;
-        }
-        #answerReveal:empty {
-            display: none;
-        }
-        .answer-hint {
-            font-size: 0.6rem;
-            background: #f0e8f8;
-            padding: 2px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            border: 2px solid #b090d0;
+            padding: 0 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
             color: #4a2a6a;
-            font-weight: 600;
-        }
-
-        .history-section {
-            background: white;
-            border-radius: 14px;
-            padding: 3px 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-            margin-top: 3px;
-            flex-shrink: 0;
-            max-height: 55px;
-            display: flex;
-            flex-direction: column;
-        }
-        .history-section h3 {
-            font-size: 0.45rem;
-            color: #7a5a9a;
-            margin: 0 0 1px 0;
-            font-weight: 600;
-            flex-shrink: 0;
-            display: flex;
-            justify-content: space-between;
-        }
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            overflow-y: auto;
-            flex: 1;
-        }
-        .history-item {
+            white-space: nowrap;
+            height: 50px;
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.45rem;
-            padding: 1px 6px;
-            background: #f8f4fc;
-            border-radius: 8px;
-            border-left: 3px solid #d0c0e0;
-            flex-shrink: 0;
-        }
-        .history-item .h-tag {
-            font-size: 0.35rem;
-            background: #d0c0e0;
-            color: #3a2a4a;
-            padding: 0 6px;
-            border-radius: 20px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        .history-item .h-ion {
-            font-weight: 600;
-            color: #4a2a6a;
-            min-width: 40px;
-            font-size: 0.4rem;
-        }
-        .history-item .h-answer {
-            color: #7a5a9a;
-            font-size: 0.4rem;
-        }
-        .history-item .h-result {
-            font-weight: 700;
-            margin-left: auto;
-            font-size: 0.55rem;
-        }
-        .history-item .h-result.correct {
-            color: #2a8a5a;
-        }
-        .history-item .h-result.wrong {
-            color: #d9534f;
-        }
-        .history-item .h-time {
-            font-size: 0.35rem;
-            color: #aaa;
-            white-space: nowrap;
         }
 
         .footer-note {
             display: none;
         }
 
-        /* ===== 手機版 ===== */
+        /* ===== 手機版專用調整 ===== */
         @media (max-width: 600px) {
             .card {
                 padding: 0.3rem 0.5rem;
                 max-height: 95vh;
-                height: 95vh;
+                height: auto;
+                border-radius: 24px;
             }
+
             .header h1 {
-                font-size: 0.8rem;
+                font-size: 0.85rem;
             }
-            .header h1 small {
-                font-size: 0.4rem;
-                padding: 1px 6px;
+            .btn-ref {
+                font-size: 0.55rem;
+                padding: 3px 10px;
             }
             .lang-btn {
-                padding: 3px 10px;
-                font-size: 0.6rem;
+                font-size: 0.5rem;
+                padding: 2px 10px;
+            }
+
+            /* 手機版左欄維持窄版 */
+            .left-sidebar {
+                flex: 0 0 95px;
+                min-width: unset;
+                padding-right: 4px;
             }
             .tab-btn {
-                padding: 6px 4px;
                 font-size: 0.6rem;
-                min-height: 36px;
-                border-radius: 10px;
+                padding: 4px 4px;
+                min-height: 30px;
+                border-radius: 8px;
+                white-space: nowrap;
+                text-align: center;
             }
-            .tabs-grid {
-                gap: 4px;
-                margin-bottom: 4px;
-            }
-            .question-area {
-                padding: 0.2rem 0.4rem;
-            }
+
+            /* 手機版：split-panel 改為上下排列，按鈕移到最下方 */
             .split-panel {
+                flex-direction: column;
                 gap: 6px;
             }
             .split-right {
-                flex: 2.5;
+                flex: 0 0 auto;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                padding-top: 2px;
+            }
+            .right-buttons {
+                flex-direction: row;
+                max-width: 100%;
+                gap: 6px;
             }
             .right-buttons .btn {
-                font-size: 0.7rem;
-                padding: 8px 6px;
-                min-height: 34px;
-                max-width: 80px;
+                font-size: 1rem;
+                padding: 8px 12px;
+                min-height: 38px;
+                border-radius: 40px;
+                flex: 1;
             }
+
+            .toggle-btn {
+                font-size: 0.55rem !important;
+                padding: 3px 6px !important;
+                min-height: 22px !important;
+            }
+            .toggle-group .toggle-label {
+                font-size: 0.55rem !important;
+            }
+
             .mode0-display {
-                font-size: 0.9rem;
+                font-size: 1.1rem;
             }
             .mode0-display .chinese {
-                font-size: 0.65rem;
-            }
-            .mode1-display {
-                font-size: 1rem;
-            }
-            .pair-display {
-                font-size: 0.9rem;
-            }
-            .pair-display-mode4 {
-                font-size: 1rem;
-            }
-            .sol-display {
-                font-size: 0.85rem;
+                font-size: 0.95rem;
             }
             .symbol-input-wrap input {
-                width: 80px;
+                width: 120px;
+                height: 46px;
+                font-size: 1.3rem;
+            }
+            .charge-input-wrap input {
+                width: 40px;
                 height: 34px;
                 font-size: 1rem;
             }
-            .charge-input-wrap input {
-                width: 30px;
-                height: 26px;
-                font-size: 0.7rem;
-            }
             .charge-input-wrap {
-                transform: translateY(-14px);
+                transform: translateY(-16px);
             }
-            .mode1-input-wrapper input {
-                width: 100px;
-                font-size: 0.75rem;
-                padding: 4px 8px;
-                min-height: 32px;
-            }
-            .mode1-input-suffix {
-                padding: 4px 8px;
-                font-size: 0.75rem;
-                min-width: 20px;
-                min-height: 32px;
-            }
-            .pair-input-area input {
-                width: 120px;
-                font-size: 0.75rem;
-                padding: 4px 8px;
-                min-height: 32px;
-            }
-            .sol-options button {
-                padding: 4px 12px;
-                font-size: 0.7rem;
-                min-height: 30px;
-            }
-            .colour-input-row input {
-                width: 90px;
-                min-height: 28px;
-                font-size: 0.7rem;
-            }
-            .colour-input-row .btn-colourless {
-                min-height: 28px;
-                font-size: 0.6rem;
-                padding: 3px 10px;
+            .charge-group {
+                margin-left: -8px;
             }
             .feedback-area {
-                padding: 4px 10px;
-                min-height: 34px;
+                font-size: 0.85rem;
+                padding: 5px 12px;
+                min-height: 36px;
+                border-radius: 20px;
+                margin-top: 6px;
             }
             .feedback-area .fb-icon {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
             .feedback-area .fb-text {
-                font-size: 0.75rem;
-            }
-            .feedback-area .fb-detail {
-                font-size: 0.55rem;
-            }
-            .stat-item .number {
-                font-size: 0.65rem;
-            }
-            .color-area {
-                padding: 2px 6px;
-                gap: 4px;
-            }
-            .color-toggle {
-                font-size: 0.5rem;
-            }
-            .color-input-wrap input {
-                width: 60px;
-                height: 20px;
-                font-size: 0.5rem;
-            }
-            .btn-small {
-                padding: 1px 8px;
-                font-size: 0.45rem;
-                min-height: 20px;
-            }
-            .history-section {
-                max-height: 40px;
-            }
-            .history-item {
-                font-size: 0.35rem;
-                gap: 4px;
-            }
-            .history-item .h-ion {
-                font-size: 0.33rem;
-                min-width: 25px;
-            }
-            .history-item .h-tag {
-                font-size: 0.28rem;
-                padding: 0 4px;
-            }
-            .history-item .h-time {
-                font-size: 0.28rem;
-            }
-            .stats-grid {
-                padding: 2px 6px;
-                gap: 4px;
-            }
-            .stat-item .label {
-                font-size: 0.32rem;
-            }
-            .hint-row {
-                font-size: 0.45rem;
-            }
-            .sol-question-sub {
-                font-size: 0.65rem;
-            }
-            .reference-table {
-                font-size: 0.5rem;
-            }
-            .reference-table th {
-                font-size: 0.4rem;
-                padding: 3px 4px;
-            }
-            .reference-table td {
-                padding: 2px 4px;
-            }
-            .reference-table .ion-symbol {
-                font-size: 0.6rem;
-            }
-            .reference-header .ref-title {
-                font-size: 0.55rem;
-            }
-            .ref-sort-group select {
-                font-size: 0.4rem;
-                padding: 1px 6px;
-            }
-            .toggle-btn {
-                padding: 4px 12px;
-                font-size: 0.6rem;
-                min-height: 28px;
-            }
-            .toggle-group {
-                padding: 3px 10px;
-            }
-            .toggle-group .toggle-label {
-                font-size: 0.55rem;
-            }
-            .toggle-row {
-                gap: 6px;
-            }
-        }
-        @media (max-height: 650px) {
-            .card {
-                max-height: 95vh;
-                padding: 0.2rem 0.5rem;
-            }
-            .question-area {
-                padding: 0.15rem 0.4rem;
-            }
-            .history-section {
-                max-height: 32px;
-            }
-            .mode0-display {
                 font-size: 0.85rem;
             }
-            .mode1-display {
+            .hint-row {
+                font-size: 0.6rem;
+            }
+            .hint-row .highlight {
+                font-size: 0.6rem;
+            }
+            .hint-row .subscript-hint {
+                font-size: 0.6rem;
+            }
+            .pair-input-area input {
+                width: 160px;
+                font-size: 1.2rem;
+                height: 44px;
+            }
+            .mode1-input-wrapper input {
+                width: 150px;
+                font-size: 1.2rem;
+                height: 44px;
+            }
+            .mode1-input-suffix {
+                font-size: 1.2rem;
+                height: 44px;
+                padding: 0 12px;
+            }
+            .color-toggle {
+                font-size: 0.75rem;
+            }
+            .color-input-wrap input {
+                width: 85px;
+                height: 32px;
+                font-size: 0.75rem;
+            }
+            .btn-small {
+                font-size: 0.65rem;
+                padding: 2px 10px;
+                min-height: 28px;
+            }
+            .sol-options button {
+                font-size: 1rem;
+                padding: 5px 16px;
+                min-height: 40px;
+            }
+            .colour-input-row input {
+                width: 130px;
                 font-size: 0.95rem;
+                height: 38px;
+            }
+            .colour-input-row .btn-colourless {
+                font-size: 0.85rem;
+                height: 38px;
+                padding: 0 12px;
             }
             .pair-display {
-                font-size: 0.85rem;
+                font-size: 1.1rem;
             }
-            .pair-display-mode4 {
+            .pair-display small {
                 font-size: 0.95rem;
             }
+            .pair-display-mode4 {
+                font-size: 1.5rem;
+            }
             .sol-display {
-                font-size: 0.8rem;
+                font-size: 1.1rem;
             }
-            .symbol-input-wrap input {
-                width: 70px;
-                height: 30px;
-                font-size: 0.9rem;
+            .sol-display small {
+                font-size: 0.95rem;
             }
-            .charge-input-wrap input {
-                width: 26px;
-                height: 22px;
-                font-size: 0.6rem;
-            }
-            .charge-input-wrap {
-                transform: translateY(-12px);
-            }
-            .mode1-input-wrapper input {
-                width: 90px;
-                font-size: 0.65rem;
-                min-height: 28px;
-            }
-            .mode1-input-suffix {
-                min-height: 28px;
-                font-size: 0.65rem;
-            }
-            .pair-input-area input {
-                width: 100px;
-                font-size: 0.65rem;
-                min-height: 28px;
-            }
-            .sol-options button {
-                padding: 3px 10px;
-                font-size: 0.6rem;
-                min-height: 26px;
-            }
-            .colour-input-row input {
-                width: 80px;
-                min-height: 24px;
-                font-size: 0.6rem;
-            }
-            .colour-input-row .btn-colourless {
-                min-height: 24px;
-                font-size: 0.55rem;
-            }
-            .feedback-area {
-                padding: 4px 8px;
-                min-height: 28px;
-            }
-            .feedback-area .fb-icon {
+            .sol-question-sub {
                 font-size: 1rem;
             }
-            .feedback-area .fb-text {
+            .mode1-display {
+                font-size: 1.5rem;
+            }
+
+            .modal-box {
+                padding: 16px 18px;
+                max-height: 90vh;
+            }
+            .modal-header h2 {
+                font-size: 1rem;
+            }
+            .modal-body .reference-table {
+                font-size: 0.55rem;
+            }
+            .modal-body .reference-table th {
+                font-size: 0.5rem;
+                padding: 4px 6px;
+            }
+            .modal-body .reference-table td {
+                padding: 4px 6px;
+            }
+            .modal-body .reference-table .ion-symbol {
                 font-size: 0.65rem;
             }
-            .feedback-area .fb-detail {
+            .modal-body .ref-sort-group label {
                 font-size: 0.5rem;
             }
-            .right-buttons .btn {
-                font-size: 0.65rem;
-                padding: 6px 6px;
-                min-height: 30px;
-                max-width: 70px;
-            }
-            .reference-table {
-                font-size: 0.45rem;
-            }
-            .reference-table th {
-                font-size: 0.35rem;
-                padding: 2px 4px;
-            }
-            .reference-table td {
-                padding: 2px 4px;
-            }
-            .reference-table .ion-symbol {
-                font-size: 0.55rem;
-            }
-            .tab-btn {
-                padding: 5px 4px;
-                font-size: 0.55rem;
-                min-height: 30px;
-            }
-            .toggle-btn {
-                padding: 3px 10px;
-                font-size: 0.55rem;
-                min-height: 24px;
-            }
-            .toggle-group {
+            .modal-body .ref-sort-group select {
+                font-size: 0.5rem;
                 padding: 2px 8px;
             }
-            .toggle-group .toggle-label {
+            .modal-body .ref-db-btn {
                 font-size: 0.5rem;
+                padding: 2px 10px;
             }
-            .hint-row {
-                font-size: 0.4rem;
-                margin-bottom: 1px;
-            }
-            .color-area {
-                padding: 2px 6px;
-                margin: 1px 0 2px 0;
-            }
-            .color-toggle {
-                font-size: 0.45rem;
-            }
-            .color-input-wrap input {
-                width: 55px;
-                height: 18px;
-                font-size: 0.45rem;
-            }
-            .btn-small {
-                padding: 1px 6px;
-                font-size: 0.4rem;
-                min-height: 18px;
-            }
-        }
-        @media (max-width: 400px) {
-            .split-right {
-                flex: 2;
-            }
-            .right-buttons .btn {
-                font-size: 0.6rem;
-                padding: 6px 4px;
-                min-height: 28px;
-                max-width: 60px;
-            }
-            .symbol-input-wrap input {
-                width: 65px;
-                height: 30px;
-                font-size: 0.85rem;
-            }
-            .charge-input-wrap input {
-                width: 24px;
-                height: 20px;
-                font-size: 0.55rem;
-            }
-            .charge-input-wrap {
-                transform: translateY(-10px);
+            .modal-body .ref-count {
+                font-size: 0.5rem;
             }
         }
     </style>
@@ -1414,272 +1262,250 @@
         </div>
     </div>
 
+    <!-- ===== Modal：離子對照表 ===== -->
+    <div class="modal-overlay" id="refModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>📋 離子對照表</h2>
+                <button class="modal-close" id="refModalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="ref-top-row">
+                    <div class="ref-sort-group">
+                        <label for="modalChargeFilter">電荷：</label>
+                        <select id="modalChargeFilter">
+                            <option value="all">全部</option>
+                            <option value="+">+</option>
+                            <option value="2+">2+</option>
+                            <option value="3+">3+</option>
+                            <option value="-">-</option>
+                            <option value="2-">2-</option>
+                            <option value="3-">3-</option>
+                        </select>
+                    </div>
+                    <div class="ref-db-toggle" id="modalDbToggle">
+                        <button class="ref-db-btn active" data-db="core" id="modalCoreBtn">基礎</button>
+                        <button class="ref-db-btn" data-db="extra" id="modalExtraBtn">進階</button>
+                    </div>
+                    <span class="ref-count" id="modalRefCount">共 0 個離子</span>
+                </div>
+                <div class="reference-table-wrap" id="modalRefTableWrap">
+                    <div id="modalRefTableContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== 主卡片 ===== -->
     <div class="card" id="mainCard">
         <div class="header">
-            <h1>🧪 離子與化合物 <small>DSE</small></h1>
-            <div class="lang-toggle">
-                <button class="lang-btn" data-lang="zh" id="langZh">中文</button>
-                <button class="lang-btn active" data-lang="en" id="langEn">English</button>
-            </div>
-        </div>
-
-        <!-- ===== 分頁: 2x3 網格 ===== -->
-        <div class="tabs-grid" id="tabBar">
-            <button class="tab-btn active" data-tab="0" id="tab0">📝 名稱→符號</button>
-            <button class="tab-btn" data-tab="1" id="tab1">🔤 符號→名稱</button>
-            <button class="tab-btn" data-tab="2" id="tab2">📖 離子對照表</button>
-            <button class="tab-btn" data-tab="3" id="tab3">📝 名稱→化學式</button>
-            <button class="tab-btn" data-tab="4" id="tab4">🔄 化學式→名稱</button>
-            <button class="tab-btn" data-tab="5" id="tab5">🎨 溶解度與顏色</button>
-        </div>
-
-        <!-- 統計 -->
-        <div class="stats-grid" id="statsGrid">
-            <div class="stat-item">
-                <div class="number" id="totalCount">0</div>
-                <div class="label">答題數</div>
-            </div>
-            <div class="stat-item">
-                <div class="number" id="correctCount">0</div>
-                <div class="label">正確</div>
-            </div>
-            <div class="stat-item">
-                <div class="number" id="percentCount">0%</div>
-                <div class="label">正確率</div>
-            </div>
-        </div>
-
-        <!-- 離子庫切換 -->
-        <div class="toggle-row" id="toggleRowIon">
-            <div class="toggle-group">
-                <span class="toggle-label">📚 離子庫：</span>
-                <button class="toggle-btn active" id="coreToggle">基礎 (Ch.7)</button>
-                <button class="toggle-btn" id="extraToggle">進階 (公開試)</button>
-            </div>
-        </div>
-
-        <!-- ===== 題目區 ===== -->
-        <div class="question-area" id="questionArea">
-
-            <!-- Tab 0: 名稱→符號 -->
-            <div class="tab-content active" id="tabContent0">
-                <!-- 提示行（在顏色 checkbox 上面） -->
-                <div class="hint-row" id="hintRow0">
-                    <span class="highlight">⚠️ 符號必須區分大小寫</span>
-                    <span class="subscript-hint">｜先不用考慮下標，如 H₂O 請輸入 H2O</span>
+            <h1 id="mainTitle">🧪 離子與化合物</h1>
+            <div class="header-right">
+                <button class="btn-ref" id="btnOpenRef">📖 對照表</button>
+                <div class="lang-toggle">
+                    <button class="lang-btn" data-lang="zh" id="langZh">中文</button>
+                    <button class="lang-btn active" data-lang="en" id="langEn">English</button>
                 </div>
+            </div>
+        </div>
 
-                <div class="split-panel">
-                    <!-- 左欄 -->
-                    <div class="split-left">
-                        <div class="mode0-display" id="mode0Display">
-                            iron(II) ion <span class="chinese">(鐵(II)離子)</span>
-                        </div>
-                        <div class="mode0-input-area">
-                            <div class="symbol-group">
-                                <label for="symbolInput">符號</label>
-                                <div class="symbol-input-wrap">
-                                    <input type="text" id="symbolInput" placeholder="符號" autocomplete="off" spellcheck="false" inputmode="text">
+        <div class="main-content">
+            <div class="left-sidebar" id="leftSidebar">
+                <button class="tab-btn active" data-tab="0" id="tab0">📝 名稱 → 符號</button>
+                <button class="tab-btn" data-tab="1" id="tab1">🔤 符號 → 名稱</button>
+                <button class="tab-btn" data-tab="2" id="tab2">📝 名稱 → 化學式</button>
+                <button class="tab-btn" data-tab="3" id="tab3">🔄 化學式 → 名稱</button>
+                <button class="tab-btn" data-tab="4" id="tab4">🎨 溶解度與顏色</button>
+                <div class="toggle-row" id="toggleRowIon">
+                    <div class="toggle-group">
+                        <span class="toggle-label">📚 離子庫</span>
+                        <button class="toggle-btn active" id="coreToggle">基礎 (Ch.7)</button>
+                        <button class="toggle-btn" id="extraToggle">進階 (公開試)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-area" id="questionArea">
+                <!-- Tab 0 -->
+                <div class="tab-content active" id="tabContent0">
+                    <div class="hint-row" id="hintRow0">
+                        <span class="highlight">⚠️ 符號必須區分大小寫</span>
+                        <span class="subscript-hint">｜先不用考慮下標，如 H₂O 請輸入 H2O</span>
+                    </div>
+                    <div class="split-panel">
+                        <div class="split-left">
+                            <div class="mode0-display" id="mode0Display">
+                                iron(II) ion <span class="chinese">(鐵(II)離子)</span>
+                            </div>
+                            <div class="mode0-input-area">
+                                <div class="symbol-group">
+                                    <label for="symbolInput">符號</label>
+                                    <div class="symbol-input-wrap">
+                                        <input type="text" id="symbolInput" placeholder="符號" autocomplete="off" spellcheck="false" inputmode="text">
+                                    </div>
+                                </div>
+                                <div class="charge-group">
+                                    <label for="chargeInput">電荷</label>
+                                    <div class="charge-input-wrap">
+                                        <input type="text" id="chargeInput" placeholder="電荷" autocomplete="off" spellcheck="false" inputmode="text">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="charge-group">
-                                <label for="chargeInput">電荷</label>
-                                <div class="charge-input-wrap">
-                                    <input type="text" id="chargeInput" placeholder="電荷" autocomplete="off" spellcheck="false" inputmode="text">
+                            <div class="color-area" id="colorArea">
+                                <label class="color-toggle">
+                                    <input type="checkbox" id="colorToggle"> 🎨 填寫顏色
+                                </label>
+                                <div class="color-input-wrap hidden" id="colorInputWrap">
+                                    <input type="text" id="colorInputIon" placeholder="顏色" autocomplete="off" spellcheck="false" inputmode="text">
+                                    <button class="btn-small" id="colorlessBtnIon">填上 colourless</button>
                                 </div>
                             </div>
+                            <div class="feedback-area" id="feedback0">
+                                <span class="fb-icon">✏️</span>
+                                <span class="fb-text">輸入符號和電荷後檢查</span>
+                                <span class="fb-detail"></span>
+                            </div>
+                            <div id="answerReveal0"></div>
                         </div>
-                        <div class="color-area" id="colorArea">
-                            <label class="color-toggle">
-                                <input type="checkbox" id="colorToggle"> 🎨 填寫顏色
-                            </label>
-                            <div class="color-input-wrap hidden" id="colorInputWrap">
-                                <input type="text" id="colorInputIon" placeholder="顏色" autocomplete="off" spellcheck="false" inputmode="text">
-                                <button class="btn-small" id="colorlessBtnIon">填上 colourless</button>
+                        <div class="split-right">
+                            <div class="right-buttons">
+                                <button class="btn btn-check check-btn" data-tab="0">✔ 檢查</button>
+                                <button class="btn btn-next next-btn" data-tab="0" disabled>🎲 下一題</button>
                             </div>
                         </div>
                     </div>
-                    <!-- 右欄：按鈕 -->
-                    <div class="split-right">
-                        <div class="right-buttons">
-                            <button class="btn btn-check check-btn" data-tab="0">✔ 檢查</button>
-                            <button class="btn btn-next next-btn" data-tab="0" disabled>🎲 下一題</button>
+                </div>
+
+                <!-- Tab 1 -->
+                <div class="tab-content" id="tabContent1">
+                    <div class="hint-row" id="hintRow1">
+                        <span class="highlight">⚠️ 符號必須區分大小寫</span>
+                        <span class="subscript-hint">｜先不用考慮下標，如 H₂O 請輸入 H2O</span>
+                    </div>
+                    <div class="split-panel">
+                        <div class="split-left">
+                            <div class="mode1-display" id="mode1Display">Fe<sup>2+</sup></div>
+                            <div class="mode1-input-wrapper">
+                                <input type="text" id="nameInput" placeholder="請輸入名稱..." autocomplete="off" spellcheck="false" inputmode="text">
+                                <span class="mode1-input-suffix" id="nameSuffix"> ion</span>
+                            </div>
+                            <div class="feedback-area" id="feedback1">
+                                <span class="fb-icon">✏️</span>
+                                <span class="fb-text">輸入名稱後檢查</span>
+                                <span class="fb-detail"></span>
+                            </div>
+                            <div id="answerReveal1"></div>
+                        </div>
+                        <div class="split-right">
+                            <div class="right-buttons">
+                                <button class="btn btn-check check-btn" data-tab="1">✔ 檢查</button>
+                                <button class="btn btn-next next-btn" data-tab="1" disabled>🎲 下一題</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 回饋（跨全寬） -->
-                <div class="feedback-area" id="feedback0">
-                    <span class="fb-icon">✏️</span>
-                    <span class="fb-text">輸入後檢查</span>
-                    <span class="fb-detail"></span>
+                <!-- Tab 2 -->
+                <div class="tab-content" id="tabContent2">
+                    <div class="hint-row" id="hintRow2">
+                        <span class="highlight">⚠️ 符號必須區分大小寫</span>
+                        <span class="subscript-hint">｜下標請直接輸入數字，如 H₂O → H2O</span>
+                    </div>
+                    <div class="split-panel">
+                        <div class="split-left">
+                            <div class="pair-display" id="pairDisplay2">硫酸銅(II) <small>copper(II) sulphate</small></div>
+                            <div class="pair-input-area">
+                                <input type="text" id="pairInput2" placeholder="請輸入化學式..." autocomplete="off" spellcheck="false" inputmode="text">
+                            </div>
+                            <div class="feedback-area" id="feedback2">
+                                <span class="fb-icon">✏️</span>
+                                <span class="fb-text">輸入化學式後檢查</span>
+                                <span class="fb-detail"></span>
+                            </div>
+                            <div id="answerReveal2"></div>
+                        </div>
+                        <div class="split-right">
+                            <div class="right-buttons">
+                                <button class="btn btn-check check-btn" data-tab="2">✔ 檢查</button>
+                                <button class="btn btn-next next-btn" data-tab="2" disabled>🎲 下一題</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="answerReveal0"></div>
-            </div>
 
-            <!-- Tab 1: 符號→名稱 -->
-            <div class="tab-content" id="tabContent1">
-                <div class="hint-row" id="hintRow1">
-                    <span class="highlight">⚠️ 符號必須區分大小寫</span>
-                    <span class="subscript-hint">｜先不用考慮下標，如 H₂O 請輸入 H2O</span>
-                </div>
-                <div class="split-panel">
-                    <div class="split-left">
-                        <div class="mode1-display" id="mode1Display">Fe<sup>2+</sup></div>
-                        <div class="mode1-input-wrapper">
-                            <input type="text" id="nameInput" placeholder="請輸入名稱..." autocomplete="off" spellcheck="false" inputmode="text">
-                            <span class="mode1-input-suffix" id="nameSuffix"> ion</span>
+                <!-- Tab 3 -->
+                <div class="tab-content" id="tabContent3">
+                    <div class="hint-row" id="hintRow3">
+                        <span class="highlight">⚠️ 符號必須區分大小寫</span>
+                        <span class="subscript-hint">｜請輸入完整名稱</span>
+                    </div>
+                    <div class="split-panel">
+                        <div class="split-left">
+                            <div class="pair-display-mode4" id="pairDisplay3">CuSO₄</div>
+                            <div class="pair-input-area">
+                                <input type="text" id="pairInput3" placeholder="請輸入名稱..." autocomplete="off" spellcheck="false" inputmode="text">
+                            </div>
+                            <div class="feedback-area" id="feedback3">
+                                <span class="fb-icon">✏️</span>
+                                <span class="fb-text">輸入名稱後檢查</span>
+                                <span class="fb-detail"></span>
+                            </div>
+                            <div id="answerReveal3"></div>
+                        </div>
+                        <div class="split-right">
+                            <div class="right-buttons">
+                                <button class="btn btn-check check-btn" data-tab="3">✔ 檢查</button>
+                                <button class="btn btn-next next-btn" data-tab="3" disabled>🎲 下一題</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="split-right">
-                        <div class="right-buttons">
-                            <button class="btn btn-check check-btn" data-tab="1">✔ 檢查</button>
-                            <button class="btn btn-next next-btn" data-tab="1" disabled>🎲 下一題</button>
-                        </div>
-                    </div>
                 </div>
-                <div class="feedback-area" id="feedback1">
-                    <span class="fb-icon">✏️</span>
-                    <span class="fb-text">輸入後檢查</span>
-                    <span class="fb-detail"></span>
-                </div>
-                <div id="answerReveal1"></div>
-            </div>
 
-            <!-- Tab 2: 離子對照表 -->
-            <div class="tab-content" id="tabContent2">
-                <div class="reference-container">
-                    <div class="reference-header">
-                        <span class="ref-title">📋 離子對照表</span>
-                        <span class="ref-count" id="refCount">共 0 個離子</span>
-                        <div class="ref-sort-group">
-                            <label for="chargeFilter">電荷：</label>
-                            <select id="chargeFilter">
-                                <option value="all">全部</option>
-                                <option value="+">+</option>
-                                <option value="2+">2+</option>
-                                <option value="3+">3+</option>
-                                <option value="-">-</option>
-                                <option value="2-">2-</option>
-                                <option value="3-">3-</option>
-                            </select>
+                <!-- Tab 4 -->
+                <div class="tab-content" id="tabContent4">
+                    <div class="hint-row" id="hintRow4">
+                        <span class="highlight">💡 先選溶解度，再輸入顏色（如適用）</span>
+                    </div>
+                    <div class="split-panel">
+                        <div class="split-left">
+                            <div class="sol-display" id="solDisplay">Loading...</div>
+                            <div class="sol-question-sub" id="solQ1">1. 是否溶於水？</div>
+                            <div class="sol-options" id="solOptions">
+                                <button data-value="soluble" id="solSoluble">✅ 溶</button>
+                                <button data-value="insoluble" id="solInsoluble">❌ 不溶</button>
+                            </div>
+                            <div class="sol-question-sub" id="solQ2" style="display:none;">2. 水溶液顏色？</div>
+                            <div class="colour-input-row" id="colourInputRow" style="display:none;">
+                                <input type="text" id="colourInput" placeholder="請輸入顏色..." autocomplete="off" spellcheck="false" inputmode="text">
+                                <button class="btn-colourless" id="btnColourless">無色</button>
+                            </div>
+                            <div class="feedback-area" id="feedback4">
+                                <span class="fb-icon">✏️</span>
+                                <span class="fb-text">先選溶解度，再輸入顏色</span>
+                                <span class="fb-detail"></span>
+                            </div>
+                            <div id="answerReveal4"></div>
+                        </div>
+                        <div class="split-right">
+                            <div class="right-buttons">
+                                <button class="btn btn-check check-btn" data-tab="4">✔ 檢查</button>
+                                <button class="btn btn-next next-btn" data-tab="4" disabled>🎲 下一題</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="reference-table-wrap" id="refTableWrap">
-                        <div id="refTableContent"></div>
-                    </div>
                 </div>
-            </div>
 
-            <!-- Tab 3: 名稱→化學式 -->
-            <div class="tab-content" id="tabContent3">
-                <div class="hint-row" id="hintRow3">
-                    <span class="highlight">⚠️ 符號必須區分大小寫</span>
-                    <span class="subscript-hint">｜下標請直接輸入數字，如 H₂O → H2O</span>
-                </div>
-                <div class="split-panel">
-                    <div class="split-left">
-                        <div class="pair-display" id="pairDisplay3">硫酸銅(II) <small>copper(II) sulphate</small></div>
-                        <div class="pair-input-area">
-                            <input type="text" id="pairInput3" placeholder="請輸入化學式..." autocomplete="off" spellcheck="false" inputmode="text">
-                        </div>
-                    </div>
-                    <div class="split-right">
-                        <div class="right-buttons">
-                            <button class="btn btn-check check-btn" data-tab="3">✔ 檢查</button>
-                            <button class="btn btn-next next-btn" data-tab="3" disabled>🎲 下一題</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="feedback-area" id="feedback3">
-                    <span class="fb-icon">✏️</span>
-                    <span class="fb-text">輸入後檢查</span>
-                    <span class="fb-detail"></span>
-                </div>
-                <div id="answerReveal3"></div>
-            </div>
-
-            <!-- Tab 4: 化學式→名稱 -->
-            <div class="tab-content" id="tabContent4">
-                <div class="hint-row" id="hintRow4">
-                    <span class="highlight">⚠️ 符號必須區分大小寫</span>
-                    <span class="subscript-hint">｜請輸入完整名稱</span>
-                </div>
-                <div class="split-panel">
-                    <div class="split-left">
-                        <div class="pair-display-mode4" id="pairDisplay4">CuSO₄</div>
-                        <div class="pair-input-area">
-                            <input type="text" id="pairInput4" placeholder="請輸入名稱..." autocomplete="off" spellcheck="false" inputmode="text">
-                        </div>
-                    </div>
-                    <div class="split-right">
-                        <div class="right-buttons">
-                            <button class="btn btn-check check-btn" data-tab="4">✔ 檢查</button>
-                            <button class="btn btn-next next-btn" data-tab="4" disabled>🎲 下一題</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="feedback-area" id="feedback4">
-                    <span class="fb-icon">✏️</span>
-                    <span class="fb-text">輸入後檢查</span>
-                    <span class="fb-detail"></span>
-                </div>
-                <div id="answerReveal4"></div>
-            </div>
-
-            <!-- Tab 5: 溶解度與顏色 -->
-            <div class="tab-content" id="tabContent5">
-                <div class="hint-row" id="hintRow5">
-                    <span class="highlight">💡 先選溶解度，再輸入顏色（如適用）</span>
-                </div>
-                <div class="split-panel">
-                    <div class="split-left">
-                        <div class="sol-display" id="solDisplay">Loading...</div>
-                        <div class="sol-question-sub" id="solQ1">1. 是否溶於水？</div>
-                        <div class="sol-options" id="solOptions">
-                            <button data-value="soluble" id="solSoluble">✅ 溶</button>
-                            <button data-value="insoluble" id="solInsoluble">❌ 不溶</button>
-                        </div>
-                        <div class="sol-question-sub" id="solQ2" style="display:none;">2. 水溶液顏色？</div>
-                        <div class="colour-input-row" id="colourInputRow" style="display:none;">
-                            <input type="text" id="colourInput" placeholder="請輸入顏色..." autocomplete="off" spellcheck="false" inputmode="text">
-                            <button class="btn-colourless" id="btnColourless">⬜ 無色</button>
-                            <span class="colour-hint" style="font-size:0.55rem;color:#7a5a9a;">💡 可輸入: 無色, 藍色, 綠色, 黃色, 棕色, 粉紅色, 紫色, 橙色</span>
-                        </div>
-                    </div>
-                    <div class="split-right">
-                        <div class="right-buttons">
-                            <button class="btn btn-check check-btn" data-tab="5">✔ 檢查</button>
-                            <button class="btn btn-next next-btn" data-tab="5" disabled>🎲 下一題</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="feedback-area" id="feedback5">
-                    <span class="fb-icon">✏️</span>
-                    <span class="fb-text">先選溶解度，再輸入顏色（如適用）</span>
-                    <span class="fb-detail"></span>
-                </div>
-                <div id="answerReveal5"></div>
-            </div>
-
-        </div><!-- /question-area -->
-
-        <div class="history-section">
-            <h3>📋 最近記錄</h3>
-            <div class="history-list" id="historyList">
-                <div style="color: #8a6aaa; font-size: 0.4rem; padding: 2px;">尚無記錄</div>
             </div>
         </div>
 
-        <!-- footer 已移除 -->
     </div>
 
     <script>
+        // ============================================================
+        //  完整 JavaScript
+        // ============================================================
         (function() {
-            // ============================================================
-            //  1. 離子資料庫 (汞(I) 已排除)
-            // ============================================================
+            // ---- 離子資料庫 ----
             const CORE_ION_DB = [
                 { name: "sodium ion", chinese: "鈉離子", symbol: "Na", charge: "+", color: "colourless",
                     display: "Na<sup>+</sup>" },
@@ -1820,9 +1646,6 @@
                     display: "Ti<sup>3+</sup>" },
             ];
 
-            // ============================================================
-            //  2. 化合物資料庫 (汞(I) 已排除)
-            // ============================================================
             const COMPOUNDS_FULL = [
                 { formula: 'NaCl', name_zh: '氯化鈉', name_en: 'sodium chloride', soluble: 'soluble', colour: '無色',
                     colour_en: 'colourless' },
@@ -1931,20 +1754,21 @@
             const EXCLUDED_SOL = new Set(['Na2O', 'K2O', 'CaO', 'BaO', 'MgO', 'NaH', 'KH', 'CaH2', 'BaH2', 'MgH2', 'AlH3']);
             const COMPOUNDS_SOL = COMPOUNDS_FULL.filter(c => !EXCLUDED_SOL.has(c.formula));
 
-            // ============================================================
-            //  3. 狀態
-            // ============================================================
             let currentLang = 'en';
             let currentTab = 0;
             let currentIonDb = 'core';
             let ION_DB = [...CORE_ION_DB];
             let currentFilter = 'all';
 
+            // 對照表獨立離子庫
+            let modalIonDb = 'core';
+            let modalFilter = 'all';
+
+            let pairPool2 = [...COMPOUNDS_FULL];
             let pairPool3 = [...COMPOUNDS_FULL];
-            let pairPool4 = [...COMPOUNDS_FULL];
             let solPool = [...COMPOUNDS_SOL];
+            let currentCompound2 = null;
             let currentCompound3 = null;
-            let currentCompound4 = null;
             let currentCompound5 = null;
 
             let solSelectedSoluble = null;
@@ -1953,50 +1777,42 @@
             let isAnsweredCorrectly = false;
             let totalAttempts = 0;
             let correctAttempts = 0;
-            let history = [];
             let colorEnabled = false;
 
-            // ============================================================
-            //  4. DOM 引用
-            // ============================================================
             const welcomeScreen = document.getElementById('welcomeScreen');
             const mainCard = document.getElementById('mainCard');
             const welcomeZh = document.getElementById('welcomeZh');
             const welcomeEn = document.getElementById('welcomeEn');
-
-            const totalCountEl = document.getElementById('totalCount');
-            const correctCountEl = document.getElementById('correctCount');
-            const percentCountEl = document.getElementById('percentCount');
-            const historyList = document.getElementById('historyList');
+            const mainTitle = document.getElementById('mainTitle');
 
             const feedbacks = {
                 0: document.getElementById('feedback0'),
                 1: document.getElementById('feedback1'),
+                2: document.getElementById('feedback2'),
                 3: document.getElementById('feedback3'),
-                4: document.getElementById('feedback4'),
-                5: document.getElementById('feedback5')
+                4: document.getElementById('feedback4')
             };
             const answerReveals = {
                 0: document.getElementById('answerReveal0'),
                 1: document.getElementById('answerReveal1'),
+                2: document.getElementById('answerReveal2'),
                 3: document.getElementById('answerReveal3'),
-                4: document.getElementById('answerReveal4'),
-                5: document.getElementById('answerReveal5')
+                4: document.getElementById('answerReveal4')
             };
             const nextBtns = {
                 0: document.querySelector('.next-btn[data-tab="0"]'),
                 1: document.querySelector('.next-btn[data-tab="1"]'),
+                2: document.querySelector('.next-btn[data-tab="2"]'),
                 3: document.querySelector('.next-btn[data-tab="3"]'),
-                4: document.querySelector('.next-btn[data-tab="4"]'),
-                5: document.querySelector('.next-btn[data-tab="5"]')
+                4: document.querySelector('.next-btn[data-tab="4"]')
             };
 
             const hintRows = {
                 0: document.getElementById('hintRow0'),
                 1: document.getElementById('hintRow1'),
+                2: document.getElementById('hintRow2'),
                 3: document.getElementById('hintRow3'),
-                4: document.getElementById('hintRow4'),
-                5: document.getElementById('hintRow5')
+                4: document.getElementById('hintRow4')
             };
 
             const colorArea = document.getElementById('colorArea');
@@ -2012,18 +1828,23 @@
             const nameInput = document.getElementById('nameInput');
             const nameSuffix = document.getElementById('nameSuffix');
 
-            const refTableContent = document.getElementById('refTableContent');
-            const refCount = document.getElementById('refCount');
-            const chargeFilter = document.getElementById('chargeFilter');
+            const modalRefContent = document.getElementById('modalRefTableContent');
+            const modalRefCount = document.getElementById('modalRefCount');
+            const modalChargeFilter = document.getElementById('modalChargeFilter');
+            const modalCoreBtn = document.getElementById('modalCoreBtn');
+            const modalExtraBtn = document.getElementById('modalExtraBtn');
             const coreToggle = document.getElementById('coreToggle');
             const extraToggle = document.getElementById('extraToggle');
             const toggleRowIon = document.getElementById('toggleRowIon');
+            const btnOpenRef = document.getElementById('btnOpenRef');
+            const refModal = document.getElementById('refModal');
+            const refModalClose = document.getElementById('refModalClose');
+
+            const pairDisplay2 = document.getElementById('pairDisplay2');
+            const pairInput2 = document.getElementById('pairInput2');
 
             const pairDisplay3 = document.getElementById('pairDisplay3');
             const pairInput3 = document.getElementById('pairInput3');
-
-            const pairDisplay4 = document.getElementById('pairDisplay4');
-            const pairInput4 = document.getElementById('pairInput4');
 
             const solDisplay = document.getElementById('solDisplay');
             const solQ1 = document.getElementById('solQ1');
@@ -2033,12 +1854,9 @@
             const colourInput = document.getElementById('colourInput');
             const btnColourless = document.getElementById('btnColourless');
 
-            const tabs = document.querySelectorAll('.tab-btn');
+            const tabBtns = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
 
-            // ============================================================
-            //  5. 工具函數
-            // ============================================================
             function getSuffix() { return currentLang === 'zh' ? '離子' : 'ion'; }
 
             function getDisplaySuffix() { return currentLang === 'zh' ? '離子' : ' ion'; }
@@ -2052,6 +1870,18 @@
             function getCoreLabel() { return currentLang === 'zh' ? '基礎 (Ch.7)' : 'Basic (Ch.7)'; }
 
             function getExtraLabel() { return currentLang === 'zh' ? '進階 (公開試)' : 'Advanced (Public Exam)'; }
+
+            function getModalCoreLabel() { return currentLang === 'zh' ? '基礎' : 'Basic'; }
+
+            function getModalExtraLabel() { return currentLang === 'zh' ? '進階' : 'Advanced'; }
+
+            function getMainTitle() {
+                return currentLang === 'zh' ? '🧪 離子與化合物' : '🧪 Ions & Compounds';
+            }
+
+            function getColorToggleLabel() {
+                return currentLang === 'zh' ? '🎨 填寫顏色' : '🎨 Fill in colour';
+            }
 
             function getColorDisplay(colorKey) {
                 if (!colorKey) return currentLang === 'zh' ? '無色' : 'colourless';
@@ -2113,24 +1943,17 @@
                 return item;
             }
 
-            function updateStats() {
-                totalCountEl.textContent = totalAttempts;
-                correctCountEl.textContent = correctAttempts;
-                const p = totalAttempts === 0 ? 0 : Math.round((correctAttempts / totalAttempts) * 100);
-                percentCountEl.textContent = p + '%';
-            }
-
             function getTabLabel(tabIndex) {
-                const zh = ['📝 名稱→符號', '🔤 符號→名稱', '📖 離子對照表', '📝 名稱→化學式', '🔄 化學式→名稱', '🎨 溶解度與顏色'];
-                const en = ['📝 Name→Symbol', '🔤 Symbol→Name', '📖 Ion Table', '📝 Name→Formula', '🔄 Formula→Name',
+                const zh = ['📝 名稱 → 符號', '🔤 符號 → 名稱', '📝 名稱 → 化學式', '🔄 化學式 → 名稱', '🎨 溶解度與顏色'];
+                const en = ['📝 Name → Symbol', '🔤 Symbol → Name', '📝 Name → Formula', '🔄 Formula → Name',
                     '🎨 Solubility'
                 ];
                 return currentLang === 'zh' ? zh[tabIndex] : en[tabIndex];
             }
 
             function updateTabLabels() {
-                for (let i = 0; i < tabs.length; i++) {
-                    tabs[i].textContent = getTabLabel(i);
+                for (let i = 0; i < tabBtns.length; i++) {
+                    tabBtns[i].textContent = getTabLabel(i);
                 }
             }
 
@@ -2139,63 +1962,35 @@
                 const nextLabel = getNextLabel();
                 document.querySelectorAll('.check-btn').forEach(b => b.textContent = checkLabel);
                 document.querySelectorAll('.next-btn').forEach(b => b.textContent = nextLabel);
+                // 更新「填寫顏色」文字（保留圖示，只改文字）
+                const colorToggleLabel = document.querySelector('.color-toggle');
+                if (colorToggleLabel) {
+                    // 保留 checkbox 和圖示，只更新文字節點
+                    const checkbox = colorToggleLabel.querySelector('input[type="checkbox"]');
+                    const iconSpan = colorToggleLabel.querySelector('.color-icon');
+                    // 清除文字節點，重新加入
+                    const textNodes = [];
+                    const children = colorToggleLabel.childNodes;
+                    for (let i = children.length - 1; i >= 0; i--) {
+                        if (children[i].nodeType === 3) {
+                            colorToggleLabel.removeChild(children[i]);
+                        }
+                    }
+                    // 在 checkbox 後面插入文字
+                    const textNode = document.createTextNode(' ' + getColorToggleLabel());
+                    if (checkbox) {
+                        checkbox.parentNode.insertBefore(textNode, checkbox.nextSibling);
+                    } else {
+                        colorToggleLabel.appendChild(textNode);
+                    }
+                }
                 colorlessBtnIon.textContent = '填上 ' + getColorlessText();
-                btnColourless.textContent = '⬜ ' + getColorlessText();
-                // 更新離子庫按鈕
+                btnColourless.textContent = getColorlessText();
                 coreToggle.textContent = getCoreLabel();
                 extraToggle.textContent = getExtraLabel();
-            }
-
-            function getTagName(tabIndex) {
-                const tags = ['離子→符號', '符號→離子', '對照表', '名稱→化學式', '化學式→名稱', '溶解度'];
-                const tagsEn = ['Ion→Sym', 'Sym→Ion', 'Table', 'Name→Fml', 'Fml→Name', 'Solubility'];
-                return currentLang === 'zh' ? tags[tabIndex] : tagsEn[tabIndex];
-            }
-
-            function getTimeStr() {
-                const d = new Date();
-                return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
-            }
-
-            function addHistory(ionName, userAnswer, correctAnswer, isCorrect) {
-                const tag = getTagName(currentTab);
-                const time = getTimeStr();
-                history.unshift({ ionName, userAnswer, correctAnswer, isCorrect, tag, time });
-                if (history.length > 15) history.pop();
-                renderHistory();
-            }
-
-            function renderHistory() {
-                if (history.length === 0) {
-                    historyList.innerHTML =
-                        '<div style="color: #8a6aaa; font-size: 0.4rem; padding: 2px;">尚無記錄</div>';
-                    return;
-                }
-                let html = '';
-                history.forEach((item) => {
-                    const cls = item.isCorrect ? 'correct' : 'wrong';
-                    const sym = item.isCorrect ? '✓' : '✗';
-                    html += `<div class="history-item">
-                        <span class="h-tag">${item.tag}</span>
-                        <span class="h-ion">${item.ionName}</span>
-                        <span class="h-answer">${item.userAnswer}</span>
-                        <span class="h-answer" style="color:#8a6aaa;">→ ${item.correctAnswer}</span>
-                        <span class="h-result ${cls}">${sym}</span>
-                        <span class="h-time">${item.time}</span>
-                    </div>`;
-                });
-                historyList.innerHTML = html;
-            }
-
-            function lockInputs(lock) {
-                symbolInput.disabled = lock;
-                chargeInput.disabled = lock;
-                nameInput.disabled = lock;
-                pairInput3.disabled = lock;
-                pairInput4.disabled = lock;
-                colourInput.disabled = lock;
-                colorInputIon.disabled = lock;
-                document.querySelectorAll('.sol-options button').forEach(b => b.disabled = lock);
+                modalCoreBtn.textContent = getModalCoreLabel();
+                modalExtraBtn.textContent = getModalExtraLabel();
+                mainTitle.textContent = getMainTitle();
             }
 
             function getFeedback(tab) { return feedbacks[tab] || feedbacks[0]; }
@@ -2209,7 +2004,7 @@
             function setFeedback(tab, icon, text, detail, isCorrect) {
                 const fb = getFeedback(tab);
                 fb.className = 'feedback-area';
-                if (isCorrect === true) fb.classList.add('correct');
+                if (isCorrect === true) fb.classList.remove('error');
                 else if (isCorrect === false) fb.classList.add('error');
                 fb.querySelector('.fb-icon').textContent = icon;
                 fb.querySelector('.fb-text').textContent = text;
@@ -2219,33 +2014,34 @@
             function getHintText(tab) {
                 if (tab === 0 || tab === 1) {
                     return '<span class="highlight">⚠️ 符號必須區分大小寫</span><span class="subscript-hint">｜先不用考慮下標，如 H₂O 請輸入 H2O</span>';
-                } else if (tab === 3) {
+                } else if (tab === 2) {
                     return '<span class="highlight">⚠️ 符號必須區分大小寫</span><span class="subscript-hint">｜下標請直接輸入數字，如 H₂O → H2O</span>';
-                } else if (tab === 4) {
+                } else if (tab === 3) {
                     return '<span class="highlight">⚠️ 符號必須區分大小寫</span><span class="subscript-hint">｜請輸入完整名稱</span>';
-                } else if (tab === 5) {
+                } else if (tab === 4) {
                     return '<span class="highlight">💡 先選溶解度，再輸入顏色（如適用）</span>';
                 }
                 return '';
             }
 
-            // ============================================================
-            //  6. 離子對照表
-            // ============================================================
-            function getFilteredDB() {
-                let db = [...ION_DB];
-                if (currentFilter !== 'all') {
-                    db = db.filter(ion => ion.charge === currentFilter);
+            function getModalDB() {
+                return modalIonDb === 'core' ? [...CORE_ION_DB] : [...EXTRA_ION_DB];
+            }
+
+            function getFilteredModalDB() {
+                let db = getModalDB();
+                if (modalFilter !== 'all') {
+                    db = db.filter(ion => ion.charge === modalFilter);
                 }
                 db.sort((a, b) => a.name.localeCompare(b.name));
                 return db;
             }
 
-            function renderReferenceTable() {
-                const db = getFilteredDB();
+            function renderModalTable() {
+                const db = getFilteredModalDB();
                 if (db.length === 0) {
-                    refTableContent.innerHTML = '<div class="ref-empty">📭 沒有符合條件的離子</div>';
-                    refCount.textContent = '共 0 個離子';
+                    modalRefContent.innerHTML = '<div class="ref-empty">📭 沒有符合條件的離子</div>';
+                    modalRefCount.textContent = '共 0 個離子';
                     return;
                 }
                 let html =
@@ -2256,17 +2052,25 @@
                     html += `<tr><td>${ion.name}</td><td>${ion.chinese}</td><td class="ion-symbol">${ion.display}</td><td><span class="color-dot" style="${dotStyle}"></span><span class="color-label">${colorDisplay}</span></td></tr>`;
                 });
                 html += `</tbody></table>`;
-                refTableContent.innerHTML = html;
-                refCount.textContent =
+                modalRefContent.innerHTML = html;
+                modalRefCount.textContent =
                     `${currentLang === 'zh' ? '共' : 'Total'} ${db.length} ${currentLang === 'zh' ? '個離子' : 'ions'}`;
             }
 
-            // ============================================================
-            //  7. 離子題目 (Tab 0, 1)
-            // ============================================================
             function pickRandomIon() {
                 const idx = Math.floor(Math.random() * ION_DB.length);
                 return { ...ION_DB[idx] };
+            }
+
+            function lockInputs(lock) {
+                symbolInput.disabled = lock;
+                chargeInput.disabled = lock;
+                nameInput.disabled = lock;
+                pairInput2.disabled = lock;
+                pairInput3.disabled = lock;
+                colourInput.disabled = lock;
+                colorInputIon.disabled = lock;
+                document.querySelectorAll('.sol-options button').forEach(b => b.disabled = lock);
             }
 
             function loadIonQuestion() {
@@ -2312,7 +2116,6 @@
                 setFeedback(currentTab, '✏️', currentTab === 0 ? '輸入符號和電荷後檢查' : '輸入名稱後檢查', '', null);
                 getAnswerReveal(currentTab).innerHTML = '';
                 lockInputs(false);
-                statsGrid.style.display = 'grid';
                 toggleRowIon.style.display = 'flex';
                 updateButtonLabels();
             }
@@ -2396,48 +2199,39 @@
                     setFeedback(currentTab, '❌', '請修正後再試', '', false);
                 }
 
-                const displayAns = mainRaw || '(空)';
-                const correctAns = expected;
-                const ionName = currentLang === 'zh' ? currentIon.chinese : currentIon.name;
-                addHistory(ionName, displayAns, correctAns, allCorrect);
-                updateStats();
                 updateButtonLabels();
             }
 
-            // ============================================================
-            //  8. 配對題目 (Tab 3, 4)
-            // ============================================================
-            function loadCompoundQuestion3() {
-                if (pairPool3.length === 0) pairPool3 = [...COMPOUNDS_FULL];
-                currentCompound3 = getRandomItem(pairPool3);
-                if (!currentCompound3) { pairPool3 = [...COMPOUNDS_FULL];
-                    currentCompound3 = getRandomItem(pairPool3); }
-                const name = currentLang === 'zh' ? currentCompound3.name_zh : currentCompound3.name_en;
-                const extra = currentLang === 'zh' ? currentCompound3.name_en : currentCompound3.name_zh;
-                pairDisplay3.innerHTML = `${name} <small>${extra}</small>`;
-                pairInput3.value = '';
-                pairInput3.className = '';
-                pairInput3.placeholder = currentLang === 'zh' ? '請輸入化學式...' : 'Enter formula...';
+            function loadCompoundQuestion2() {
+                if (pairPool2.length === 0) pairPool2 = [...COMPOUNDS_FULL];
+                currentCompound2 = getRandomItem(pairPool2);
+                if (!currentCompound2) { pairPool2 = [...COMPOUNDS_FULL];
+                    currentCompound2 = getRandomItem(pairPool2); }
+                const name = currentLang === 'zh' ? currentCompound2.name_zh : currentCompound2.name_en;
+                const extra = currentLang === 'zh' ? currentCompound2.name_en : currentCompound2.name_zh;
+                pairDisplay2.innerHTML = `${name} <small>${extra}</small>`;
+                pairInput2.value = '';
+                pairInput2.className = '';
+                pairInput2.placeholder = currentLang === 'zh' ? '請輸入化學式...' : 'Enter formula...';
                 isAnsweredCorrectly = false;
-                getNextBtn(3).disabled = true;
-                setFeedback(3, '✏️', '輸入化學式後檢查', '', null);
-                getAnswerReveal(3).innerHTML = '';
+                getNextBtn(2).disabled = true;
+                setFeedback(2, '✏️', '輸入化學式後檢查', '', null);
+                getAnswerReveal(2).innerHTML = '';
                 lockInputs(false);
-                pairInput3.focus();
-                statsGrid.style.display = 'grid';
+                pairInput2.focus();
                 toggleRowIon.style.display = 'none';
-                getHintRow(3).innerHTML = getHintText(3);
+                getHintRow(2).innerHTML = getHintText(2);
                 colorArea.classList.add('hidden');
                 colorInputWrap.classList.add('hidden');
                 updateButtonLabels();
             }
 
-            function loadCompoundQuestion4() {
-                if (pairPool4.length === 0) pairPool4 = [...COMPOUNDS_FULL];
-                currentCompound4 = getRandomItem(pairPool4);
-                if (!currentCompound4) { pairPool4 = [...COMPOUNDS_FULL];
-                    currentCompound4 = getRandomItem(pairPool4); }
-                let formula = currentCompound4.formula;
+            function loadCompoundQuestion3() {
+                if (pairPool3.length === 0) pairPool3 = [...COMPOUNDS_FULL];
+                currentCompound3 = getRandomItem(pairPool3);
+                if (!currentCompound3) { pairPool3 = [...COMPOUNDS_FULL];
+                    currentCompound3 = getRandomItem(pairPool3); }
+                let formula = currentCompound3.formula;
                 let sub = '';
                 let map = { '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈',
                     '9': '₉' };
@@ -2445,21 +2239,56 @@
                     let ch = formula.charAt(i);
                     sub += map[ch] || ch;
                 }
-                pairDisplay4.innerHTML = sub;
-                pairInput4.value = '';
-                pairInput4.className = '';
-                pairInput4.placeholder = currentLang === 'zh' ? '請輸入名稱...' : 'Enter name...';
+                pairDisplay3.innerHTML = sub;
+                pairInput3.value = '';
+                pairInput3.className = '';
+                pairInput3.placeholder = currentLang === 'zh' ? '請輸入名稱...' : 'Enter name...';
                 isAnsweredCorrectly = false;
-                getNextBtn(4).disabled = true;
-                setFeedback(4, '✏️', '輸入名稱後檢查', '', null);
-                getAnswerReveal(4).innerHTML = '';
+                getNextBtn(3).disabled = true;
+                setFeedback(3, '✏️', '輸入名稱後檢查', '', null);
+                getAnswerReveal(3).innerHTML = '';
                 lockInputs(false);
-                pairInput4.focus();
-                statsGrid.style.display = 'grid';
+                pairInput3.focus();
                 toggleRowIon.style.display = 'none';
-                getHintRow(4).innerHTML = getHintText(4);
+                getHintRow(3).innerHTML = getHintText(3);
                 colorArea.classList.add('hidden');
                 colorInputWrap.classList.add('hidden');
+                updateButtonLabels();
+            }
+
+            function checkCompound2() {
+                if (!currentCompound2) {
+                    setFeedback(2, '⚠️', '請先載入題目', '', false);
+                    return;
+                }
+                if (isAnsweredCorrectly) {
+                    setFeedback(2, '✅', '已答對，請點「下一題」', '', true);
+                    return;
+                }
+                const ans = pairInput2.value.trim();
+                if (ans === '') {
+                    setFeedback(2, '✏️', '請輸入答案', '', null);
+                    return;
+                }
+                const correct = currentCompound2.formula;
+                const normAns = normalizeFormula(ans);
+                const normCorrect = normalizeFormula(correct);
+                const ok = (normAns === normCorrect);
+                totalAttempts++;
+                pairInput2.className = ok ? 'correct' : 'incorrect';
+                if (ok) {
+                    isAnsweredCorrectly = true;
+                    correctAttempts++;
+                    lockInputs(true);
+                    setFeedback(2, '✅', '完全正確！', '點「下一題」繼續', true);
+                    getNextBtn(2).disabled = false;
+                    getAnswerReveal(2).innerHTML = '';
+                } else {
+                    getNextBtn(2).disabled = true;
+                    lockInputs(false);
+                    setFeedback(2, '❌', `正確答案為 ${correct}`, '請記住這個化學式', false);
+                    getAnswerReveal(2).innerHTML = '';
+                }
                 updateButtonLabels();
             }
 
@@ -2477,10 +2306,13 @@
                     setFeedback(3, '✏️', '請輸入答案', '', null);
                     return;
                 }
-                const correct = currentCompound3.formula;
-                const normAns = normalizeFormula(ans);
-                const normCorrect = normalizeFormula(correct);
-                const ok = (normAns === normCorrect);
+                const correct = currentLang === 'zh' ? currentCompound3.name_zh : currentCompound3.name_en;
+                let ok = false;
+                if (currentLang === 'zh') {
+                    ok = (ans.replace(/\s/g, '') === correct.replace(/\s/g, ''));
+                } else {
+                    ok = (ans.toLowerCase() === correct.toLowerCase());
+                }
                 totalAttempts++;
                 pairInput3.className = ok ? 'correct' : 'incorrect';
                 if (ok) {
@@ -2493,62 +2325,12 @@
                 } else {
                     getNextBtn(3).disabled = true;
                     lockInputs(false);
-                    setFeedback(3, '❌', `正確答案為 ${correct}`, '請記住這個化學式', false);
+                    setFeedback(3, '❌', `正確答案為 ${correct}`, '請記住這個名稱', false);
                     getAnswerReveal(3).innerHTML = '';
                 }
-                const displayAns = ans || '(空)';
-                const ionName = currentLang === 'zh' ? currentCompound3.name_zh : currentCompound3.name_en;
-                addHistory(ionName, displayAns, correct, ok);
-                updateStats();
                 updateButtonLabels();
             }
 
-            function checkCompound4() {
-                if (!currentCompound4) {
-                    setFeedback(4, '⚠️', '請先載入題目', '', false);
-                    return;
-                }
-                if (isAnsweredCorrectly) {
-                    setFeedback(4, '✅', '已答對，請點「下一題」', '', true);
-                    return;
-                }
-                const ans = pairInput4.value.trim();
-                if (ans === '') {
-                    setFeedback(4, '✏️', '請輸入答案', '', null);
-                    return;
-                }
-                const correct = currentLang === 'zh' ? currentCompound4.name_zh : currentCompound4.name_en;
-                let ok = false;
-                if (currentLang === 'zh') {
-                    ok = (ans.replace(/\s/g, '') === correct.replace(/\s/g, ''));
-                } else {
-                    ok = (ans.toLowerCase() === correct.toLowerCase());
-                }
-                totalAttempts++;
-                pairInput4.className = ok ? 'correct' : 'incorrect';
-                if (ok) {
-                    isAnsweredCorrectly = true;
-                    correctAttempts++;
-                    lockInputs(true);
-                    setFeedback(4, '✅', '完全正確！', '點「下一題」繼續', true);
-                    getNextBtn(4).disabled = false;
-                    getAnswerReveal(4).innerHTML = '';
-                } else {
-                    getNextBtn(4).disabled = true;
-                    lockInputs(false);
-                    setFeedback(4, '❌', `正確答案為 ${correct}`, '請記住這個名稱', false);
-                    getAnswerReveal(4).innerHTML = '';
-                }
-                const displayAns = ans || '(空)';
-                const ionName = currentLang === 'zh' ? currentCompound4.name_zh : currentCompound4.name_en;
-                addHistory(ionName, displayAns, correct, ok);
-                updateStats();
-                updateButtonLabels();
-            }
-
-            // ============================================================
-            //  9. 溶解度與顏色 (Tab 5)
-            // ============================================================
             function loadSolQuestion() {
                 if (solPool.length === 0) solPool = [...COMPOUNDS_SOL];
                 currentCompound5 = getRandomItem(solPool);
@@ -2580,15 +2362,14 @@
                 solQ2.textContent = currentLang === 'zh' ? '2. 水溶液顏色？' : '2. Colour of aqueous solution?';
                 document.querySelector('#solSoluble').textContent = currentLang === 'zh' ? '✅ 溶' : '✅ Soluble';
                 document.querySelector('#solInsoluble').textContent = currentLang === 'zh' ? '❌ 不溶' : '❌ Insoluble';
-                btnColourless.textContent = '⬜ ' + getColorlessText();
-                setFeedback(5, '✏️', '先選溶解度，再輸入顏色（如適用）', '', null);
-                getAnswerReveal(5).innerHTML = '';
+                btnColourless.textContent = getColorlessText();
+                setFeedback(4, '✏️', '先選溶解度，再輸入顏色', '', null);
+                getAnswerReveal(4).innerHTML = '';
                 isAnsweredCorrectly = false;
-                getNextBtn(5).disabled = true;
+                getNextBtn(4).disabled = true;
                 lockInputs(false);
-                statsGrid.style.display = 'grid';
                 toggleRowIon.style.display = 'none';
-                getHintRow(5).innerHTML = getHintText(5);
+                getHintRow(4).innerHTML = getHintText(4);
                 updateButtonLabels();
             }
 
@@ -2609,15 +2390,15 @@
 
             function checkSolAnswer() {
                 if (!currentCompound5) {
-                    setFeedback(5, '⚠️', '請先載入題目', '', false);
+                    setFeedback(4, '⚠️', '請先載入題目', '', false);
                     return;
                 }
                 if (isAnsweredCorrectly) {
-                    setFeedback(5, '✅', '已答對，請點「下一題」', '', true);
+                    setFeedback(4, '✅', '已答對，請點「下一題」', '', true);
                     return;
                 }
                 if (!solSelectedSoluble) {
-                    setFeedback(5, '⚠️', '請先選擇溶解度', '', null);
+                    setFeedback(4, '⚠️', '請先選擇溶解度', '', null);
                     return;
                 }
 
@@ -2641,7 +2422,7 @@
                 if (solOk && isSolubleExpected) {
                     let inputColour = colourInput.value.trim().toLowerCase();
                     if (inputColour === '') {
-                        setFeedback(5, '⚠️', '請輸入顏色', '', null);
+                        setFeedback(4, '⚠️', '請輸入顏色', '', null);
                         return;
                     }
                     let isFe3 = currentCompound5.formula.indexOf('Fe') !== -1 &&
@@ -2658,7 +2439,7 @@
                         colourDisplay = getColorDisplay(currentCompound5.colour);
                     }
                     if (!colourOk) {
-                        setFeedback(5, '❌', `顏色應為 ${colourDisplay}，你輸入 ${colourInput.value || '(空)'}`, '', false);
+                        setFeedback(4, '❌', `顏色應為 ${colourDisplay}，你輸入 ${colourInput.value || '(空)'}`, '', false);
                         return;
                     }
                 }
@@ -2670,12 +2451,12 @@
                     totalAttempts++;
                     correctAttempts++;
                     lockInputs(true);
-                    setFeedback(5, '✅', '完全正確！', '點「下一題」繼續', true);
-                    getNextBtn(5).disabled = false;
-                    getAnswerReveal(5).innerHTML = '';
+                    setFeedback(4, '✅', '完全正確！', '點「下一題」繼續', true);
+                    getNextBtn(4).disabled = false;
+                    getAnswerReveal(4).innerHTML = '';
                 } else {
                     totalAttempts++;
-                    getNextBtn(5).disabled = true;
+                    getNextBtn(4).disabled = true;
                     lockInputs(false);
                     if (!solOk) {
                         let exp = isSolubleExpected ? (currentLang === 'zh' ? '溶' : 'soluble') : (currentLang === 'zh' ?
@@ -2684,38 +2465,27 @@
                             `${currentLang === 'zh' ? '溶解度應為' : 'Solubility should be'} ${exp}` +
                             (expected === 'slightly' ? (currentLang === 'zh' ? '（微溶）' : ' (slightly soluble)') : '') +
                             (expected === 'sparingly' ? (currentLang === 'zh' ? '（難溶）' : ' (sparingly soluble)') : '');
-                        setFeedback(5, '❌', msg, '', false);
+                        setFeedback(4, '❌', msg, '', false);
                         return;
                     }
                 }
-                let displayAns = solSelectedSoluble + (isSolubleExpected ? ' (' + (colourInput.value || '未填') + ')' : '');
-                let correctAns = solDisplay + (isSolubleExpected ? ' (' + colourDisplay + ')' : '');
-                let ionName = currentLang === 'zh' ? currentCompound5.name_zh : currentCompound5.name_en;
-                addHistory(ionName, displayAns, correctAns, allOk);
-                updateStats();
                 updateButtonLabels();
             }
 
-            // ============================================================
-            //  10. 分頁切換
-            // ============================================================
             function switchTab(tabIndex) {
                 currentTab = tabIndex;
-                for (let i = 0; i < tabs.length; i++) {
-                    tabs[i].classList.toggle('active', i === tabIndex);
+                for (let i = 0; i < tabBtns.length; i++) {
+                    tabBtns[i].classList.toggle('active', i === tabIndex);
                     tabContents[i].classList.toggle('active', i === tabIndex);
                 }
 
-                let isIonTab = (tabIndex === 0 || tabIndex === 1 || tabIndex === 2);
-                if (tabIndex === 2) {
-                    toggleRowIon.style.display = 'flex';
-                } else if (isIonTab) {
+                let isIonTab = (tabIndex === 0 || tabIndex === 1);
+                if (isIonTab) {
                     toggleRowIon.style.display = 'flex';
                 } else {
                     toggleRowIon.style.display = 'none';
                 }
 
-                statsGrid.style.display = (tabIndex === 2) ? 'none' : 'grid';
                 colorArea.style.display = (tabIndex === 0) ? 'flex' : 'none';
                 if (tabIndex !== 0) colorInputWrap.classList.add('hidden');
 
@@ -2728,19 +2498,14 @@
                         extraToggle.classList.remove('active'); }
                     loadIonQuestion();
                 } else if (tabIndex === 2) {
-                    renderReferenceTable();
+                    loadCompoundQuestion2();
                 } else if (tabIndex === 3) {
                     loadCompoundQuestion3();
                 } else if (tabIndex === 4) {
-                    loadCompoundQuestion4();
-                } else if (tabIndex === 5) {
                     loadSolQuestion();
                 }
             }
 
-            // ============================================================
-            //  11. 語言與初始化
-            // ============================================================
             function setLanguage(lang) {
                 currentLang = lang;
                 let btns = document.querySelectorAll('.lang-btn');
@@ -2749,15 +2514,12 @@
                 }
                 updateTabLabels();
                 updateButtonLabels();
-                if (currentTab === 2) renderReferenceTable();
-                else {
-                    if (currentTab === 0 || currentTab === 1) loadIonQuestion();
-                    else if (currentTab === 3) loadCompoundQuestion3();
-                    else if (currentTab === 4) loadCompoundQuestion4();
-                    else if (currentTab === 5) loadSolQuestion();
-                }
-                // update hint row content
-                if (currentTab !== 2) {
+                if (currentTab === 0 || currentTab === 1) loadIonQuestion();
+                else if (currentTab === 2) loadCompoundQuestion2();
+                else if (currentTab === 3) loadCompoundQuestion3();
+                else if (currentTab === 4) loadSolQuestion();
+                if (refModal.classList.contains('active')) renderModalTable();
+                if (currentTab !== 4) {
                     getHintRow(currentTab).innerHTML = getHintText(currentTab);
                 }
             }
@@ -2778,15 +2540,15 @@
                 extraToggle.classList.remove('active');
 
                 let options = ['all', '+', '2+', '3+', '-', '2-', '3-'];
-                chargeFilter.innerHTML = '';
+                modalChargeFilter.innerHTML = '';
                 let labels = { 'all': '全部', '+': '+', '2+': '2+', '3+': '3+', '-': '-', '2-': '2-', '3-': '3-' };
                 for (let i = 0; i < options.length; i++) {
                     let opt = document.createElement('option');
                     opt.value = options[i];
                     opt.textContent = labels[options[i]] || options[i];
-                    chargeFilter.appendChild(opt);
+                    modalChargeFilter.appendChild(opt);
                 }
-                chargeFilter.value = 'all';
+                modalChargeFilter.value = 'all';
 
                 updateTabLabels();
                 updateButtonLabels();
@@ -2799,74 +2561,86 @@
                 coreToggle.classList.toggle('active', dbType === 'core');
                 extraToggle.classList.toggle('active', dbType === 'extra');
 
-                let options = dbType === 'core' ? ['all', '+', '2+', '3+', '-', '2-', '3-'] : ['all', '+', '2+', '3+',
-                    '4+', '-', '2-', '3-'
-                ];
-                let currentVal = chargeFilter.value;
-                chargeFilter.innerHTML = '';
-                let labels = { 'all': '全部', '+': '+', '2+': '2+', '3+': '3+', '4+': '4+', '-': '-', '2-': '2-',
-                    '3-': '3-' };
-                for (let i = 0; i < options.length; i++) {
-                    let opt = document.createElement('option');
-                    opt.value = options[i];
-                    opt.textContent = labels[options[i]] || options[i];
-                    chargeFilter.appendChild(opt);
-                }
-                if (options.indexOf(currentVal) === -1) chargeFilter.value = 'all';
-                else chargeFilter.value = currentVal;
-
-                if (currentTab === 2) renderReferenceTable();
-                else loadIonQuestion();
+                // 不影響對照表的獨立切換
+                if (currentTab === 0 || currentTab === 1) loadIonQuestion();
             }
 
-            // ============================================================
-            //  12. 事件綁定
-            // ============================================================
+            function switchModalDb(dbType) {
+                modalIonDb = dbType;
+                modalCoreBtn.classList.toggle('active', dbType === 'core');
+                modalExtraBtn.classList.toggle('active', dbType === 'extra');
+                renderModalTable();
+            }
+
+            // ---- 歡迎畫面 ----
             welcomeZh.addEventListener('click', function() { initApp('zh'); });
             welcomeEn.addEventListener('click', function() { initApp('en'); });
 
+            // ---- 語言切換 ----
             let langBtns = document.querySelectorAll('.lang-btn');
             for (let i = 0; i < langBtns.length; i++) {
                 langBtns[i].addEventListener('click', function() { setLanguage(this.dataset.lang); });
             }
 
-            for (let i = 0; i < tabs.length; i++) {
+            // ---- 頁籤切換 ----
+            for (let i = 0; i < tabBtns.length; i++) {
                 (function(index) {
-                    tabs[index].addEventListener('click', function() {
+                    tabBtns[index].addEventListener('click', function() {
                         if (index !== currentTab) switchTab(index);
                     });
                 })(i);
             }
 
+            // ---- 離子庫切換 (主畫面) ----
             coreToggle.addEventListener('click', function() { if (currentIonDb !== 'core') switchDb('core'); });
             extraToggle.addEventListener('click', function() { if (currentIonDb !== 'extra') switchDb('extra'); });
 
+            // ---- Modal 對照表 ----
+            btnOpenRef.addEventListener('click', function() {
+                refModal.classList.add('active');
+                renderModalTable();
+            });
+            refModalClose.addEventListener('click', function() {
+                refModal.classList.remove('active');
+            });
+            refModal.addEventListener('click', function(e) {
+                if (e.target === refModal) refModal.classList.remove('active');
+            });
+            modalChargeFilter.addEventListener('change', function() {
+                modalFilter = this.value;
+                renderModalTable();
+            });
+            modalCoreBtn.addEventListener('click', function() { if (modalIonDb !== 'core') switchModalDb('core'); });
+            modalExtraBtn.addEventListener('click', function() { if (modalIonDb !== 'extra') switchModalDb('extra'); });
+
+            // ---- 檢查 / 下一題 ----
             document.addEventListener('click', function(e) {
                 const checkBtn = e.target.closest('.check-btn');
                 if (checkBtn) {
                     const tab = parseInt(checkBtn.dataset.tab);
                     if (tab === 0 || tab === 1) checkIonAnswer();
+                    else if (tab === 2) checkCompound2();
                     else if (tab === 3) checkCompound3();
-                    else if (tab === 4) checkCompound4();
-                    else if (tab === 5) checkSolAnswer();
+                    else if (tab === 4) checkSolAnswer();
                 }
 
                 const nextBtn = e.target.closest('.next-btn');
                 if (nextBtn) {
                     const tab = parseInt(nextBtn.dataset.tab);
                     if (tab === 0 || tab === 1) loadIonQuestion();
+                    else if (tab === 2) loadCompoundQuestion2();
                     else if (tab === 3) loadCompoundQuestion3();
-                    else if (tab === 4) loadCompoundQuestion4();
-                    else if (tab === 5) loadSolQuestion();
+                    else if (tab === 4) loadSolQuestion();
                 }
             });
 
+            // ---- Enter 鍵觸發檢查 ----
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
                     let active = document.activeElement;
                     if (active && (active.id === 'symbolInput' || active.id === 'chargeInput' ||
-                            active.id === 'nameInput' || active.id === 'pairInput3' ||
-                            active.id === 'pairInput4' || active.id === 'colourInput' ||
+                            active.id === 'nameInput' || active.id === 'pairInput2' ||
+                            active.id === 'pairInput3' || active.id === 'colourInput' ||
                             active.id === 'colorInputIon')) {
                         e.preventDefault();
                         const checkBtn = document.querySelector(`.check-btn[data-tab="${currentTab}"]`);
@@ -2875,6 +2649,7 @@
                 }
             });
 
+            // ---- 顏色功能 ----
             colorToggle.addEventListener('change', function() {
                 colorEnabled = this.checked;
                 if (colorEnabled && currentTab === 0) {
@@ -2906,17 +2681,14 @@
                     colourInput.focus(); }
             });
 
-            chargeFilter.addEventListener('change', function() {
-                currentFilter = this.value;
-                if (currentTab === 2) renderReferenceTable();
-            });
-
+            // ---- 溶解度選項 ----
             let solBtns = document.querySelectorAll('.sol-options button');
             for (let i = 0; i < solBtns.length; i++) {
                 solBtns[i].addEventListener('click', function() { onSolSelected(this.dataset.value); });
             }
 
-            let inputs = [symbolInput, chargeInput, nameInput, pairInput3, pairInput4, colourInput, colorInputIon];
+            // ---- 輸入時清除錯誤狀態 ----
+            let inputs = [symbolInput, chargeInput, nameInput, pairInput2, pairInput3, colourInput, colorInputIon];
             for (let i = 0; i < inputs.length; i++) {
                 inputs[i].addEventListener('input', function() {
                     if (this.disabled || isAnsweredCorrectly) return;
@@ -2927,7 +2699,7 @@
                 });
             }
 
-            console.log('🧪 離子與化合物練習已啟動 (左右分欄 + 上標保留！)');
+            console.log('🧪 離子與化合物練習已啟動！');
         })();
     </script>
 </body>
