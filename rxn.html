@@ -1,0 +1,3796 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>⚙️ 金屬反應 · DSE</title>
+    <base href="./">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            background: linear-gradient(145deg, #f0f4ff 0%, #d4dcec 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 4px;
+            padding-top: 4px;
+        }
+
+        .card {
+            max-width: 1200px;
+            width: 100%;
+            height: 98vh;
+            max-height: 98vh;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(40, 60, 120, 0.15);
+            padding: 0.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(180, 200, 220, 0.3);
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex-shrink: 0;
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 3px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .header-left select {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            background: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 2px 0;
+            max-width: 200px;
+        }
+        .header-left select option {
+            font-weight: 600;
+        }
+        .header-funcs {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+        }
+        .header-funcs .func-btn {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #f0f4fc;
+            color: #4a5a7a;
+            border: 2px solid #d0d8e8;
+            min-height: 32px;
+        }
+        .header-funcs .func-btn:hover {
+            background: #e0e8f8;
+            border-color: #4a6a9a;
+        }
+        .header-funcs .func-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .lang-toggle {
+            display: flex;
+            gap: 2px;
+            background: white;
+            padding: 2px;
+            border-radius: 30px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+        .lang-btn {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.15s;
+            background: transparent;
+            color: #5a6a8a;
+        }
+        .lang-btn.active {
+            background: #4a6a9a;
+            color: white;
+            box-shadow: 0 2px 8px rgba(74, 106, 154, 0.3);
+        }
+        .lang-btn:hover:not(.active) {
+            background: #e8eef8;
+        }
+
+        .question-area {
+            flex: 1;
+            min-width: 0;
+            padding: 0.1rem 0.3rem;
+            overflow: hidden;
+            border-radius: 14px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .question-area .tab-content {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            min-height: 0;
+        }
+        .question-area .tab-content.active {
+            display: flex;
+        }
+
+        .split-panel {
+            display: flex;
+            gap: 4px;
+            flex: 1;
+            min-height: 0;
+            align-items: flex-start;
+        }
+        .split-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 0;
+            min-height: 0;
+            height: 100%;
+        }
+
+        .hint-row-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px 8px;
+            flex-shrink: 0;
+            padding: 2px 0;
+        }
+        .hint-row-wrap .hint-text {
+            font-size: 1rem;
+            color: #6a7a8a;
+            flex: 1;
+            min-width: 150px;
+        }
+        .hint-row-wrap .hint-text .highlight {
+            color: #e74c3c;
+            font-weight: 700;
+        }
+        .hint-row-wrap .balance-toggle-compact {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            background: #e8f0fe;
+            padding: 1px 8px 1px 5px;
+            border-radius: 30px;
+            border: 2px solid #4a6a9a;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            cursor: pointer;
+            user-select: none;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .hint-row-wrap .balance-toggle-compact input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #4a6a9a;
+            margin: 0;
+        }
+
+        .top-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 4px 10px;
+            padding: 4px 0;
+            flex-shrink: 0;
+        }
+        .top-row .spin-box {
+            background: #f0f4fc;
+            border-radius: 10px;
+            padding: 3px 12px;
+            border: 2px solid #c8d4e8;
+            text-align: center;
+            min-width: 55px;
+        }
+        .top-row .spin-box .label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #5a6a8a;
+        }
+        .top-row .spin-box .value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            min-height: 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2px;
+        }
+        .top-row .btn-spin {
+            background: linear-gradient(145deg, #6a8aba, #4a6a9a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 22px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 20px rgba(74, 106, 154, 0.3);
+            min-height: 40px;
+            white-space: nowrap;
+            min-width: 80px;
+        }
+        .top-row .btn-spin:hover:not(:disabled) {
+            transform: scale(1.03);
+        }
+        .top-row .btn-spin:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .top-row .btn-spin.spinning {
+            animation: pulse 0.5s ease-in-out infinite alternate;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.03);
+                opacity: 0.8;
+            }
+        }
+        .top-row .arrow-display {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #6a8aba;
+            min-width: 32px;
+            display: inline-block;
+            text-align: center;
+        }
+        .top-row .operator-plus {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #6a8aba;
+        }
+
+        .question-block {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .reaction-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 10px;
+            transition: all 0.2s;
+        }
+        .reaction-row.hidden {
+            display: none !important;
+        }
+
+        .q-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #4a5a7a;
+            min-width: 60px;
+        }
+        .q-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .q-options .opt-btn {
+            border: 2px solid #d0d8e8;
+            background: white;
+            padding: 4px 18px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #2a3a6a;
+            min-height: 36px;
+            white-space: nowrap;
+        }
+        .q-options .opt-btn:hover:not(:disabled) {
+            background: #eef4fc;
+        }
+        .q-options .opt-btn.selected {
+            border-color: #4a6a9a;
+            background: #4a6a9a;
+            color: white;
+        }
+        .q-options .opt-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-check {
+            background: linear-gradient(145deg, #f5a623, #e0941a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 4px 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 20px rgba(245, 166, 35, 0.3);
+            min-height: 36px;
+            white-space: nowrap;
+        }
+        .btn-check:hover:not(:disabled) {
+            transform: scale(1.03);
+        }
+        .btn-check:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .product-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 4px 0;
+            align-items: center;
+            flex: 1;
+        }
+        .product-group .prod-btn {
+            border: 2px solid #d0d8e8;
+            background: white;
+            padding: 4px 16px;
+            border-radius: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #3a4a6a;
+            min-height: 34px;
+            white-space: nowrap;
+            flex: 1 0 auto;
+            max-width: 140px;
+            text-align: center;
+        }
+        .product-group .prod-btn:hover:not(:disabled) {
+            background: #eef4fc;
+        }
+        .product-group .prod-btn.selected {
+            border-color: #4a6a9a;
+            background: #4a6a9a;
+            color: white;
+        }
+        .product-group .prod-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .product-group .prod-btn.correct {
+            border-color: #2ecc71;
+            background: #d4edda;
+            color: #155724;
+            font-weight: 700;
+        }
+        .product-group .prod-btn.incorrect {
+            border-color: #e74c3c;
+            background: #f8d7da;
+            color: #721c24;
+            font-weight: 700;
+        }
+
+        .product-group .btn-next-step {
+            background: linear-gradient(145deg, #f5a623, #e0941a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 4px 18px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            min-height: 34px;
+            white-space: nowrap;
+            box-shadow: 0 2px 10px rgba(245, 166, 35, 0.3);
+        }
+        .product-group .btn-next-step:hover:not(:disabled) {
+            transform: scale(1.03);
+        }
+        .product-group .btn-next-step:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .product-feedback {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-left: 6px;
+            display: inline-block;
+        }
+        .product-feedback.success {
+            color: #155724;
+        }
+        .product-feedback.error {
+            color: #721c24;
+        }
+
+        .balance-area {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+            flex-shrink: 0;
+            border-top: 2px dashed #d0d8e8;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+        .balance-area .bal-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #4a5a7a;
+            white-space: nowrap;
+        }
+        .balance-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 6px 10px;
+            padding: 4px 0;
+            flex: 1;
+        }
+        .balance-row .term {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2a3a6a;
+        }
+        .balance-row .arrow-symbol {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #6a8aba;
+        }
+        .balance-row .coeff-box {
+            display: inline-block;
+            border: 2px solid #c8d4e8;
+            border-radius: 5px;
+            background: white;
+            min-width: 30px;
+            height: 30px;
+            line-height: 26px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            cursor: pointer;
+            padding: 0 6px;
+            transition: 0.15s;
+            user-select: none;
+        }
+        .balance-row .coeff-box:hover:not(:disabled) {
+            background: #eef4fc;
+            border-color: #4a6a9a;
+        }
+        .balance-row .coeff-box:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .balance-row .coeff-box.has-value {
+            border-color: #4a6a9a;
+            background: #e8f0fe;
+        }
+
+        .balance-trap-hint {
+            font-size: 0.9rem;
+            color: #e67e22;
+            font-weight: 600;
+            padding: 2px 10px;
+            background: #fef9e7;
+            border-radius: 8px;
+            border: 1px solid #f39c12;
+            width: 100%;
+            text-align: center;
+        }
+
+        .coeff-popup {
+            display: none;
+            position: fixed;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+            padding: 12px;
+            z-index: 1000;
+            border: 2px solid #c8d4e8;
+            min-width: 160px;
+        }
+        .coeff-popup.active {
+            display: block;
+        }
+        .coeff-popup .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+        .coeff-popup .grid button {
+            border: 2px solid #d0d8e8;
+            background: white;
+            border-radius: 6px;
+            padding: 6px 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .coeff-popup .grid button:hover {
+            background: #eef4fc;
+            border-color: #4a6a9a;
+        }
+        .coeff-popup .grid button.selected {
+            background: #4a6a9a;
+            color: white;
+            border-color: #4a6a9a;
+        }
+
+        .obs-section {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 8px 0;
+            border-top: 2px dashed #d0d8e8;
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+        .obs-section .obs-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #4a5a7a;
+        }
+        .obs-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 10px;
+        }
+        .obs-row .obs-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #5a6a8a;
+            min-width: 50px;
+        }
+        .obs-row select {
+            border: 2px solid #d0d8e8;
+            border-radius: 30px;
+            padding: 4px 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            background: white;
+            color: #2a3a6a;
+            outline: none;
+            min-height: 34px;
+            min-width: 100px;
+            flex: 0 1 auto;
+        }
+        .obs-row select:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .obs-row .obs-btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .obs-row .obs-btn {
+            border: 2px solid #d0d8e8;
+            background: white;
+            padding: 4px 14px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #3a4a6a;
+            min-height: 34px;
+            white-space: nowrap;
+        }
+        .obs-row .obs-btn:hover:not(:disabled) {
+            background: #eef4fc;
+        }
+        .obs-row .obs-btn.selected {
+            border-color: #f5a623;
+            background: #fff4e0;
+        }
+        .obs-row .obs-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .color-temp-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            background: #f0f6ff;
+            border: 2px solid #4a6a9a;
+            border-radius: 8px;
+            padding: 4px 10px;
+        }
+        .color-temp-wrapper select {
+            min-width: 70px;
+            border: 2px solid #c8d4e8;
+            border-radius: 30px;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: white;
+            min-height: 28px;
+        }
+        .color-temp-wrapper .temp-arrow {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #4a6a9a;
+        }
+        .color-temp-wrapper .temp-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #4a6a9a;
+        }
+
+        .bottom-check-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 6px 0 0 0;
+            margin-top: 4px;
+            border-top: 2px dashed #d0d8e8;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .feedback-area {
+            padding: 8px 18px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: #e8f5e8;
+            border: 2px solid #6bcb77;
+            color: #0d553a;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            width: 100%;
+            min-height: 44px;
+            transition: 0.2s;
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+        .feedback-area.error {
+            background: #fce8e8;
+            border-color: #e74c3c;
+            color: #7a2a2a;
+        }
+        .feedback-area .fb-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+        .feedback-area .fb-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .feedback-area .fb-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .feedback-area .fb-detail {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #5a5a7a;
+            padding-left: 30px;
+        }
+
+        .btn-next-question {
+            background: linear-gradient(145deg, #6a8aba, #4a6a9a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 4px 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            min-height: 36px;
+            white-space: nowrap;
+            box-shadow: 0 2px 10px rgba(74, 106, 154, 0.3);
+        }
+        .btn-next-question:hover:not(:disabled) {
+            transform: scale(1.03);
+        }
+        .btn-next-question:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-box {
+            background: white;
+            border-radius: 28px;
+            max-width: 750px;
+            width: 100%;
+            max-height: 85vh;
+            padding: 18px 22px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .modal-header h2 {
+            font-size: 0.95rem;
+            color: #2a3a6a;
+        }
+        .modal-close {
+            background: #f0e8f8;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: #4a2a6a;
+            font-weight: 700;
+            transition: 0.15s;
+        }
+        .modal-close:hover {
+            background: #e0d0f0;
+        }
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+        }
+        .ref-table-wrap {
+            overflow-y: auto;
+            max-height: 55vh;
+        }
+        .ref-table-wrap::-webkit-scrollbar {
+            width: 4px;
+        }
+        .ref-table-wrap::-webkit-scrollbar-thumb {
+            background: #c0c8d8;
+            border-radius: 10px;
+        }
+        .ref-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.6rem;
+        }
+        .ref-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        .ref-table th {
+            background: #4a6a9a;
+            color: white;
+            padding: 3px 5px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.5rem;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+        .ref-table td {
+            padding: 3px 5px;
+            border-bottom: 1px solid #e8eef8;
+            color: #2a3a6a;
+            vertical-align: middle;
+        }
+        .ref-table .color-dot {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid #c8d4e8;
+            vertical-align: middle;
+            margin-right: 3px;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .ref-table .metal-symbol {
+            font-weight: 700;
+            color: #2a3a6a;
+            font-size: 0.65rem;
+            white-space: nowrap;
+        }
+        .ref-table .row-highlight {
+            background: #f0f6ff;
+        }
+
+        .multi-select-hint {
+            color: #e67e22;
+            font-weight: 700;
+            font-size: 0.85rem;
+            background: #fef9e7;
+            padding: 1px 8px;
+            border-radius: 12px;
+            border: 1px solid #f39c12;
+            margin-left: 4px;
+            display: inline-block;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 0.3rem 0.4rem;
+                border-radius: 16px;
+                max-height: 100vh;
+                height: 100vh;
+                overflow: hidden;
+            }
+            .header-left select {
+                font-size: 0.55rem;
+                max-width: 85px;
+            }
+            .header-funcs .func-btn {
+                font-size: 0.7rem;
+                padding: 2px 8px;
+                min-height: 28px;
+            }
+            .lang-btn {
+                font-size: 0.7rem;
+                padding: 2px 8px;
+            }
+            .hint-row-wrap .hint-text {
+                font-size: 0.45rem;
+            }
+            .hint-row-wrap .balance-toggle-compact {
+                font-size: 0.4rem;
+                padding: 1px 6px 1px 4px;
+            }
+            .hint-row-wrap .balance-toggle-compact input {
+                width: 16px;
+                height: 16px;
+            }
+            .top-row {
+                display: flex;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                gap: 4px;
+                padding: 3px 0;
+            }
+            .top-row .spin-box {
+                flex: 1;
+                min-width: 0;
+                padding: 2px 4px;
+            }
+            .top-row .spin-box .label {
+                font-size: 0.4rem;
+            }
+            .top-row .spin-box .value {
+                font-size: 0.85rem;
+                min-height: 1.1rem;
+            }
+            .top-row .btn-spin {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+                min-height: 36px;
+                min-width: 56px;
+                flex-shrink: 0;
+            }
+            .top-row .operator-plus {
+                font-size: 0.8rem;
+                flex-shrink: 0;
+            }
+            .top-row .arrow-display {
+                display: none;
+            }
+            .reaction-row {
+                gap: 3px 4px;
+            }
+            .reaction-row .q-label {
+                font-size: 0.7rem;
+                min-width: 40px;
+                width: 100%;
+            }
+            .reaction-row .q-options .opt-btn {
+                font-size: 0.8rem;
+                padding: 4px 8px;
+                min-height: 32px;
+                flex: 1;
+                text-align: center;
+            }
+            .reaction-row .btn-check {
+                font-size: 0.75rem;
+                padding: 4px 12px;
+                min-height: 32px;
+                flex: 0 1 auto;
+            }
+            .product-group {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                padding: 2px 0;
+                align-items: center;
+                justify-content: flex-start;
+            }
+            .product-group .prod-btn {
+                font-size: 0.7rem;
+                padding: 5px 4px;
+                min-height: 30px;
+                width: calc(33.33% - 4px);
+                flex: 0 0 calc(33.33% - 4px);
+                max-width: none;
+                border-radius: 20px;
+                text-align: center;
+            }
+            .product-group .btn-next-step {
+                font-size: 0.7rem;
+                padding: 5px 12px;
+                min-height: 30px;
+                width: auto;
+                flex: 0 1 auto;
+                max-width: none;
+                text-align: center;
+            }
+            .product-feedback {
+                font-size: 0.6rem;
+                width: 100%;
+                margin-left: 0;
+                margin-top: 2px;
+            }
+            .balance-area {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+            }
+            .balance-area .bal-title {
+                font-size: 0.6rem;
+                text-align: center;
+            }
+            .balance-row .term {
+                font-size: 0.65rem;
+            }
+            .balance-row .arrow-symbol {
+                font-size: 0.65rem;
+            }
+            .balance-row .coeff-box {
+                min-width: 26px;
+                height: 26px;
+                line-height: 22px;
+                font-size: 0.65rem;
+                padding: 0 4px;
+            }
+            .obs-section .obs-title {
+                font-size: 0.6rem;
+            }
+            .obs-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 3px 4px;
+            }
+            .obs-row .obs-label {
+                font-size: 0.6rem;
+                min-width: 32px;
+                width: 100%;
+                margin-bottom: 1px;
+            }
+            .obs-row select {
+                font-size: 0.6rem;
+                min-height: 30px;
+                min-width: 60px;
+                padding: 2px 6px;
+                flex: 1 0 calc(50% - 4px);
+            }
+            .obs-row .obs-btn-group {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                width: 100%;
+                justify-content: center;
+            }
+            #obsRowDeposit .obs-btn {
+                font-size: 0.7rem;
+                padding: 4px 6px;
+                min-height: 32px;
+                flex: 1 0 calc(50% - 4px);
+                max-width: calc(50% - 4px);
+                text-align: center;
+            }
+            #obsRowPpt .obs-btn {
+                font-size: 0.7rem;
+                padding: 4px 6px;
+                min-height: 32px;
+                flex: 1 0 calc(50% - 4px);
+                max-width: calc(50% - 4px);
+                text-align: center;
+            }
+            #obsRowOther .obs-btn {
+                font-size: 0.7rem;
+                padding: 4px 6px;
+                min-height: 32px;
+                flex: 1 0 calc(50% - 4px);
+                max-width: calc(50% - 4px);
+                text-align: center;
+            }
+            .color-temp-wrapper {
+                padding: 3px 6px;
+                width: 100%;
+                justify-content: space-around;
+            }
+            .color-temp-wrapper select {
+                min-width: 50px;
+                font-size: 0.5rem;
+                min-height: 26px;
+                flex: 1;
+            }
+            .color-temp-wrapper .temp-label {
+                font-size: 0.45rem;
+            }
+            .color-temp-wrapper .temp-arrow {
+                font-size: 0.5rem;
+            }
+            .bottom-check-row {
+                flex-direction: row;
+                justify-content: flex-end;
+                gap: 6px;
+            }
+            .bottom-check-row .btn-check {
+                font-size: 0.75rem;
+                padding: 6px 16px;
+                min-height: 36px;
+            }
+            .bottom-check-row .btn-next-question {
+                font-size: 0.75rem;
+                padding: 6px 16px;
+                min-height: 36px;
+            }
+            .feedback-area {
+                padding: 4px 10px;
+                font-size: 0.6rem;
+                min-height: 30px;
+            }
+            .feedback-area .fb-text {
+                font-size: 0.6rem;
+            }
+            .feedback-area .fb-detail {
+                font-size: 0.55rem;
+                padding-left: 16px;
+            }
+            .coeff-popup {
+                padding: 5px;
+                min-width: 100px;
+            }
+            .coeff-popup .grid button {
+                font-size: 0.7rem;
+                padding: 6px 0;
+            }
+            .ref-table {
+                font-size: 0.45rem;
+            }
+            .ref-table th {
+                font-size: 0.4rem;
+                padding: 2px 3px;
+            }
+            .ref-table td {
+                padding: 2px 3px;
+            }
+            .ref-table .metal-symbol {
+                font-size: 0.5rem;
+            }
+            .ref-table .color-dot {
+                width: 14px;
+                height: 14px;
+            }
+            .modal-box {
+                padding: 10px 12px;
+                max-height: 90vh;
+            }
+            .modal-header h2 {
+                font-size: 0.8rem;
+            }
+            .split-left {
+                gap: 2px;
+            }
+            .question-block {
+                gap: 4px;
+            }
+            .obs-section {
+                gap: 4px;
+                padding: 4px 0;
+            }
+            .balance-area {
+                padding: 3px 0;
+            }
+            .bottom-check-row {
+                padding: 4px 0 0 0;
+            }
+            .question-area {
+                overflow-y: auto;
+            }
+            .question-area::-webkit-scrollbar {
+                width: 3px;
+            }
+            .question-area::-webkit-scrollbar-thumb {
+                background: #c0c8d8;
+                border-radius: 10px;
+            }
+            .multi-select-hint {
+                font-size: 0.6rem;
+                padding: 1px 6px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .header-left select {
+                font-size: 0.45rem;
+                max-width: 65px;
+            }
+            .top-row .spin-box .value {
+                font-size: 0.7rem;
+            }
+            .top-row .btn-spin {
+                font-size: 0.6rem;
+                padding: 2px 6px;
+                min-height: 32px;
+                min-width: 48px;
+            }
+            .reaction-row .q-options .opt-btn {
+                font-size: 0.7rem;
+                padding: 3px 4px;
+                min-height: 28px;
+            }
+            .reaction-row .btn-check {
+                font-size: 0.65rem;
+                padding: 3px 8px;
+                min-height: 28px;
+            }
+            .product-group .prod-btn {
+                font-size: 0.6rem;
+                padding: 4px 2px;
+                min-height: 26px;
+                flex: 0 0 calc(33.33% - 3px);
+                width: calc(33.33% - 3px);
+            }
+            .product-group .btn-next-step {
+                font-size: 0.6rem;
+                padding: 4px 2px;
+                min-height: 26px;
+            }
+            #obsRowDeposit .obs-btn,
+            #obsRowPpt .obs-btn,
+            #obsRowOther .obs-btn {
+                font-size: 0.6rem;
+                padding: 3px 4px;
+                min-height: 28px;
+                flex: 1 0 calc(50% - 4px);
+                max-width: calc(50% - 4px);
+            }
+            .obs-row select {
+                font-size: 0.5rem;
+                min-height: 26px;
+                min-width: 50px;
+            }
+            .color-temp-wrapper select {
+                min-width: 40px;
+                font-size: 0.4rem;
+                min-height: 22px;
+            }
+            .color-temp-wrapper .temp-label {
+                font-size: 0.4rem;
+            }
+            .hint-row-wrap .hint-text {
+                font-size: 0.4rem;
+            }
+            .hint-row-wrap .balance-toggle-compact {
+                font-size: 0.35rem;
+                padding: 1px 4px 1px 3px;
+            }
+            .hint-row-wrap .balance-toggle-compact input {
+                width: 14px;
+                height: 14px;
+            }
+            .feedback-area {
+                padding: 3px 8px;
+                font-size: 0.55rem;
+                min-height: 26px;
+            }
+            .feedback-area .fb-text {
+                font-size: 0.55rem;
+            }
+            .feedback-area .fb-detail {
+                font-size: 0.5rem;
+                padding-left: 14px;
+            }
+            .bottom-check-row .btn-check,
+            .bottom-check-row .btn-next-question {
+                font-size: 0.65rem;
+                padding: 4px 12px;
+                min-height: 32px;
+            }
+            .q-label {
+                font-size: 0.5rem;
+                min-width: 32px;
+            }
+            .multi-select-hint {
+                font-size: 0.5rem;
+                padding: 1px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card" id="mainCard">
+        <div class="header">
+            <div class="header-top">
+                <div class="header-left">
+                    <select id="practiceSelector">
+                        <option value="ions">🧪 離子與化合物 (Ch.7)</option>
+                        <option value="rxn" selected>⚙️ 金屬反應 (Ch.11)</option>
+                        <option value="home">🏠 返回目錄</option>
+                    </select>
+                    <div class="header-funcs">
+                        <button class="func-btn" id="btnMetalSeries">📊 活性序</button>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="lang-toggle">
+                        <button class="lang-btn" data-lang="zh" id="langZh">中文</button>
+                        <button class="lang-btn active" data-lang="en" id="langEn">English</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-area" id="questionArea">
+            <div class="tab-content active" id="tabContent0">
+                <div class="hint-row-wrap">
+                    <span class="hint-text" id="hintText">
+                        <span class="highlight">按「抽題」開始！</span>
+                        <span>｜反應 → 產物 → 方程式 → 觀察</span>
+                    </span>
+                    <label class="balance-toggle-compact" id="balanceToggleCompact">
+                        <input type="checkbox" checked id="balanceCheckbox">
+                        <span id="balanceToggleLabel">☑ 需要平衡</span>
+                    </label>
+                </div>
+
+                <div class="split-panel">
+                    <div class="split-left">
+                        <div class="top-row">
+                            <div class="spin-box">
+                                <div class="label" id="metalLabel">⚙️ 金屬</div>
+                                <div class="value" id="metalDisplay">—</div>
+                            </div>
+                            <span class="operator-plus">+</span>
+                            <div class="spin-box">
+                                <div class="label" id="reagentLabel">🧪 反應物</div>
+                                <div class="value" id="reagentDisplay">—</div>
+                            </div>
+                            <button class="btn-spin" id="spinBtn">🎲 抽題</button>
+                        </div>
+
+                        <div class="question-block" id="questionBlock">
+                            <div class="reaction-row" id="reactionRow">
+                                <span class="q-label" id="q1Label">📌 反應？</span>
+                                <div class="q-options" id="q1Options">
+                                    <button class="opt-btn" data-value="yes" id="q1Yes">✅ 有反應</button>
+                                    <button class="opt-btn" data-value="no" id="q1No">❌ 無反應</button>
+                                </div>
+                                <button class="btn-check" id="checkReactionBtn" disabled>✔ 檢查</button>
+                            </div>
+
+                            <div class="q-row" id="productRow" style="display:none;">
+                                <span class="q-label" id="productLabel">📦 產物 <span class="multi-select-hint">可複選</span></span>
+                                <div class="product-group" id="productGroup">
+                                    <button class="prod-btn" data-prod="oxide">氧化物</button>
+                                    <button class="prod-btn" data-prod="hydroxide">氫氧化物</button>
+                                    <button class="prod-btn" data-prod="salt">鹽</button>
+                                    <button class="prod-btn" data-prod="hydrogen">氫氣</button>
+                                    <button class="prod-btn" data-prod="metal">金屬</button>
+                                    <button class="btn-next-step" id="nextStepBtn" disabled>➡️ 下一步</button>
+                                </div>
+                                <span class="product-feedback" id="productFeedback"></span>
+                            </div>
+
+                            <div class="balance-area" id="balanceArea" style="display:none;">
+                                <span class="bal-title" id="balTitle">⚖️ 平衡方程式：</span>
+                                <div class="balance-row" id="balanceRow"></div>
+                                <div class="balance-trap-hint" id="balanceTrapHint" style="display:none;">
+                                    ⚠️ 此為陷阱題，金屬先與水反應，再與鹽溶液反應，沒有單一平衡方程式。
+                                </div>
+                            </div>
+
+                            <div class="obs-section" id="obsSection" style="display:none;">
+                                <div class="obs-title" id="obsTitle">🔍 觀察 <span class="multi-select-hint">可多選</span></div>
+
+                                <div class="obs-row" id="obsRowFlame">
+                                    <span class="obs-label" id="obsFlameLabel">🔥 火焰</span>
+                                    <select id="obsFlame">
+                                        <option value="none">—</option>
+                                    </select>
+                                    <span class="obs-label" id="obsSolutionLabel" style="margin-left:3px;">🎨 溶液</span>
+                                    <select id="obsSolution">
+                                        <option value="none">—</option>
+                                    </select>
+                                </div>
+
+                                <div class="obs-row" id="obsRowSolid">
+                                    <span class="obs-label" id="obsSolidLabel">🧊 生成固體</span>
+                                    <select id="obsSolid">
+                                        <option value="none">—</option>
+                                    </select>
+                                    <span id="colorTempSub" style="display:none;">
+                                        <span class="color-temp-wrapper">
+                                            <span class="temp-label" id="tempHotLabel">🔥 熱</span>
+                                            <select id="colorTempHot">
+                                                <option value="none">—</option>
+                                                <option value="yellow">🟡 黃色</option>
+                                                <option value="orange">🟠 橙色</option>
+                                            </select>
+                                            <span class="temp-arrow">→</span>
+                                            <span class="temp-label" id="tempColdLabel">❄️ 室溫</span>
+                                            <select id="colorTempCold">
+                                                <option value="none">—</option>
+                                                <option value="white">⬜ 白色</option>
+                                                <option value="yellow">🟡 黃色</option>
+                                            </select>
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <div class="obs-row" id="obsRowDeposit">
+                                    <span class="obs-label" id="obsDepositLabel">🔄 固體沉積物</span>
+                                    <div class="obs-btn-group" id="obsDepositGroup">
+                                        <button class="obs-btn" data-obs="deposit_brown">🟤 紅棕色沉積物生成</button>
+                                        <button class="obs-btn" data-obs="deposit_silver">⬜ 銀白色沉積物生成</button>
+                                    </div>
+                                </div>
+
+                                <div class="obs-row" id="obsRowPpt">
+                                    <span class="obs-label" id="obsPptLabel">🟦 沉澱</span>
+                                    <div class="obs-btn-group" id="obsPptGroup">
+                                        <button class="obs-btn" data-obs="ppt_blue">🟦 藍色沉澱生成</button>
+                                        <button class="obs-btn" data-obs="ppt_green">🟩 綠色沉澱生成</button>
+                                        <button class="obs-btn" data-obs="ppt_brown">🟫 棕色沉澱生成</button>
+                                        <button class="obs-btn" data-obs="ppt_white">⬜ 白色沉澱生成</button>
+                                    </div>
+                                </div>
+
+                                <div class="obs-row" id="obsRowOther">
+                                    <span class="obs-label" id="obsOtherLabel">🔦 其他</span>
+                                    <div class="obs-btn-group" id="obsOtherGroup">
+                                        <button class="obs-btn" data-obs="gas">💨 有氣泡釋出</button>
+                                        <button class="obs-btn" data-obs="dissolve">🫠 金屬溶解</button>
+                                        <button class="obs-btn" data-obs="float">🌊 金屬浮起</button>
+                                        <button class="obs-btn" data-obs="sink">⬇️ 金屬沉底</button>
+                                        <button class="obs-btn" data-obs="stop">⏹️ 反應很快停止</button>
+                                    </div>
+                                </div>
+
+                                <div class="bottom-check-row">
+                                    <button class="btn-check" id="checkBottomBtn" disabled>✔ 檢查</button>
+                                    <button class="btn-next-question" id="nextQuestionBtn" disabled style="display:none;">➡️ 下一題</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feedback-area" id="feedback0">
+                            <div class="fb-row">
+                                <span class="fb-icon">✏️</span>
+                                <span class="fb-text" id="fbText0">按「抽題」開始練習</span>
+                            </div>
+                            <div class="fb-detail" id="fbDetail0"></div>
+                        </div>
+                        <div id="answerReveal"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 活性序模態框 ===== -->
+    <div class="modal-overlay" id="metalSeriesModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 id="modalTitle">📊 金屬活性序</h2>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="ref-table-wrap">
+                    <table class="ref-table" id="modalRefTable">
+                        <thead>
+                            <tr>
+                                <th id="mthSymbol">符號</th>
+                                <th id="mthEnglish">英文名稱</th>
+                                <th id="mthChinese">中文名稱</th>
+                                <th id="mthMetalColor">金屬顏色</th>
+                                <th id="mthOxideColor">氧化物顏色</th>
+                                <th id="mthIonColor">離子顏色</th>
+                                <th id="mthFlame">焰色</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalRefBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 係數彈窗 ===== -->
+    <div class="coeff-popup" id="coeffPopup">
+        <div class="grid" id="coeffGrid">
+            <button data-val="1">1</button>
+            <button data-val="2">2</button>
+            <button data-val="3">3</button>
+            <button data-val="4">4</button>
+            <button data-val="5">5</button>
+            <button data-val="6">6</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ============================================================
+            // 跨頁面導航
+            // ============================================================
+            function getUrlParameter(name) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            }
+
+            function switchPractice(target) {
+                const lang = currentLang || 'en';
+                if (target === 'home') {
+                    window.location.href = 'index.html?lang=' + lang;
+                } else if (target === 'ions') {
+                    window.location.href = 'ions.html?lang=' + lang;
+                } else if (target === 'rxn') {
+                    window.location.href = 'rxn.html?lang=' + lang;
+                }
+            }
+
+            // ============================================================
+            // 資料庫 - 金屬
+            // ============================================================
+            const METALS = ['K', 'Na', 'Ba', 'Ca', 'Mg', 'Al', 'Zn', 'Fe', 'Sn', 'Pb', 'Cu', 'Hg', 'Ag', 'Pt', 'Au'];
+
+            const METAL_DATA = {
+                'K': {
+                    symbol: 'K',
+                    english: 'Potassium',
+                    chinese: '鉀',
+                    metalColor: { en: 'Silvery white', zh: '銀白色' },
+                    oxideColor: { en: 'White', zh: '白色' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: 'Lilac', zh: '淺紫色' }
+                },
+                'Na': {
+                    symbol: 'Na',
+                    english: 'Sodium',
+                    chinese: '鈉',
+                    metalColor: { en: 'Silvery white', zh: '銀白色' },
+                    oxideColor: { en: 'White', zh: '白色' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: 'Golden yellow', zh: '金黃色' }
+                },
+                'Ba': {
+                    symbol: 'Ba',
+                    english: 'Barium',
+                    chinese: '鋇',
+                    metalColor: { en: 'Silvery white', zh: '銀白色' },
+                    oxideColor: { en: 'White', zh: '白色' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: 'Apple green', zh: '蘋果綠色' }
+                },
+                'Ca': {
+                    symbol: 'Ca',
+                    english: 'Calcium',
+                    chinese: '鈣',
+                    metalColor: { en: 'Silvery white', zh: '銀白色' },
+                    oxideColor: { en: 'White', zh: '白色' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: 'Brick-red', zh: '磚紅色' }
+                },
+                'Mg': {
+                    symbol: 'Mg',
+                    english: 'Magnesium',
+                    chinese: '鎂',
+                    metalColor: { en: 'Silvery white', zh: '銀白色' },
+                    oxideColor: { en: 'White', zh: '白色' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: 'Dazzling white light', zh: '耀眼白光' }
+                },
+                'Al': {
+                    symbol: 'Al',
+                    english: 'Aluminium',
+                    chinese: '鋁',
+                    metalColor: { en: 'Silvery white', zh: '銀白色' },
+                    oxideColor: { en: 'White', zh: '白色' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: '—', zh: '—' }
+                },
+                'Zn': {
+                    symbol: 'Zn',
+                    english: 'Zinc',
+                    chinese: '鋅',
+                    metalColor: { en: 'Silvery white', zh: '銀白色' },
+                    oxideColor: { en: 'White (yellow when hot)', zh: '白色（熱時黃色）' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: '—', zh: '—' }
+                },
+                'Fe': {
+                    symbol: 'Fe',
+                    english: 'Iron',
+                    chinese: '鐵',
+                    metalColor: { en: 'Silvery white', zh: '銀白色' },
+                    oxideColor: { en: 'Black (Fe₃O₄)', zh: '黑色（Fe₃O₄）' },
+                    ionColor: { en: 'Pale green (Fe²⁺) / Yellow-brown (Fe³⁺)', zh: '淺綠色（Fe²⁺）/ 黃棕色（Fe³⁺）' },
+                    flame: { en: '—', zh: '—' }
+                },
+                'Sn': {
+                    symbol: 'Sn',
+                    english: 'Tin',
+                    chinese: '錫',
+                    metalColor: { en: 'Silvery white', zh: '銀白色' },
+                    oxideColor: { en: 'White', zh: '白色' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: '—', zh: '—' }
+                },
+                'Pb': {
+                    symbol: 'Pb',
+                    english: 'Lead',
+                    chinese: '鉛',
+                    metalColor: { en: 'Silvery white', zh: '銀白色' },
+                    oxideColor: { en: 'Yellow (orange when hot)', zh: '黃色（熱時橙色）' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: '—', zh: '—' }
+                },
+                'Cu': {
+                    symbol: 'Cu',
+                    english: 'Copper',
+                    chinese: '銅',
+                    metalColor: { en: 'Reddish-brown', zh: '紅棕色' },
+                    oxideColor: { en: 'Black (CuO)', zh: '黑色（CuO）' },
+                    ionColor: { en: 'Blue (Cu²⁺)', zh: '藍色（Cu²⁺）' },
+                    flame: { en: '—', zh: '—' }
+                },
+                'Hg': {
+                    symbol: 'Hg',
+                    english: 'Mercury',
+                    chinese: '汞',
+                    metalColor: { en: 'Silvery white (liquid)', zh: '銀白色（液態）' },
+                    oxideColor: { en: 'Red (HgO)', zh: '紅色（HgO）' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: '—', zh: '—' }
+                },
+                'Ag': {
+                    symbol: 'Ag',
+                    english: 'Silver',
+                    chinese: '銀',
+                    metalColor: { en: 'Silvery white', zh: '銀白色' },
+                    oxideColor: { en: 'Black (Ag₂O)', zh: '黑色（Ag₂O）' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: '—', zh: '—' }
+                },
+                'Pt': {
+                    symbol: 'Pt',
+                    english: 'Platinum',
+                    chinese: '鉑',
+                    metalColor: { en: 'Silvery white', zh: '銀白色' },
+                    oxideColor: { en: '—', zh: '—' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: '—', zh: '—' }
+                },
+                'Au': {
+                    symbol: 'Au',
+                    english: 'Gold',
+                    chinese: '金',
+                    metalColor: { en: 'Golden yellow', zh: '金黃色' },
+                    oxideColor: { en: '—', zh: '—' },
+                    ionColor: { en: 'Colourless', zh: '無色' },
+                    flame: { en: '—', zh: '—' }
+                }
+            };
+
+            const REAGENTS = [
+                { id: 'O2(g)', label_zh: 'O₂(g)', label_en: 'O₂(g)', weight: 18, type: 'major' },
+                { id: 'H2O(l)', label_zh: 'H₂O(l)', label_en: 'H₂O(l)', weight: 18, type: 'major' },
+                { id: 'H2O(g)', label_zh: 'H₂O(g)', label_en: 'H₂O(g)', weight: 18, type: 'major' },
+                { id: 'HCl(aq)', label_zh: 'HCl(aq)', label_en: 'HCl(aq)', weight: 18, type: 'major' },
+                { id: 'CuSO4(aq)', label_zh: 'CuSO₄(aq)', label_en: 'CuSO₄(aq)', weight: 3.0, type: 'salt' },
+                { id: 'AgNO3(aq)', label_zh: 'AgNO₃(aq)', label_en: 'AgNO₃(aq)', weight: 3.0, type: 'salt' },
+                { id: 'Pb(NO3)2(aq)', label_zh: 'Pb(NO₃)₂(aq)', label_en: 'Pb(NO₃)₂(aq)', weight: 2.5, type: 'salt' },
+                { id: 'ZnSO4(aq)', label_zh: 'ZnSO₄(aq)', label_en: 'ZnSO₄(aq)', weight: 2.5, type: 'salt' },
+                { id: 'FeSO4(aq)', label_zh: 'FeSO₄(aq)', label_en: 'FeSO₄(aq)', weight: 2.5, type: 'salt' },
+                { id: 'FeCl3(aq)', label_zh: 'FeCl₃(aq)', label_en: 'FeCl₃(aq)', weight: 2.5, type: 'salt' },
+                { id: 'Cu(NO3)2(aq)', label_zh: 'Cu(NO₃)₂(aq)', label_en: 'Cu(NO₃)₂(aq)', weight: 2.0, type: 'salt' },
+                { id: 'CuCl2(aq)', label_zh: 'CuCl₂(aq)', label_en: 'CuCl₂(aq)', weight: 2.0, type: 'salt' },
+                { id: 'Zn(NO3)2(aq)', label_zh: 'Zn(NO₃)₂(aq)', label_en: 'Zn(NO₃)₂(aq)', weight: 2.0, type: 'salt' },
+                { id: 'ZnCl2(aq)', label_zh: 'ZnCl₂(aq)', label_en: 'ZnCl₂(aq)', weight: 2.0, type: 'salt' },
+                { id: 'Fe(NO3)2(aq)', label_zh: 'Fe(NO₃)₂(aq)', label_en: 'Fe(NO₃)₂(aq)', weight: 2.0, type: 'salt' },
+                { id: 'FeCl2(aq)', label_zh: 'FeCl₂(aq)', label_en: 'FeCl₂(aq)', weight: 2.0, type: 'salt' },
+                { id: 'SnCl2(aq)', label_zh: 'SnCl₂(aq)', label_en: 'SnCl₂(aq)', weight: 2.0, type: 'salt' }
+            ];
+
+            function buildWeightedArray() {
+                let arr = [];
+                REAGENTS.forEach(r => { for (let i = 0; i < r.weight; i++) arr.push(r.id); });
+                return arr;
+            }
+            let weightedReagents = buildWeightedArray();
+
+            // ============================================================
+            // REACTION_MAP - 已按您最新指示修正
+            // ============================================================
+            const REACTION_MAP = {
+                'K': {
+                    'O2(g)': { reaction: true, products: '4K + O₂ → 2K₂O', obs: ['solid_white'],
+                        prod: ['oxide'] },
+                    'H2O(l)': { reaction: true, products: '2K + 2H₂O → 2KOH + H₂', obs: ['flame_lilac', 'gas', 'float',
+                            'dissolve'
+                        ], prod: ['hydroxide', 'hydrogen'] },
+                    'H2O(g)': { reaction: true, products: '2K + 2H₂O → 2KOH + H₂', obs: ['solid_white'],
+                        prod: ['hydroxide', 'hydrogen'] },
+                    'HCl(aq)': { reaction: true, products: '2K + 2HCl → 2KCl + H₂', obs: ['flame_lilac', 'gas',
+                            'dissolve'
+                        ], prod: ['salt', 'hydrogen'] },
+                    'CuSO4(aq)': { reaction: true, products: 'K + H₂O + CuSO₄ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_blue', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'AgNO3(aq)': { reaction: true, products: 'K + H₂O + AgNO₃ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_brown'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Pb(NO3)2(aq)': { reaction: true, products: 'K + H₂O + Pb(NO₃)₂ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'ZnSO4(aq)': { reaction: true, products: 'K + H₂O + ZnSO₄ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'FeSO4(aq)': { reaction: true, products: 'K + H₂O + FeSO₄ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_green', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'FeCl3(aq)': { reaction: true, products: 'K + H₂O + FeCl₃ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_brown', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Cu(NO3)2(aq)': { reaction: true, products: 'K + H₂O + Cu(NO₃)₂ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_blue', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'CuCl2(aq)': { reaction: true, products: 'K + H₂O + CuCl₂ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_blue', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Zn(NO3)2(aq)': { reaction: true, products: 'K + H₂O + Zn(NO₃)₂ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'ZnCl2(aq)': { reaction: true, products: 'K + H₂O + ZnCl₂ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Fe(NO3)2(aq)': { reaction: true, products: 'K + H₂O + Fe(NO₃)₂ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_green', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'FeCl2(aq)': { reaction: true, products: 'K + H₂O + FeCl₂ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_green', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'SnCl2(aq)': { reaction: true, products: 'K + H₂O + SnCl₂ → ...',
+                        obs: ['flame_lilac', 'gas', 'float', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' }
+                },
+                'Na': {
+                    'O2(g)': { reaction: true, products: '4Na + O₂ → 2Na₂O', obs: ['solid_white'],
+                        prod: ['oxide'] },
+                    'H2O(l)': { reaction: true, products: '2Na + 2H₂O → 2NaOH + H₂', obs: ['flame_golden', 'gas', 'float',
+                            'dissolve'
+                        ], prod: ['hydroxide', 'hydrogen'] },
+                    'H2O(g)': { reaction: true, products: '2Na + 2H₂O → 2NaOH + H₂', obs: ['solid_white'],
+                        prod: ['hydroxide', 'hydrogen'] },
+                    'HCl(aq)': { reaction: true, products: '2Na + 2HCl → 2NaCl + H₂', obs: ['flame_golden', 'gas',
+                            'dissolve'
+                        ], prod: ['salt', 'hydrogen'] },
+                    'CuSO4(aq)': { reaction: true, products: 'Na + H₂O + CuSO₄ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_blue', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'AgNO3(aq)': { reaction: true, products: 'Na + H₂O + AgNO₃ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_brown'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Pb(NO3)2(aq)': { reaction: true, products: 'Na + H₂O + Pb(NO₃)₂ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'ZnSO4(aq)': { reaction: true, products: 'Na + H₂O + ZnSO₄ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'FeSO4(aq)': { reaction: true, products: 'Na + H₂O + FeSO₄ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_green', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'FeCl3(aq)': { reaction: true, products: 'Na + H₂O + FeCl₃ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_brown', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Cu(NO3)2(aq)': { reaction: true, products: 'Na + H₂O + Cu(NO₃)₂ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_blue', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'CuCl2(aq)': { reaction: true, products: 'Na + H₂O + CuCl₂ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_blue', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Zn(NO3)2(aq)': { reaction: true, products: 'Na + H₂O + Zn(NO₃)₂ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'ZnCl2(aq)': { reaction: true, products: 'Na + H₂O + ZnCl₂ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Fe(NO3)2(aq)': { reaction: true, products: 'Na + H₂O + Fe(NO₃)₂ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_green', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'FeCl2(aq)': { reaction: true, products: 'Na + H₂O + FeCl₂ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_green', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'SnCl2(aq)': { reaction: true, products: 'Na + H₂O + SnCl₂ → ...',
+                        obs: ['flame_golden', 'gas', 'float', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' }
+                },
+                'Ba': {
+                    'O2(g)': { reaction: true, products: '2Ba + O₂ → 2BaO', obs: ['flame_apple_green', 'solid_white'],
+                        prod: ['oxide'] },
+                    'H2O(l)': { reaction: true, products: 'Ba + 2H₂O → Ba(OH)₂ + H₂', obs: ['gas', 'dissolve', 'sink'],
+                        prod: ['hydroxide', 'hydrogen'] },
+                    'H2O(g)': { reaction: true, products: 'Ba + H₂O → BaO + H₂', obs: ['solid_white'],
+                        prod: ['oxide', 'hydrogen'] },
+                    'HCl(aq)': { reaction: true, products: 'Ba + 2HCl → BaCl₂ + H₂', obs: ['gas', 'dissolve'],
+                        prod: ['salt', 'hydrogen'] },
+                    'CuSO4(aq)': { reaction: true, products: 'Ba + H₂O + CuSO₄ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_white', 'ppt_blue', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'AgNO3(aq)': { reaction: true, products: 'Ba + H₂O + AgNO₃ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_brown'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Pb(NO3)2(aq)': { reaction: true, products: 'Ba + H₂O + Pb(NO₃)₂ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'ZnSO4(aq)': { reaction: true, products: 'Ba + H₂O + ZnSO₄ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'FeSO4(aq)': { reaction: true, products: 'Ba + H₂O + FeSO₄ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_white', 'ppt_green', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'FeCl3(aq)': { reaction: true, products: 'Ba + H₂O + FeCl₃ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_brown', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Cu(NO3)2(aq)': { reaction: true, products: 'Ba + H₂O + Cu(NO₃)₂ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_blue', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'CuCl2(aq)': { reaction: true, products: 'Ba + H₂O + CuCl₂ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_blue', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Zn(NO3)2(aq)': { reaction: true, products: 'Ba + H₂O + Zn(NO₃)₂ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'ZnCl2(aq)': { reaction: true, products: 'Ba + H₂O + ZnCl₂ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Fe(NO3)2(aq)': { reaction: true, products: 'Ba + H₂O + Fe(NO₃)₂ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_green', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'FeCl2(aq)': { reaction: true, products: 'Ba + H₂O + FeCl₂ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_green', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'SnCl2(aq)': { reaction: true, products: 'Ba + H₂O + SnCl₂ → ...',
+                        obs: ['gas', 'dissolve', 'sink', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' }
+                },
+                'Ca': {
+                    'O2(g)': { reaction: true, products: '2Ca + O₂ → 2CaO', obs: ['flame_brick', 'solid_white'],
+                        prod: ['oxide'] },
+                    'H2O(l)': { reaction: true, products: 'Ca + 2H₂O → Ca(OH)₂ + H₂', obs: ['ppt_white', 'gas', 'sink',
+                            'dissolve'
+                        ], prod: ['hydroxide', 'hydrogen'] },
+                    'H2O(g)': { reaction: true, products: 'Ca + H₂O → CaO + H₂', obs: ['solid_white'],
+                        prod: ['oxide', 'hydrogen'] },
+                    'HCl(aq)': { reaction: true, products: 'Ca + 2HCl → CaCl₂ + H₂', obs: ['gas', 'dissolve'],
+                        prod: ['salt', 'hydrogen'] },
+                    'CuSO4(aq)': { reaction: true, products: 'Ca + H₂O + CuSO₄ → ...',
+                        obs: ['gas', 'ppt_white', 'ppt_blue', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'AgNO3(aq)': { reaction: true, products: 'Ca + H₂O + AgNO₃ → ...',
+                        obs: ['gas', 'dissolve', 'ppt_brown'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Pb(NO3)2(aq)': { reaction: true, products: 'Ca + H₂O + Pb(NO₃)₂ → ...',
+                        obs: ['gas', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'ZnSO4(aq)': { reaction: true, products: 'Ca + H₂O + ZnSO₄ → ...',
+                        obs: ['gas', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'FeSO4(aq)': { reaction: true, products: 'Ca + H₂O + FeSO₄ → ...',
+                        obs: ['gas', 'ppt_white', 'ppt_green', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'FeCl3(aq)': { reaction: true, products: 'Ca + H₂O + FeCl₃ → ...',
+                        obs: ['gas', 'dissolve', 'ppt_brown', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Cu(NO3)2(aq)': { reaction: true, products: 'Ca + H₂O + Cu(NO₃)₂ → ...',
+                        obs: ['gas', 'dissolve', 'ppt_blue', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'CuCl2(aq)': { reaction: true, products: 'Ca + H₂O + CuCl₂ → ...',
+                        obs: ['gas', 'dissolve', 'ppt_blue', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Zn(NO3)2(aq)': { reaction: true, products: 'Ca + H₂O + Zn(NO₃)₂ → ...',
+                        obs: ['gas', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'ZnCl2(aq)': { reaction: true, products: 'Ca + H₂O + ZnCl₂ → ...',
+                        obs: ['gas', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'Fe(NO3)2(aq)': { reaction: true, products: 'Ca + H₂O + Fe(NO₃)₂ → ...',
+                        obs: ['gas', 'dissolve', 'ppt_green', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'FeCl2(aq)': { reaction: true, products: 'Ca + H₂O + FeCl₂ → ...',
+                        obs: ['gas', 'dissolve', 'ppt_green', 'sol_fade'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' },
+                    'SnCl2(aq)': { reaction: true, products: 'Ca + H₂O + SnCl₂ → ...',
+                        obs: ['gas', 'dissolve', 'ppt_white'],
+                        prod: ['salt', 'hydroxide', 'hydrogen'],
+                        trap: true,
+                        trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' }
+                },
+                'Mg': {
+                    'O2(g)': { reaction: true, products: '2Mg + O₂ → 2MgO', obs: ['bright', 'solid_white'],
+                        prod: ['oxide'] },
+                    'H2O(l)': { reaction: true, products: 'Mg + 2H₂O → Mg(OH)₂ + H₂', obs: ['ppt_white', 'gas', 'sink'],
+                        note: 'hot water', prod: ['hydroxide', 'hydrogen'] },
+                    'H2O(g)': { reaction: true, products: 'Mg + H₂O → MgO + H₂', obs: ['solid_white'],
+                        prod: ['oxide', 'hydrogen'] },
+                    'HCl(aq)': { reaction: true, products: 'Mg + 2HCl → MgCl₂ + H₂', obs: ['gas', 'dissolve'],
+                        prod: ['salt', 'hydrogen'] },
+                    'CuSO4(aq)': { reaction: true, products: 'Mg + CuSO₄ → MgSO₄ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'AgNO3(aq)': { reaction: true, products: 'Mg + 2AgNO₃ → Mg(NO₃)₂ + 2Ag',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'Pb(NO3)2(aq)': { reaction: true, products: 'Mg + Pb(NO₃)₂ → Mg(NO₃)₂ + Pb',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'ZnSO4(aq)': { reaction: true, products: 'Mg + ZnSO₄ → MgSO₄ + Zn',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'FeSO4(aq)': { reaction: true, products: 'Mg + FeSO₄ → MgSO₄ + Fe',
+                        obs: ['dissolve', 'deposit_silver', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'FeCl3(aq)': { reaction: true, products: '3Mg + 2FeCl₃ → 3MgCl₂ + 2Fe',
+                        obs: ['dissolve', 'deposit_silver', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'Cu(NO3)2(aq)': { reaction: true, products: 'Mg + Cu(NO₃)₂ → Mg(NO₃)₂ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'CuCl2(aq)': { reaction: true, products: 'Mg + CuCl₂ → MgCl₂ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'Zn(NO3)2(aq)': { reaction: true, products: 'Mg + Zn(NO₃)₂ → Mg(NO₃)₂ + Zn',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'ZnCl2(aq)': { reaction: true, products: 'Mg + ZnCl₂ → MgCl₂ + Zn',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'Fe(NO3)2(aq)': { reaction: true, products: 'Mg + Fe(NO₃)₂ → Mg(NO₃)₂ + Fe',
+                        obs: ['dissolve', 'deposit_silver', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'FeCl2(aq)': { reaction: true, products: 'Mg + FeCl₂ → MgCl₂ + Fe',
+                        obs: ['dissolve', 'deposit_silver', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'SnCl2(aq)': { reaction: true, products: 'Mg + SnCl₂ → MgCl₂ + Sn',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] }
+                },
+                'Al': {
+                    'O2(g)': { reaction: true, products: '4Al + 3O₂ → 2Al₂O₃', obs: ['solid_white'],
+                        prod: ['oxide'] },
+                    'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(g)': { reaction: false, products: '', obs: [], prod: [] },
+                    'HCl(aq)': { reaction: true, products: '2Al + 6HCl → 2AlCl₃ + 3H₂', obs: ['gas', 'dissolve'],
+                        prod: ['salt', 'hydrogen'] },
+                    'CuSO4(aq)': { reaction: true, products: '2Al + 3CuSO₄ → Al₂(SO₄)₃ + 3Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'AgNO3(aq)': { reaction: true, products: 'Al + 3AgNO₃ → Al(NO₃)₃ + 3Ag',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'Pb(NO3)2(aq)': { reaction: true, products: '2Al + 3Pb(NO₃)₂ → 2Al(NO₃)₃ + 3Pb',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'ZnSO4(aq)': { reaction: true, products: '2Al + 3ZnSO₄ → Al₂(SO₄)₃ + 3Zn',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'FeSO4(aq)': { reaction: true, products: '2Al + 3FeSO₄ → Al₂(SO₄)₃ + 3Fe',
+                        obs: ['dissolve', 'deposit_silver', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'FeCl3(aq)': { reaction: true, products: 'Al + FeCl₃ → AlCl₃ + Fe',
+                        obs: ['dissolve', 'deposit_silver', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'Cu(NO3)2(aq)': { reaction: true, products: '2Al + 3Cu(NO₃)₂ → 2Al(NO₃)₃ + 3Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'CuCl2(aq)': { reaction: true, products: '2Al + 3CuCl₂ → 2AlCl₃ + 3Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'Zn(NO3)2(aq)': { reaction: true, products: '2Al + 3Zn(NO₃)₂ → 2Al(NO₃)₃ + 3Zn',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'ZnCl2(aq)': { reaction: true, products: '2Al + 3ZnCl₂ → 2AlCl₃ + 3Zn',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'Fe(NO3)2(aq)': { reaction: true, products: '2Al + 3Fe(NO₃)₂ → 2Al(NO₃)₃ + 3Fe',
+                        obs: ['dissolve', 'deposit_silver', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'FeCl2(aq)': { reaction: true, products: '2Al + 3FeCl₂ → 2AlCl₃ + 3Fe',
+                        obs: ['dissolve', 'deposit_silver', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'SnCl2(aq)': { reaction: true, products: '2Al + 3SnCl₂ → 2AlCl₃ + 3Sn',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] }
+                },
+                'Zn': {
+                    'O2(g)': { reaction: true, products: '2Zn + O₂ → 2ZnO', obs: ['color_temp_white_yellow'],
+                        prod: ['oxide'] },
+                    'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(g)': { reaction: true, products: 'Zn + H₂O → ZnO + H₂', obs: ['solid_white'],
+                        prod: ['oxide', 'hydrogen'] },
+                    'HCl(aq)': { reaction: true, products: 'Zn + 2HCl → ZnCl₂ + H₂', obs: ['gas', 'dissolve'],
+                        prod: ['salt', 'hydrogen'] },
+                    'CuSO4(aq)': { reaction: true, products: 'Zn + CuSO₄ → ZnSO₄ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'AgNO3(aq)': { reaction: true, products: 'Zn + 2AgNO₃ → Zn(NO₃)₂ + 2Ag',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'Pb(NO3)2(aq)': { reaction: true, products: 'Zn + Pb(NO₃)₂ → Zn(NO₃)₂ + Pb',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'ZnSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeSO4(aq)': { reaction: true, products: 'Zn + FeSO₄ → ZnSO₄ + Fe',
+                        obs: ['dissolve', 'deposit_silver', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'FeCl3(aq)': { reaction: true, products: '3Zn + 2FeCl₃ → 3ZnCl₂ + 2Fe',
+                        obs: ['dissolve', 'deposit_silver', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'Cu(NO3)2(aq)': { reaction: true, products: 'Zn + Cu(NO₃)₂ → Zn(NO₃)₂ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'CuCl2(aq)': { reaction: true, products: 'Zn + CuCl₂ → ZnCl₂ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'Zn(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Fe(NO3)2(aq)': { reaction: true, products: 'Zn + Fe(NO₃)₂ → Zn(NO₃)₂ + Fe',
+                        obs: ['dissolve', 'deposit_silver', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'FeCl2(aq)': { reaction: true, products: 'Zn + FeCl₂ → ZnCl₂ + Fe',
+                        obs: ['dissolve', 'deposit_silver', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'SnCl2(aq)': { reaction: true, products: 'Zn + SnCl₂ → ZnCl₂ + Sn',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] }
+                },
+                'Fe': {
+                    'O2(g)': { reaction: true, products: '3Fe + 2O₂ → Fe₃O₄', obs: ['spark', 'solid_black'],
+                        prod: ['oxide'] },
+                    'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(g)': { reaction: true, products: '3Fe + 4H₂O → Fe₃O₄ + 4H₂', obs: ['solid_black'],
+                        prod: ['oxide', 'hydrogen'] },
+                    'HCl(aq)': { reaction: true, products: 'Fe + 2HCl → FeCl₂ + H₂', obs: ['gas', 'dissolve', 'sol_green'],
+                        prod: ['salt', 'hydrogen'] },
+                    'CuSO4(aq)': { reaction: true, products: 'Fe + CuSO₄ → FeSO₄ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_green'], prod: ['salt', 'metal'] },
+                    'AgNO3(aq)': { reaction: true, products: 'Fe + 2AgNO₃ → Fe(NO₃)₂ + 2Ag',
+                        obs: ['dissolve', 'deposit_silver', 'sol_green'], prod: ['salt', 'metal'] },
+                    'Pb(NO3)2(aq)': { reaction: true, products: 'Fe + Pb(NO₃)₂ → Fe(NO₃)₂ + Pb',
+                        obs: ['dissolve', 'deposit_silver', 'sol_green'], prod: ['salt', 'metal'] },
+                    'ZnSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Cu(NO3)2(aq)': { reaction: true, products: 'Fe + Cu(NO₃)₂ → Fe(NO₃)₂ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_green'], prod: ['salt', 'metal'] },
+                    'CuCl2(aq)': { reaction: true, products: 'Fe + CuCl₂ → FeCl₂ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_green'], prod: ['salt', 'metal'] },
+                    'Zn(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Fe(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'SnCl2(aq)': { reaction: true, products: 'Fe + SnCl₂ → FeCl₂ + Sn',
+                        obs: ['dissolve', 'deposit_silver', 'sol_green'], prod: ['salt', 'metal'] }
+                },
+                'Sn': {
+                    'O2(g)': { reaction: true, products: 'Sn + O₂ → SnO₂', obs: ['solid_white'], prod: ['oxide'] },
+                    'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(g)': { reaction: false, products: '', obs: [], prod: [] },
+                    'HCl(aq)': { reaction: true, products: 'Sn + 2HCl → SnCl₂ + H₂', obs: ['gas', 'dissolve'],
+                        prod: ['salt', 'hydrogen'] },
+                    'CuSO4(aq)': { reaction: true, products: 'Sn + CuSO₄ → SnSO₄ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'AgNO3(aq)': { reaction: true, products: 'Sn + 2AgNO₃ → Sn(NO₃)₂ + 2Ag',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'Pb(NO3)2(aq)': { reaction: true, products: 'Sn + Pb(NO₃)₂ → Sn(NO₃)₂ + Pb',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'ZnSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Cu(NO3)2(aq)': { reaction: true, products: 'Sn + Cu(NO₃)₂ → Sn(NO₃)₂ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'CuCl2(aq)': { reaction: true, products: 'Sn + CuCl₂ → SnCl₂ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'Zn(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Fe(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'SnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] }
+                },
+                'Pb': {
+                    'O2(g)': { reaction: true, products: '2Pb + O₂ → 2PbO', obs: ['color_temp_yellow_orange'],
+                        prod: ['oxide'] },
+                    'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(g)': { reaction: false, products: '', obs: [], prod: [] },
+                    'HCl(aq)': { reaction: true, products: 'Pb + 2HCl → PbCl₂ + H₂', obs: ['gas', 'dissolve', 'stop'],
+                        note: 'slow, stops', prod: ['salt', 'hydrogen'] },
+                    'CuSO4(aq)': { reaction: true, products: 'Pb + CuSO₄ → PbSO₄ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'solid_white'], prod: ['salt', 'metal'] },
+                    'AgNO3(aq)': { reaction: true, products: 'Pb + 2AgNO₃ → Pb(NO₃)₂ + 2Ag',
+                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+                    'Pb(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Cu(NO3)2(aq)': { reaction: true, products: 'Pb + Cu(NO₃)₂ → Pb(NO₃)₂ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+                    'CuCl2(aq)': { reaction: true, products: 'Pb + CuCl₂ → PbCl₂ + Cu',
+                        obs: ['dissolve', 'deposit_brown', 'solid_white'], prod: ['salt', 'metal'] },
+                    'Zn(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Fe(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'SnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] }
+                },
+                'Cu': {
+                    'O2(g)': { reaction: true, products: '2Cu + O₂ → 2CuO', obs: ['solid_black'], prod: ['oxide'] },
+                    'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(g)': { reaction: false, products: '', obs: [], prod: [] },
+                    'HCl(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'CuSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'AgNO3(aq)': { reaction: true, products: 'Cu + 2AgNO₃ → Cu(NO₃)₂ + 2Ag',
+                        obs: ['dissolve', 'deposit_silver', 'sol_blue'], prod: ['salt', 'metal'] },
+                    'Pb(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Cu(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'CuCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Zn(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Fe(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'SnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] }
+                },
+                'Hg': {
+                    'O2(g)': { reaction: true, products: '2Hg + O₂ → 2HgO', obs: ['solid_red'], prod: ['oxide'] },
+                    'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(g)': { reaction: false, products: '', obs: [], prod: [] },
+                    'HCl(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'CuSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'AgNO3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Pb(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Cu(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'CuCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Zn(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Fe(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'SnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] }
+                },
+                'Ag': {
+                    'O2(g)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(g)': { reaction: false, products: '', obs: [], prod: [] },
+                    'HCl(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'CuSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'AgNO3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Pb(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Cu(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'CuCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Zn(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Fe(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'SnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] }
+                },
+                'Pt': {
+                    'O2(g)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(g)': { reaction: false, products: '', obs: [], prod: [] },
+                    'HCl(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'CuSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'AgNO3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Pb(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Cu(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'CuCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Zn(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Fe(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'SnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] }
+                },
+                'Au': {
+                    'O2(g)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
+                    'H2O(g)': { reaction: false, products: '', obs: [], prod: [] },
+                    'HCl(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'CuSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'AgNO3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Pb(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Cu(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'CuCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Zn(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'ZnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'Fe(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'FeCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+                    'SnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] }
+                }
+            };
+
+            // ============================================================
+            // 語言文字
+            // ============================================================
+            const LANG = {
+                zh: {
+                    spinBtn: '🎲 抽題',
+                    nextBtn: '➡️ 下一題',
+                    checkBtn: '✔ 檢查',
+                    nextStepBtn: '➡️ 下一步',
+                    metalLabel: '⚙️ 金屬',
+                    reagentLabel: '🧪 反應物',
+                    q1Label: '📌 反應？',
+                    q1Yes: '✅ 有反應',
+                    q1No: '❌ 無反應',
+                    productLabel: '📦 產物 <span class="multi-select-hint">可複選</span>',
+                    prod_oxide: '氧化物',
+                    prod_hydroxide: '氫氧化物',
+                    prod_salt: '鹽',
+                    prod_hydrogen: '氫氣',
+                    prod_metal: '金屬',
+                    balTitle: '⚖️ 平衡方程式：',
+                    obsTitle: '🔍 觀察 <span class="multi-select-hint">可多選</span>',
+                    obsFlameLabel: '🔥 火焰',
+                    obsSolidLabel: '🧊 生成固體',
+                    obsDepositLabel: '🔄 固體沉積物',
+                    obsSolutionLabel: '🎨 溶液',
+                    obsPptLabel: '🟦 沉澱',
+                    obsOtherLabel: '🔦 其他',
+                    hintText: '按「抽題」開始！｜反應 → 產物 → 方程式 → 觀察',
+                    balanceToggle: '☑ 需要平衡',
+                    fbSpin: '按「抽題」開始練習',
+                    fbCorrect: '✅ 完全正確！',
+                    fbWrong: '❌ 有誤，請再試',
+                    fbNoReaction: '✅ 無反應，正確！',
+                    fbTrap: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。',
+                    fbMissingPrefix: '⚠️ 你漏選了：',
+                    fbProducts: '✅ 正確答案：',
+                    balCheck: '✅ 方程式平衡正確！',
+                    balWrong: '❌ 方程式未平衡，請再試',
+                    modalTitle: '📊 金屬活性序',
+                    thSymbol: '符號',
+                    thEnglish: '英文名稱',
+                    thChinese: '中文名稱',
+                    thMetalColor: '金屬顏色',
+                    thOxideColor: '氧化物顏色',
+                    thIonColor: '離子顏色',
+                    thFlame: '焰色',
+                    productsCorrect: '✅ 產物正確！',
+                    productMissing: '❌ 漏選：',
+                    productExtra: '多選：',
+                    productFeedbackError: '產物選擇有誤，請修正',
+                    tempHotLabel: '🔥 熱',
+                    tempColdLabel: '❄️ 室溫',
+                    flame_lilac: '🟣 淺紫色火焰',
+                    flame_golden: '🟡 金黃色火焰',
+                    flame_brick: '🔴 磚紅色火焰',
+                    flame_apple_green: '🟢 蘋果綠色火焰',
+                    bright: '💡 耀眼白光',
+                    spark: '✨ 火花',
+                    sol_green: '🟩 溶液變淺綠色',
+                    sol_blue: '🟦 溶液變藍色',
+                    sol_fade: '🎨 溶液顏色變淡',
+                    solid_white: '⬜ 白色固體生成',
+                    solid_black: '⬛ 黑色固體生成',
+                    solid_brown: '🟤 紅棕色固體生成',
+                    solid_silver: '⬜ 銀白色固體生成',
+                    solid_red: '🔴 紅色固體生成',
+                    solid_yellow: '🟡 黃色固體生成',
+                    color_temp: '🌡️ 顏色隨溫度轉變',
+                    deposit_brown: '🟤 紅棕色沉積物生成',
+                    deposit_silver: '⬜ 銀白色沉積物生成',
+                    ppt_blue: '🟦 藍色沉澱生成',
+                    ppt_green: '🟩 綠色沉澱生成',
+                    ppt_brown: '🟫 棕色沉澱生成',
+                    ppt_white: '⬜ 白色沉澱生成',
+                    gas: '💨 有氣泡釋出',
+                    float: '🌊 金屬浮起',
+                    sink: '⬇️ 金屬沉底',
+                    stop: '⏹️ 反應很快停止',
+                    dissolve: '🫠 金屬溶解',
+                    correctAnswer: '✅ 正確答案：',
+                    hintText: '💡 ',
+                    reactionHint: '這個組合會產生反應，請記住正確答案。',
+                    noReactionHint: '這個組合不會產生反應，請記住這個組合。',
+                    eqCoeffHint: '請檢查方程式的係數是否正確。',
+                    obsExtraPrefix: '⚠️ 你多選了：',
+                    balanceTrapHint: '⚠️ 此為陷阱題，金屬先與水反應，再與鹽溶液反應，沒有單一平衡方程式。',
+                    nextQuestionBtn: '➡️ 下一題'
+                },
+                en: {
+                    spinBtn: '🎲 Spin',
+                    nextBtn: '➡️ Next',
+                    checkBtn: '✔ Check',
+                    nextStepBtn: '➡️ Next Step',
+                    metalLabel: '⚙️ Metal',
+                    reagentLabel: '🧪 Reagent',
+                    q1Label: '📌 Reaction?',
+                    q1Yes: '✅ Reaction',
+                    q1No: '❌ No reaction',
+                    productLabel: '📦 Products <span class="multi-select-hint">select all</span>',
+                    prod_oxide: 'Oxide',
+                    prod_hydroxide: 'Hydroxide',
+                    prod_salt: 'Salt',
+                    prod_hydrogen: 'Hydrogen',
+                    prod_metal: 'Metal',
+                    balTitle: '⚖️ Balance the equation:',
+                    obsTitle: '🔍 Observations <span class="multi-select-hint">select all</span>',
+                    obsFlameLabel: '🔥 Flame',
+                    obsSolidLabel: '🧊 Solid formed',
+                    obsDepositLabel: '🔄 Solid deposit',
+                    obsSolutionLabel: '🎨 Solution',
+                    obsPptLabel: '🟦 Precipitate',
+                    obsOtherLabel: '🔦 Other',
+                    hintText: 'Press "Spin" to start!｜Reaction → Products → Equation → Observations',
+                    balanceToggle: '☑ Balancing required',
+                    fbSpin: 'Press "Spin" to start',
+                    fbCorrect: '✅ Perfect!',
+                    fbWrong: '❌ Incorrect, try again',
+                    fbNoReaction: '✅ No reaction, correct!',
+                    fbTrap: '⚠️ This metal is very reactive and reacts with water first. The main observations come from "metal + water" and subsequent precipitation reactions.',
+                    fbMissingPrefix: '⚠️ You missed: ',
+                    fbProducts: '✅ Correct answer: ',
+                    balCheck: '✅ Equation balanced correctly!',
+                    balWrong: '❌ Equation not balanced, try again',
+                    modalTitle: '📊 Metal Reactivity Series',
+                    thSymbol: 'Symbol',
+                    thEnglish: 'English Name',
+                    thChinese: '中文名稱',
+                    thMetalColor: 'Metal Colour',
+                    thOxideColor: 'Oxide Colour',
+                    thIonColor: 'Ion Colour',
+                    thFlame: 'Flame Test',
+                    productsCorrect: '✅ Products correct!',
+                    productMissing: '❌ Missing: ',
+                    productExtra: 'Extra: ',
+                    productFeedbackError: 'Product selection incorrect, please fix',
+                    tempHotLabel: '🔥 Hot',
+                    tempColdLabel: '❄️ Room temp',
+                    flame_lilac: '🟣 Lilac flame',
+                    flame_golden: '🟡 Golden yellow flame',
+                    flame_brick: '🔴 Brick-red flame',
+                    flame_apple_green: '🟢 Apple green flame',
+                    bright: '💡 Dazzling white light',
+                    spark: '✨ Sparks',
+                    sol_green: '🟩 Solution turned pale green',
+                    sol_blue: '🟦 Solution turned blue',
+                    sol_fade: '🎨 Solution faded',
+                    solid_white: '⬜ White solid formed',
+                    solid_black: '⬛ Black solid formed',
+                    solid_brown: '🟤 Reddish-brown solid formed',
+                    solid_silver: '⬜ Silvery solid formed',
+                    solid_red: '🔴 Red solid formed',
+                    solid_yellow: '🟡 Yellow solid formed',
+                    color_temp: '🌡️ Colour changes with temperature',
+                    deposit_brown: '🟤 Reddish-brown deposit formed',
+                    deposit_silver: '⬜ Silvery deposit formed',
+                    ppt_blue: '🟦 Blue precipitate formed',
+                    ppt_green: '🟩 Green precipitate formed',
+                    ppt_brown: '🟫 Brown precipitate formed',
+                    ppt_white: '⬜ White precipitate formed',
+                    gas: '💨 Bubbles released',
+                    float: '🌊 Metal floated',
+                    sink: '⬇️ Metal sank',
+                    stop: '⏹️ Reaction stopped quickly',
+                    dissolve: '🫠 Metal dissolved',
+                    correctAnswer: '✅ Correct answer: ',
+                    hintText: '💡 ',
+                    reactionHint: 'This combination will react. Remember the correct answer.',
+                    noReactionHint: 'This combination will not react. Remember this combination.',
+                    eqCoeffHint: 'Check if the coefficients of the equation are correct.',
+                    obsExtraPrefix: '⚠️ You selected extra: ',
+                    balanceTrapHint: '⚠️ This is a trap question. The metal reacts with water first, then with the salt solution. There is no single balanced equation.',
+                    nextQuestionBtn: '➡️ Next'
+                }
+            };
+
+            // ============================================================
+            // 狀態
+            // ============================================================
+            let currentLang = 'en';
+            let currentMetal = null,
+                currentReagent = null,
+                currentResult = null;
+            let isAnswered = false,
+                isSpinning = false,
+                selectedReaction = null;
+            let selectedPpt = new Set(),
+                selectedOther = new Set(),
+                selectedDeposit = new Set(),
+                selectedProducts = new Set();
+            let balanceCoeffs = {},
+                balanceTerms = [],
+                balanceActive = true;
+            let totalAttempts = 0,
+                correctAttempts = 0,
+                currentCoeffTarget = null,
+                popupVisible = false;
+            let productsCorrect = false,
+                showBalanceAndObs = false;
+            let productCheckDone = false;
+            let reactionChecked = false;
+
+            // ============================================================
+            // DOM 參考
+            // ============================================================
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            const mainCard = document.getElementById('mainCard');
+            const welcomeZh = document.getElementById('welcomeZh');
+            const welcomeEn = document.getElementById('welcomeEn');
+            const balanceCheckbox = document.getElementById('balanceCheckbox');
+            const balanceToggleLabel = document.getElementById('balanceToggleLabel');
+            const metalDisplay = document.getElementById('metalDisplay');
+            const reagentDisplay = document.getElementById('reagentDisplay');
+            const spinBtn = document.getElementById('spinBtn');
+            const checkReactionBtn = document.getElementById('checkReactionBtn');
+            const checkBottomBtn = document.getElementById('checkBottomBtn');
+            const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+            const reactionQuestionMark = document.getElementById('reactionQuestionMark');
+            const q1Options = document.getElementById('q1Options');
+            const productRow = document.getElementById('productRow');
+            const productGroup = document.getElementById('productGroup');
+            const productFeedback = document.getElementById('productFeedback');
+            const nextStepBtn = document.getElementById('nextStepBtn');
+            const balanceArea = document.getElementById('balanceArea');
+            const balanceRow = document.getElementById('balanceRow');
+            const balTitle = document.getElementById('balTitle');
+            const balanceTrapHint = document.getElementById('balanceTrapHint');
+            const obsSection = document.getElementById('obsSection');
+            const obsRowFlame = document.getElementById('obsRowFlame');
+            const obsRowSolid = document.getElementById('obsRowSolid');
+            const obsRowDeposit = document.getElementById('obsRowDeposit');
+            const obsRowPpt = document.getElementById('obsRowPpt');
+            const obsRowOther = document.getElementById('obsRowOther');
+            const obsFlame = document.getElementById('obsFlame');
+            const obsSolid = document.getElementById('obsSolid');
+            const obsSolution = document.getElementById('obsSolution');
+            const obsPptGroup = document.getElementById('obsPptGroup');
+            const obsOtherGroup = document.getElementById('obsOtherGroup');
+            const obsDepositGroup = document.getElementById('obsDepositGroup');
+            const colorTempSub = document.getElementById('colorTempSub');
+            const colorTempHot = document.getElementById('colorTempHot');
+            const colorTempCold = document.getElementById('colorTempCold');
+            const fbText0 = document.getElementById('fbText0');
+            const fbDetail0 = document.getElementById('fbDetail0');
+            const feedback0 = document.getElementById('feedback0');
+            const hintText = document.getElementById('hintText');
+            const coeffPopup = document.getElementById('coeffPopup');
+            const modalRefBody = document.getElementById('modalRefBody');
+            const langBtns = document.querySelectorAll('.lang-btn');
+            const practiceSelector = document.getElementById('practiceSelector');
+            const reactionRow = document.getElementById('reactionRow');
+
+            // ============================================================
+            // 工具函數
+            // ============================================================
+            function t(key) { return LANG[currentLang][key] || key; }
+
+            function getReagentLabel(id, metal) {
+                const r = REAGENTS.find(x => x.id === id);
+                if (!r) return id;
+                if (id === 'H2O(l)' && metal === 'Mg') {
+                    return currentLang === 'zh' ? 'H₂O(l) [熱水]' : 'H₂O(l) [hot]';
+                }
+                if (id === 'H2O(l)') {
+                    return 'H₂O(l)';
+                }
+                return currentLang === 'zh' ? r.label_zh : r.label_en;
+            }
+
+            function getColorDotStyle(colorKey) {
+                if (!colorKey || colorKey === '—' || colorKey === 'Colourless') return 'background:#f8f8f8; border:1px solid #ccc;';
+                if (colorKey === 'White (yellow when hot)') return 'background: linear-gradient(135deg, #f8f8f8 50%, #f5d06a 50%); border:1px solid #ccc;';
+                if (colorKey === 'Yellow (orange when hot)') return 'background: linear-gradient(135deg, #f5d06a 50%, #f5a623 50%); border:1px solid #ccc;';
+                if (colorKey === '銀白色') return 'background:#e8eef8; border:1px solid #b0c0d0;';
+                if (colorKey === '銀白色（液態）') return 'background:#e0e8f0; border:1px solid #b0c0d0;';
+                if (colorKey === '紅棕色') return 'background:#b87333; border:1px solid #8a5a2a;';
+                if (colorKey === '金黃色') return 'background:#f5d06a; border:1px solid #c4a030;';
+                if (colorKey === '黑色（Fe₃O₄）') return 'background:#333; border:1px solid #555;';
+                if (colorKey === '黑色（CuO）') return 'background:#333; border:1px solid #555;';
+                if (colorKey === '紅色（HgO）') return 'background:#cc3333; border:1px solid #992222;';
+                if (colorKey === '黑色（Ag₂O）') return 'background:#333; border:1px solid #555;';
+                if (colorKey === '白色') return 'background:#f8f8f8; border:1px solid #ccc;';
+                if (colorKey === '淺紫色') return 'background:#c8a0d8; border:1px solid #9a70aa;';
+                if (colorKey === '金黃色') return 'background:#f5d06a; border:1px solid #c4a030;';
+                if (colorKey === '磚紅色') return 'background:#c44a3a; border:1px solid #8a2a1a;';
+                if (colorKey === '蘋果綠色') return 'background:#8ac86a; border:1px solid #5a9a3a;';
+                if (colorKey === '耀眼白光') return 'background:#f8f8ff; border:1px solid #aaa;';
+                if (colorKey === '淺綠色（Fe²⁺）/ 黃棕色（Fe³⁺）') return 'background: linear-gradient(135deg, #b8d9b0 50%, #c4a040 50%); border:1px solid #aaa;';
+                if (colorKey === '藍色（Cu²⁺）') return 'background:#4a8ab5; border:1px solid #2a6a8a;';
+                if (colorKey === '白色（熱時黃色）') return 'background: linear-gradient(135deg, #f8f8f8 50%, #f5d06a 50%); border:1px solid #ccc;';
+                if (colorKey === '黃色（熱時橙色）') return 'background: linear-gradient(135deg, #f5d06a 50%, #f5a623 50%); border:1px solid #ccc;';
+
+                const map = {
+                    'Silvery white': 'background:#e8eef8; border:1px solid #b0c0d0;',
+                    'Silvery white (liquid)': 'background:#e0e8f0; border:1px solid #b0c0d0;',
+                    'Reddish-brown': 'background:#b87333; border:1px solid #8a5a2a;',
+                    'Golden yellow': 'background:#f5d06a; border:1px solid #c4a030;',
+                    'Black (Fe₃O₄)': 'background:#333; border:1px solid #555;',
+                    'Black (CuO)': 'background:#333; border:1px solid #555;',
+                    'Red (HgO)': 'background:#cc3333; border:1px solid #992222;',
+                    'Black (Ag₂O)': 'background:#333; border:1px solid #555;',
+                    'White': 'background:#f8f8f8; border:1px solid #ccc;',
+                    'Lilac': 'background:#c8a0d8; border:1px solid #9a70aa;',
+                    'Golden yellow (flame)': 'background:#f5d06a; border:1px solid #c4a030;',
+                    'Brick-red': 'background:#c44a3a; border:1px solid #8a2a1a;',
+                    'Apple green': 'background:#8ac86a; border:1px solid #5a9a3a;',
+                    'Dazzling white light': 'background:#f8f8ff; border:1px solid #aaa;',
+                    'Pale green (Fe²⁺) / Yellow-brown (Fe³⁺)': 'background: linear-gradient(135deg, #b8d9b0 50%, #c4a040 50%); border:1px solid #aaa;',
+                    'Blue (Cu²⁺)': 'background:#4a8ab5; border:1px solid #2a6a8a;'
+                };
+                for (const key of Object.keys(map)) {
+                    if (colorKey.includes(key) || key.includes(colorKey)) return map[key];
+                }
+                return 'background:#f0f0f0; border:1px solid #ddd;';
+            }
+
+            // ============================================================
+            // 參考表格
+            // ============================================================
+            function renderReferenceTable() {
+                const metals = [...METALS];
+                let html = '';
+                const lang = currentLang;
+                metals.forEach((m, i) => {
+                    const data = METAL_DATA[m];
+                    if (!data) return;
+                    const rowClass = i % 2 === 0 ? '' : 'row-highlight';
+                    const metalColor = lang === 'zh' ? data.metalColor.zh : data.metalColor.en;
+                    const oxideColor = lang === 'zh' ? data.oxideColor.zh : data.oxideColor.en;
+                    const ionColor = lang === 'zh' ? data.ionColor.zh : data.ionColor.en;
+                    const flame = lang === 'zh' ? data.flame.zh : data.flame.en;
+                    const metalDot = getColorDotStyle(metalColor);
+                    const oxideDot = getColorDotStyle(oxideColor);
+                    const ionDot = getColorDotStyle(ionColor);
+                    const flameDot = getColorDotStyle(flame);
+                    html += `<tr class="${rowClass}">`;
+                    html += `<td class="metal-symbol">${data.symbol}</td>`;
+                    html += `<td>${data.english}</td>`;
+                    html += `<td>${data.chinese}</td>`;
+                    html += `<td><span class="color-dot" style="${metalDot}"></span>${metalColor}</td>`;
+                    html += `<td><span class="color-dot" style="${oxideDot}"></span>${oxideColor}</td>`;
+                    html += `<td><span class="color-dot" style="${ionDot}"></span>${ionColor}</td>`;
+                    html += `<td><span class="color-dot" style="${flameDot}"></span>${flame}</td>`;
+                    html += `</tr>`;
+                });
+                modalRefBody.innerHTML = html;
+                const titles = {
+                    mthSymbol: t('thSymbol'),
+                    mthEnglish: t('thEnglish'),
+                    mthChinese: t('thChinese'),
+                    mthMetalColor: t('thMetalColor'),
+                    mthOxideColor: t('thOxideColor'),
+                    mthIonColor: t('thIonColor'),
+                    mthFlame: t('thFlame')
+                };
+                ['mthSymbol', 'mthEnglish', 'mthChinese', 'mthMetalColor', 'mthOxideColor', 'mthIonColor', 'mthFlame']
+                    .forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.textContent = titles[id];
+                    });
+                document.getElementById('modalTitle').textContent = t('modalTitle');
+            }
+
+            // ============================================================
+            // 平衡方程式
+            // ============================================================
+            function getBalancedEquation(metal, reagent) {
+                const result = REACTION_MAP[metal]?.[reagent];
+                if (!result || !result.reaction) return null;
+                if (result.trap) return null;
+                const eqMap = {
+                    'K_O2(g)': { terms: ['K', 'O₂', 'K₂O'], coeffs: [4, 1, 2] },
+                    'K_H2O(l)': { terms: ['K', 'H₂O', 'KOH', 'H₂'], coeffs: [2, 2, 2, 1] },
+                    'K_H2O(g)': { terms: ['K', 'H₂O', 'KOH', 'H₂'], coeffs: [2, 2, 2, 1] },
+                    'K_HCl(aq)': { terms: ['K', 'HCl', 'KCl', 'H₂'], coeffs: [2, 2, 2, 1] },
+                    'Na_O2(g)': { terms: ['Na', 'O₂', 'Na₂O'], coeffs: [4, 1, 2] },
+                    'Na_H2O(l)': { terms: ['Na', 'H₂O', 'NaOH', 'H₂'], coeffs: [2, 2, 2, 1] },
+                    'Na_H2O(g)': { terms: ['Na', 'H₂O', 'NaOH', 'H₂'], coeffs: [2, 2, 2, 1] },
+                    'Na_HCl(aq)': { terms: ['Na', 'HCl', 'NaCl', 'H₂'], coeffs: [2, 2, 2, 1] },
+                    'Ba_O2(g)': { terms: ['Ba', 'O₂', 'BaO'], coeffs: [2, 1, 2] },
+                    'Ba_H2O(l)': { terms: ['Ba', 'H₂O', 'Ba(OH)₂', 'H₂'], coeffs: [1, 2, 1, 1] },
+                    'Ba_H2O(g)': { terms: ['Ba', 'H₂O', 'BaO', 'H₂'], coeffs: [1, 1, 1, 1] },
+                    'Ba_HCl(aq)': { terms: ['Ba', 'HCl', 'BaCl₂', 'H₂'], coeffs: [1, 2, 1, 1] },
+                    'Ca_O2(g)': { terms: ['Ca', 'O₂', 'CaO'], coeffs: [2, 1, 2] },
+                    'Ca_H2O(l)': { terms: ['Ca', 'H₂O', 'Ca(OH)₂', 'H₂'], coeffs: [1, 2, 1, 1] },
+                    'Ca_H2O(g)': { terms: ['Ca', 'H₂O', 'CaO', 'H₂'], coeffs: [1, 1, 1, 1] },
+                    'Ca_HCl(aq)': { terms: ['Ca', 'HCl', 'CaCl₂', 'H₂'], coeffs: [1, 2, 1, 1] },
+                    'Mg_O2(g)': { terms: ['Mg', 'O₂', 'MgO'], coeffs: [2, 1, 2] },
+                    'Mg_H2O(l)': { terms: ['Mg', 'H₂O', 'Mg(OH)₂', 'H₂'], coeffs: [1, 2, 1, 1] },
+                    'Mg_H2O(g)': { terms: ['Mg', 'H₂O', 'MgO', 'H₂'], coeffs: [1, 1, 1, 1] },
+                    'Mg_HCl(aq)': { terms: ['Mg', 'HCl', 'MgCl₂', 'H₂'], coeffs: [1, 2, 1, 1] },
+                    'Al_O2(g)': { terms: ['Al', 'O₂', 'Al₂O₃'], coeffs: [4, 3, 2] },
+                    'Al_HCl(aq)': { terms: ['Al', 'HCl', 'AlCl₃', 'H₂'], coeffs: [2, 6, 2, 3] },
+                    'Zn_O2(g)': { terms: ['Zn', 'O₂', 'ZnO'], coeffs: [2, 1, 2] },
+                    'Zn_H2O(g)': { terms: ['Zn', 'H₂O', 'ZnO', 'H₂'], coeffs: [1, 1, 1, 1] },
+                    'Zn_HCl(aq)': { terms: ['Zn', 'HCl', 'ZnCl₂', 'H₂'], coeffs: [1, 2, 1, 1] },
+                    'Fe_O2(g)': { terms: ['Fe', 'O₂', 'Fe₃O₄'], coeffs: [3, 2, 1] },
+                    'Fe_H2O(g)': { terms: ['Fe', 'H₂O', 'Fe₃O₄', 'H₂'], coeffs: [3, 4, 1, 4] },
+                    'Fe_HCl(aq)': { terms: ['Fe', 'HCl', 'FeCl₂', 'H₂'], coeffs: [1, 2, 1, 1] },
+                    'Sn_O2(g)': { terms: ['Sn', 'O₂', 'SnO₂'], coeffs: [1, 1, 1] },
+                    'Sn_HCl(aq)': { terms: ['Sn', 'HCl', 'SnCl₂', 'H₂'], coeffs: [1, 2, 1, 1] },
+                    'Pb_O2(g)': { terms: ['Pb', 'O₂', 'PbO'], coeffs: [2, 1, 2] },
+                    'Pb_HCl(aq)': { terms: ['Pb', 'HCl', 'PbCl₂', 'H₂'], coeffs: [1, 2, 1, 1] },
+                    'Cu_O2(g)': { terms: ['Cu', 'O₂', 'CuO'], coeffs: [2, 1, 2] },
+                    'Hg_O2(g)': { terms: ['Hg', 'O₂', 'HgO'], coeffs: [2, 1, 2] },
+                    'Mg_CuSO4(aq)': { terms: ['Mg', 'CuSO₄', 'MgSO₄', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Mg_AgNO3(aq)': { terms: ['Mg', 'AgNO₃', 'Mg(NO₃)₂', 'Ag'], coeffs: [1, 2, 1, 2] },
+                    'Mg_Pb(NO3)2(aq)': { terms: ['Mg', 'Pb(NO₃)₂', 'Mg(NO₃)₂', 'Pb'], coeffs: [1, 1, 1, 1] },
+                    'Mg_ZnSO4(aq)': { terms: ['Mg', 'ZnSO₄', 'MgSO₄', 'Zn'], coeffs: [1, 1, 1, 1] },
+                    'Mg_FeSO4(aq)': { terms: ['Mg', 'FeSO₄', 'MgSO₄', 'Fe'], coeffs: [1, 1, 1, 1] },
+                    'Mg_FeCl3(aq)': { terms: ['Mg', 'FeCl₃', 'MgCl₂', 'Fe'], coeffs: [3, 2, 3, 2] },
+                    'Mg_Cu(NO3)2(aq)': { terms: ['Mg', 'Cu(NO₃)₂', 'Mg(NO₃)₂', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Mg_CuCl2(aq)': { terms: ['Mg', 'CuCl₂', 'MgCl₂', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Mg_Zn(NO3)2(aq)': { terms: ['Mg', 'Zn(NO₃)₂', 'Mg(NO₃)₂', 'Zn'], coeffs: [1, 1, 1, 1] },
+                    'Mg_ZnCl2(aq)': { terms: ['Mg', 'ZnCl₂', 'MgCl₂', 'Zn'], coeffs: [1, 1, 1, 1] },
+                    'Mg_Fe(NO3)2(aq)': { terms: ['Mg', 'Fe(NO₃)₂', 'Mg(NO₃)₂', 'Fe'], coeffs: [1, 1, 1, 1] },
+                    'Mg_FeCl2(aq)': { terms: ['Mg', 'FeCl₂', 'MgCl₂', 'Fe'], coeffs: [1, 1, 1, 1] },
+                    'Mg_SnCl2(aq)': { terms: ['Mg', 'SnCl₂', 'MgCl₂', 'Sn'], coeffs: [1, 1, 1, 1] },
+                    'Al_CuSO4(aq)': { terms: ['Al', 'CuSO₄', 'Al₂(SO₄)₃', 'Cu'], coeffs: [2, 3, 1, 3] },
+                    'Al_AgNO3(aq)': { terms: ['Al', 'AgNO₃', 'Al(NO₃)₃', 'Ag'], coeffs: [1, 3, 1, 3] },
+                    'Al_Pb(NO3)2(aq)': { terms: ['Al', 'Pb(NO₃)₂', 'Al(NO₃)₃', 'Pb'], coeffs: [2, 3, 2, 3] },
+                    'Al_ZnSO4(aq)': { terms: ['Al', 'ZnSO₄', 'Al₂(SO₄)₃', 'Zn'], coeffs: [2, 3, 1, 3] },
+                    'Al_FeSO4(aq)': { terms: ['Al', 'FeSO₄', 'Al₂(SO₄)₃', 'Fe'], coeffs: [2, 3, 1, 3] },
+                    'Al_FeCl3(aq)': { terms: ['Al', 'FeCl₃', 'AlCl₃', 'Fe'], coeffs: [1, 1, 1, 1] },
+                    'Al_Cu(NO3)2(aq)': { terms: ['Al', 'Cu(NO₃)₂', 'Al(NO₃)₃', 'Cu'], coeffs: [2, 3, 2, 3] },
+                    'Al_CuCl2(aq)': { terms: ['Al', 'CuCl₂', 'AlCl₃', 'Cu'], coeffs: [2, 3, 2, 3] },
+                    'Al_Zn(NO3)2(aq)': { terms: ['Al', 'Zn(NO₃)₂', 'Al(NO₃)₃', 'Zn'], coeffs: [2, 3, 2, 3] },
+                    'Al_ZnCl2(aq)': { terms: ['Al', 'ZnCl₂', 'AlCl₃', 'Zn'], coeffs: [2, 3, 2, 3] },
+                    'Al_Fe(NO3)2(aq)': { terms: ['Al', 'Fe(NO₃)₂', 'Al(NO₃)₃', 'Fe'], coeffs: [2, 3, 2, 3] },
+                    'Al_FeCl2(aq)': { terms: ['Al', 'FeCl₂', 'AlCl₃', 'Fe'], coeffs: [2, 3, 2, 3] },
+                    'Al_SnCl2(aq)': { terms: ['Al', 'SnCl₂', 'AlCl₃', 'Sn'], coeffs: [2, 3, 2, 3] },
+                    'Zn_CuSO4(aq)': { terms: ['Zn', 'CuSO₄', 'ZnSO₄', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Zn_AgNO3(aq)': { terms: ['Zn', 'AgNO₃', 'Zn(NO₃)₂', 'Ag'], coeffs: [1, 2, 1, 2] },
+                    'Zn_Pb(NO3)2(aq)': { terms: ['Zn', 'Pb(NO₃)₂', 'Zn(NO₃)₂', 'Pb'], coeffs: [1, 1, 1, 1] },
+                    'Zn_FeSO4(aq)': { terms: ['Zn', 'FeSO₄', 'ZnSO₄', 'Fe'], coeffs: [1, 1, 1, 1] },
+                    'Zn_FeCl3(aq)': { terms: ['Zn', 'FeCl₃', 'ZnCl₂', 'Fe'], coeffs: [3, 2, 3, 2] },
+                    'Zn_Cu(NO3)2(aq)': { terms: ['Zn', 'Cu(NO₃)₂', 'Zn(NO₃)₂', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Zn_CuCl2(aq)': { terms: ['Zn', 'CuCl₂', 'ZnCl₂', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Zn_Fe(NO3)2(aq)': { terms: ['Zn', 'Fe(NO₃)₂', 'Zn(NO₃)₂', 'Fe'], coeffs: [1, 1, 1, 1] },
+                    'Zn_FeCl2(aq)': { terms: ['Zn', 'FeCl₂', 'ZnCl₂', 'Fe'], coeffs: [1, 1, 1, 1] },
+                    'Zn_SnCl2(aq)': { terms: ['Zn', 'SnCl₂', 'ZnCl₂', 'Sn'], coeffs: [1, 1, 1, 1] },
+                    'Fe_CuSO4(aq)': { terms: ['Fe', 'CuSO₄', 'FeSO₄', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Fe_AgNO3(aq)': { terms: ['Fe', 'AgNO₃', 'Fe(NO₃)₂', 'Ag'], coeffs: [1, 2, 1, 2] },
+                    'Fe_Pb(NO3)2(aq)': { terms: ['Fe', 'Pb(NO₃)₂', 'Fe(NO₃)₂', 'Pb'], coeffs: [1, 1, 1, 1] },
+                    'Fe_Cu(NO3)2(aq)': { terms: ['Fe', 'Cu(NO₃)₂', 'Fe(NO₃)₂', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Fe_CuCl2(aq)': { terms: ['Fe', 'CuCl₂', 'FeCl₂', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Fe_SnCl2(aq)': { terms: ['Fe', 'SnCl₂', 'FeCl₂', 'Sn'], coeffs: [1, 1, 1, 1] },
+                    'Sn_CuSO4(aq)': { terms: ['Sn', 'CuSO₄', 'SnSO₄', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Sn_AgNO3(aq)': { terms: ['Sn', 'AgNO₃', 'Sn(NO₃)₂', 'Ag'], coeffs: [1, 2, 1, 2] },
+                    'Sn_Pb(NO3)2(aq)': { terms: ['Sn', 'Pb(NO₃)₂', 'Sn(NO₃)₂', 'Pb'], coeffs: [1, 1, 1, 1] },
+                    'Sn_Cu(NO3)2(aq)': { terms: ['Sn', 'Cu(NO₃)₂', 'Sn(NO₃)₂', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Sn_CuCl2(aq)': { terms: ['Sn', 'CuCl₂', 'SnCl₂', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Pb_CuSO4(aq)': { terms: ['Pb', 'CuSO₄', 'PbSO₄', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Pb_AgNO3(aq)': { terms: ['Pb', 'AgNO₃', 'Pb(NO₃)₂', 'Ag'], coeffs: [1, 2, 1, 2] },
+                    'Pb_Cu(NO3)2(aq)': { terms: ['Pb', 'Cu(NO₃)₂', 'Pb(NO₃)₂', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Pb_CuCl2(aq)': { terms: ['Pb', 'CuCl₂', 'PbCl₂', 'Cu'], coeffs: [1, 1, 1, 1] },
+                    'Cu_AgNO3(aq)': { terms: ['Cu', 'AgNO₃', 'Cu(NO₃)₂', 'Ag'], coeffs: [1, 2, 1, 2] }
+                };
+                const key = metal + '_' + reagent;
+                return eqMap[key] || null;
+            }
+
+            function renderBalanceEquation(metal, reagent) {
+                const eq = getBalancedEquation(metal, reagent);
+                const result = REACTION_MAP[metal]?.[reagent];
+
+                if (result && result.trap) {
+                    balanceArea.style.display = 'flex';
+                    balanceRow.innerHTML = '';
+                    balanceTrapHint.style.display = 'block';
+                    balTitle.textContent = t('balTitle');
+                    return;
+                }
+
+                balanceTrapHint.style.display = 'none';
+
+                if (!eq || !balanceActive || !showBalanceAndObs) {
+                    balanceArea.style.display = 'none';
+                    return;
+                }
+                balanceArea.style.display = 'flex';
+                balanceTerms = eq.terms;
+                balanceCoeffs = {};
+                balanceTerms.forEach((_, idx) => { balanceCoeffs[idx] = 1; });
+                let html = '';
+                balanceTerms.forEach((term, idx) => {
+                    const coeff = balanceCoeffs[idx] || 1;
+                    const displayCoeff = coeff === 1 ? '' : coeff;
+                    html += `<span class="term">`;
+                    html += `<span class="coeff-box" data-idx="${idx}" data-value="${coeff}">${displayCoeff || '&nbsp;'}</span>`;
+                    html += `${term}</span>`;
+                    if (idx < balanceTerms.length - 1) {
+                        html += `<span class="arrow-symbol"> → </span>`;
+                    }
+                });
+                balanceRow.innerHTML = html;
+                document.querySelectorAll('.coeff-box').forEach(box => {
+                    box.addEventListener('click', function(e) {
+                        if (isAnswered || isSpinning) return;
+                        const idx = parseInt(this.dataset.idx);
+                        currentCoeffTarget = idx;
+                        const rect = this.getBoundingClientRect();
+                        const popup = document.getElementById('coeffPopup');
+                        let left = rect.left + rect.width / 2 - 90;
+                        let top = rect.bottom + 8;
+                        if (left < 10) left = 10;
+                        if (top + 150 > window.innerHeight) top = rect.top - 150;
+                        popup.style.left = left + 'px';
+                        popup.style.top = top + 'px';
+                        const currentVal = parseInt(this.dataset.value) || 1;
+                        document.querySelectorAll('#coeffGrid button').forEach(b => {
+                            b.classList.toggle('selected', parseInt(b.dataset.val) === currentVal);
+                        });
+                        popup.classList.add('active');
+                        popupVisible = true;
+                    });
+                });
+                balTitle.textContent = t('balTitle');
+            }
+
+            function setupCoeffPopup() {
+                document.querySelectorAll('#coeffGrid button').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const val = parseInt(this.dataset.val);
+                        if (currentCoeffTarget !== null) {
+                            balanceCoeffs[currentCoeffTarget] = val;
+                            const box = document.querySelector(
+                                `.coeff-box[data-idx="${currentCoeffTarget}"]`);
+                            if (box) {
+                                box.dataset.value = val;
+                                box.innerHTML = val === 1 ? '&nbsp;' : val;
+                                box.classList.add('has-value');
+                            }
+                        }
+                        document.getElementById('coeffPopup').classList.remove('active');
+                        popupVisible = false;
+                        setFeedback('✏️', currentLang === 'zh' ? '已調整係數' : 'Coefficient adjusted', '',
+                            null);
+                    });
+                });
+                document.addEventListener('click', function(e) {
+                    const popup = document.getElementById('coeffPopup');
+                    if (popupVisible && !popup.contains(e.target) && !e.target.closest('.coeff-box')) {
+                        popup.classList.remove('active');
+                        popupVisible = false;
+                    }
+                });
+            }
+
+            function checkBalance(metal, reagent) {
+                const eq = getBalancedEquation(metal, reagent);
+                const result = REACTION_MAP[metal]?.[reagent];
+                if (result && result.trap) return true;
+                if (!eq || !balanceActive) return true;
+                const correct = eq.coeffs;
+                for (let i = 0; i < correct.length; i++) {
+                    if ((balanceCoeffs[i] || 1) !== correct[i]) return false;
+                }
+                return true;
+            }
+
+            // ============================================================
+            // 更新觀察選項
+            // ============================================================
+            function updateObsOptions() {
+                const flameOptions = [
+                    { value: 'none', label: '—' },
+                    { value: 'flame_lilac', label: t('flame_lilac') },
+                    { value: 'flame_golden', label: t('flame_golden') },
+                    { value: 'flame_brick', label: t('flame_brick') },
+                    { value: 'flame_apple_green', label: t('flame_apple_green') },
+                    { value: 'bright', label: t('bright') },
+                    { value: 'spark', label: t('spark') }
+                ];
+                const currentFlame = obsFlame.value;
+                obsFlame.innerHTML = '';
+                flameOptions.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt.value;
+                    option.textContent = opt.label;
+                    obsFlame.appendChild(option);
+                });
+                obsFlame.value = currentFlame;
+
+                const solutionOptions = [
+                    { value: 'none', label: '—' },
+                    { value: 'sol_green', label: t('sol_green') },
+                    { value: 'sol_blue', label: t('sol_blue') },
+                    { value: 'sol_fade', label: t('sol_fade') }
+                ];
+                const currentSolution = obsSolution.value;
+                obsSolution.innerHTML = '';
+                solutionOptions.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt.value;
+                    option.textContent = opt.label;
+                    obsSolution.appendChild(option);
+                });
+                obsSolution.value = currentSolution;
+
+                const solidAllOptions = [
+                    { value: 'none', label: '—', showFor: 'all' },
+                    { value: 'solid_white', label: t('solid_white'), showFor: 'oxide' },
+                    { value: 'solid_black', label: t('solid_black'), showFor: 'oxide' },
+                    { value: 'solid_brown', label: t('solid_brown'), showFor: 'oxide' },
+                    { value: 'solid_silver', label: t('solid_silver'), showFor: 'oxide' },
+                    { value: 'solid_red', label: t('solid_red'), showFor: 'oxide' },
+                    { value: 'solid_yellow', label: t('solid_yellow'), showFor: 'oxide' },
+                    { value: 'color_temp', label: t('color_temp'), showFor: 'oxide' }
+                ];
+
+                let prodTypes = currentResult ? currentResult.prod || [] : [];
+                const hasOxide = prodTypes.includes('oxide');
+
+                let allowedValues = ['none'];
+                if (hasOxide) {
+                    allowedValues.push('solid_white', 'solid_black', 'solid_brown', 'solid_silver',
+                        'solid_red', 'solid_yellow', 'color_temp');
+                }
+
+                const currentSolid = obsSolid.value;
+                obsSolid.innerHTML = '';
+                solidAllOptions.forEach(opt => {
+                    if (allowedValues.includes(opt.value)) {
+                        const option = document.createElement('option');
+                        option.value = opt.value;
+                        option.textContent = opt.label;
+                        obsSolid.appendChild(option);
+                    }
+                });
+                if (!allowedValues.includes(currentSolid)) {
+                    obsSolid.value = 'none';
+                } else {
+                    obsSolid.value = currentSolid;
+                }
+
+                document.querySelectorAll('#obsDepositGroup .obs-btn').forEach(b => {
+                    const key = b.dataset.obs;
+                    if (key === 'deposit_brown') b.textContent = t('deposit_brown');
+                    else if (key === 'deposit_silver') b.textContent = t('deposit_silver');
+                });
+
+                document.querySelectorAll('#obsPptGroup .obs-btn').forEach(b => {
+                    const key = b.dataset.obs;
+                    if (key === 'ppt_blue') b.textContent = t('ppt_blue');
+                    else if (key === 'ppt_green') b.textContent = t('ppt_green');
+                    else if (key === 'ppt_brown') b.textContent = t('ppt_brown');
+                    else if (key === 'ppt_white') b.textContent = t('ppt_white');
+                });
+
+                document.querySelectorAll('#obsOtherGroup .obs-btn').forEach(b => {
+                    const key = b.dataset.obs;
+                    if (key === 'gas') b.textContent = t('gas');
+                    else if (key === 'dissolve') b.textContent = t('dissolve');
+                    else if (key === 'float') b.textContent = t('float');
+                    else if (key === 'sink') b.textContent = t('sink');
+                    else if (key === 'stop') b.textContent = t('stop');
+                });
+
+                document.querySelectorAll('#productGroup .prod-btn').forEach(b => {
+                    const key = b.dataset.prod;
+                    if (key === 'oxide') b.textContent = t('prod_oxide');
+                    else if (key === 'hydroxide') b.textContent = t('prod_hydroxide');
+                    else if (key === 'salt') b.textContent = t('prod_salt');
+                    else if (key === 'hydrogen') b.textContent = t('prod_hydrogen');
+                    else if (key === 'metal') b.textContent = t('prod_metal');
+                });
+
+                document.getElementById('productLabel').innerHTML = t('productLabel');
+                document.getElementById('obsTitle').innerHTML = t('obsTitle');
+                document.getElementById('obsFlameLabel').textContent = t('obsFlameLabel');
+                document.getElementById('obsSolidLabel').textContent = t('obsSolidLabel');
+                document.getElementById('obsDepositLabel').textContent = t('obsDepositLabel');
+                document.getElementById('obsSolutionLabel').textContent = t('obsSolutionLabel');
+                document.getElementById('obsPptLabel').textContent = t('obsPptLabel');
+                document.getElementById('obsOtherLabel').textContent = t('obsOtherLabel');
+                document.getElementById('balTitle').textContent = t('balTitle');
+                balanceToggleLabel.textContent = t('balanceToggle');
+                document.getElementById('q1Label').textContent = t('q1Label');
+                document.getElementById('q1Yes').textContent = t('q1Yes');
+                document.getElementById('q1No').textContent = t('q1No');
+                spinBtn.textContent = t('spinBtn');
+                checkReactionBtn.textContent = t('checkBtn');
+                checkBottomBtn.textContent = t('checkBtn');
+                nextStepBtn.textContent = t('nextStepBtn');
+                nextQuestionBtn.textContent = t('nextQuestionBtn');
+                document.getElementById('metalLabel').textContent = t('metalLabel');
+                document.getElementById('reagentLabel').textContent = t('reagentLabel');
+                hintText.innerHTML = t('hintText');
+
+                document.getElementById('tempHotLabel').textContent = t('tempHotLabel');
+                document.getElementById('tempColdLabel').textContent = t('tempColdLabel');
+                colorTempHot.options[0].text = '—';
+                colorTempHot.options[1].text = currentLang === 'zh' ? '🟡 黃色' : '🟡 Yellow';
+                colorTempHot.options[2].text = currentLang === 'zh' ? '🟠 橙色' : '🟠 Orange';
+                colorTempCold.options[0].text = '—';
+                colorTempCold.options[1].text = currentLang === 'zh' ? '⬜ 白色' : '⬜ White';
+                colorTempCold.options[2].text = currentLang === 'zh' ? '🟡 黃色' : '🟡 Yellow';
+
+                balanceTrapHint.textContent = t('balanceTrapHint');
+            }
+
+            // ============================================================
+            // 觀察區動態顯示
+            // ============================================================
+            function updateObsVisibility(prodTypes) {
+                const hasOxide = prodTypes.includes('oxide');
+                const hasHydroxide = prodTypes.includes('hydroxide');
+                const hasSalt = prodTypes.includes('salt');
+                const hasMetal = prodTypes.includes('metal');
+
+                obsRowFlame.style.display = 'flex';
+                obsRowOther.style.display = 'flex';
+
+                if (hasOxide) {
+                    obsRowSolid.style.display = 'flex';
+                } else {
+                    obsRowSolid.style.display = 'none';
+                }
+
+                if (hasMetal) {
+                    obsRowDeposit.style.display = 'flex';
+                } else {
+                    obsRowDeposit.style.display = 'none';
+                }
+
+                if (hasHydroxide || hasSalt) {
+                    obsRowPpt.style.display = 'flex';
+                } else {
+                    obsRowPpt.style.display = 'none';
+                }
+
+                const solidAllOptions = [
+                    { value: 'none', label: '—', showFor: 'all' },
+                    { value: 'solid_white', label: t('solid_white'), showFor: 'oxide' },
+                    { value: 'solid_black', label: t('solid_black'), showFor: 'oxide' },
+                    { value: 'solid_brown', label: t('solid_brown'), showFor: 'oxide' },
+                    { value: 'solid_silver', label: t('solid_silver'), showFor: 'oxide' },
+                    { value: 'solid_red', label: t('solid_red'), showFor: 'oxide' },
+                    { value: 'solid_yellow', label: t('solid_yellow'), showFor: 'oxide' },
+                    { value: 'color_temp', label: t('color_temp'), showFor: 'oxide' }
+                ];
+
+                let allowedValues = ['none'];
+                if (hasOxide) {
+                    allowedValues.push('solid_white', 'solid_black', 'solid_brown', 'solid_silver',
+                        'solid_red', 'solid_yellow', 'color_temp');
+                }
+
+                const currentSolid = obsSolid.value;
+                obsSolid.innerHTML = '';
+                solidAllOptions.forEach(opt => {
+                    if (allowedValues.includes(opt.value)) {
+                        const option = document.createElement('option');
+                        option.value = opt.value;
+                        option.textContent = opt.label;
+                        obsSolid.appendChild(option);
+                    }
+                });
+                if (!allowedValues.includes(currentSolid)) {
+                    obsSolid.value = 'none';
+                } else {
+                    obsSolid.value = currentSolid;
+                }
+
+                updateObsOptions();
+            }
+
+            // ============================================================
+            // 轉盤抽題 - 排除 Al + H₂O(g) 同 Hg + AgNO3(aq)
+            // ============================================================
+            function spinWheel() {
+                if (isSpinning) return;
+
+                isAnswered = false;
+                selectedReaction = null;
+                selectedPpt = new Set();
+                selectedOther = new Set();
+                selectedDeposit = new Set();
+                selectedProducts = new Set();
+                productsCorrect = false;
+                showBalanceAndObs = false;
+                productCheckDone = false;
+                reactionChecked = false;
+                balanceArea.style.display = 'none';
+                productRow.style.display = 'none';
+                obsSection.style.display = 'none';
+                colorTempSub.style.display = 'none';
+                productFeedback.textContent = '';
+                productFeedback.className = 'product-feedback';
+                document.querySelectorAll('.prod-btn').forEach(b => { b.classList.remove('correct', 'incorrect'); });
+
+                if (reactionRow) {
+                    reactionRow.classList.remove('hidden');
+                }
+
+                obsFlame.value = 'none';
+                obsSolution.value = 'none';
+
+                nextQuestionBtn.style.display = 'none';
+
+                isSpinning = true;
+                spinBtn.disabled = true;
+                spinBtn.classList.add('spinning');
+                spinBtn.textContent = currentLang === 'zh' ? '🌀 旋轉中...' : '🌀 Spinning...';
+
+                document.querySelectorAll('.opt-btn').forEach(b => {
+                    b.classList.remove('selected');
+                    b.disabled = true;
+                });
+                document.querySelectorAll('#productGroup .prod-btn').forEach(b => {
+                    b.classList.remove('selected');
+                    b.disabled = true;
+                });
+                document.querySelectorAll('#obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn')
+                    .forEach(b => {
+                        b.classList.remove('selected');
+                        b.disabled = true;
+                    });
+                checkReactionBtn.disabled = true;
+                checkBottomBtn.disabled = true;
+                nextStepBtn.disabled = true;
+                nextQuestionBtn.disabled = true;
+                nextQuestionBtn.style.display = 'none';
+
+                let step = 0;
+                const totalSteps = 8 + Math.floor(Math.random() * 6);
+
+                function doStep() {
+                    const randomMetal = METALS[Math.floor(Math.random() * METALS.length)];
+                    const randomReagent = weightedReagents[Math.floor(Math.random() * weightedReagents.length)];
+                    metalDisplay.textContent = randomMetal;
+                    reagentDisplay.textContent = getReagentLabel(randomReagent);
+                    step++;
+
+                    if (step < totalSteps) {
+                        const delay = 60 + step * 15;
+                        setTimeout(doStep, delay);
+                    } else {
+                        completeSpin();
+                    }
+                }
+
+                function completeSpin() {
+                    let finalMetal, finalReagent;
+                    let attempts = 0;
+                    do {
+                        finalMetal = METALS[Math.floor(Math.random() * METALS.length)];
+                        finalReagent = weightedReagents[Math.floor(Math.random() * weightedReagents.length)];
+                        attempts++;
+                    } while (
+                        (finalMetal === 'Hg' && finalReagent === 'AgNO3(aq)') ||
+                        (finalMetal === 'Al' && finalReagent === 'H2O(g)')
+                    );
+
+                    currentMetal = finalMetal;
+                    currentReagent = finalReagent;
+                    metalDisplay.textContent = finalMetal;
+                    reagentDisplay.textContent = getReagentLabel(finalReagent, finalMetal);
+                    currentResult = REACTION_MAP[finalMetal]?.[finalReagent] || null;
+
+                    const qMark = document.getElementById('reactionQuestionMark');
+                    if (qMark) {
+                        qMark.textContent = '→ ?';
+                    }
+
+                    document.querySelectorAll('.opt-btn').forEach(b => b.disabled = false);
+                    spinBtn.disabled = false;
+                    spinBtn.classList.remove('spinning');
+                    spinBtn.textContent = t('spinBtn');
+                    isSpinning = false;
+
+                    spinBtn.style.transform = 'scale(1)';
+                    spinBtn.style.opacity = '1';
+
+                    setFeedback('✏️', t('fbSpin'), '', null);
+                    obsRowFlame.style.display = 'flex';
+                    obsRowSolid.style.display = 'none';
+                    obsRowDeposit.style.display = 'none';
+                    obsRowPpt.style.display = 'none';
+                    obsRowOther.style.display = 'flex';
+                    updateObsOptions();
+
+                    nextQuestionBtn.disabled = true;
+                    nextQuestionBtn.style.display = 'none';
+                }
+
+                const safetyTimer = setTimeout(function() {
+                    if (isSpinning) {
+                        const qMark = document.getElementById('reactionQuestionMark');
+                        if (qMark) {
+                            qMark.textContent = '→ ?';
+                        }
+                        document.querySelectorAll('.opt-btn').forEach(b => b.disabled = false);
+                        spinBtn.disabled = false;
+                        spinBtn.classList.remove('spinning');
+                        spinBtn.textContent = t('spinBtn');
+                        isSpinning = false;
+                        spinBtn.style.transform = 'scale(1)';
+                        spinBtn.style.opacity = '1';
+                        setFeedback('✏️', t('fbSpin'), '', null);
+                        obsRowFlame.style.display = 'flex';
+                        obsRowSolid.style.display = 'none';
+                        obsRowDeposit.style.display = 'none';
+                        obsRowPpt.style.display = 'none';
+                        obsRowOther.style.display = 'flex';
+                        updateObsOptions();
+                        nextQuestionBtn.disabled = true;
+                        nextQuestionBtn.style.display = 'none';
+                    }
+                }, 4000);
+
+                doStep();
+
+                const originalComplete = completeSpin;
+                completeSpin = function() {
+                    clearTimeout(safetyTimer);
+                    originalComplete();
+                };
+            }
+
+            // ============================================================
+            // 答題邏輯
+            // ============================================================
+            function setFeedback(icon, text, detail, type) {
+                feedback0.className = 'feedback-area';
+                if (type === 'error') feedback0.classList.add('error');
+                else if (type === 'success') feedback0.classList.remove('error');
+                const iconEl = feedback0.querySelector('.fb-icon');
+                const textEl = feedback0.querySelector('.fb-text');
+                const detailEl = feedback0.querySelector('.fb-detail');
+                if (iconEl) iconEl.textContent = icon || '✏️';
+                if (textEl) textEl.textContent = text || '';
+                if (detailEl) detailEl.innerHTML = detail || '';
+            }
+
+            function handleOptClick(e) {
+                if (isAnswered || isSpinning) return;
+                const btn = e.currentTarget;
+                const value = btn.dataset.value;
+                document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedReaction = value;
+                reactionChecked = false;
+
+                productRow.style.display = 'none';
+                obsSection.style.display = 'none';
+                balanceArea.style.display = 'none';
+                productFeedback.textContent = '';
+                productFeedback.className = 'product-feedback';
+                document.querySelectorAll('.prod-btn').forEach(b => { b.classList.remove('correct', 'incorrect'); });
+                document.querySelectorAll('#productGroup .prod-btn').forEach(b => b.disabled = true);
+                document.querySelectorAll(
+                    '#obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn').forEach(b => b
+                    .disabled = true);
+
+                checkReactionBtn.disabled = false;
+                checkBottomBtn.disabled = true;
+                nextStepBtn.disabled = true;
+                spinBtn.disabled = true;
+                nextQuestionBtn.disabled = true;
+                nextQuestionBtn.style.display = 'none';
+
+                setFeedback('✏️', currentLang === 'zh' ? '已選擇，請按「檢查」確認' : 'Selected, press "Check" to confirm', '',
+                    null);
+            }
+
+            function handleCheckReaction() {
+                if (isAnswered || isSpinning) return;
+                if (!selectedReaction) {
+                    setFeedback('⚠️', currentLang === 'zh' ? '請先選擇「有反應」或「無反應」' :
+                        'Please select reaction or no reaction', '', 'error');
+                    return;
+                }
+                if (!currentMetal || !currentReagent) {
+                    setFeedback('⚠️', currentLang === 'zh' ? '請先抽題' : 'Please spin first', '', 'error');
+                    return;
+                }
+                const result = currentResult;
+                if (!result) {
+                    setFeedback('⚠️', currentLang === 'zh' ? '資料錯誤，請重新抽題' : 'Data error, please spin again', '',
+                        'error');
+                    return;
+                }
+                const correctReaction = result.reaction;
+                const userReaction = selectedReaction === 'yes';
+
+                if (userReaction !== correctReaction) {
+                    let msg, detail;
+                    if (correctReaction) {
+                        msg = currentLang === 'zh' ? '❌ 這組合其實有反應！' : '❌ This combination actually reacts!';
+                        detail = `${t('correctAnswer')} ${result.products}`;
+                        if (result.trap) detail += ' ' + t('fbTrap');
+                    } else {
+                        msg = currentLang === 'zh' ? '❌ 這組合其實無反應！' : '❌ This combination actually does not react!';
+                        detail = currentLang === 'zh' ? '💡 提示：此組合不會產生任何變化。' :
+                            '💡 Hint: This combination produces no observable change.';
+                    }
+                    setFeedback('❌', msg, detail, 'error');
+                    checkReactionBtn.disabled = true;
+                    spinBtn.disabled = false;
+                    spinBtn.textContent = t('spinBtn');
+                    return;
+                }
+
+                reactionChecked = true;
+
+                if (!correctReaction) {
+                    isAnswered = true;
+                    spinBtn.disabled = false;
+                    spinBtn.textContent = t('nextBtn');
+                    totalAttempts++;
+                    correctAttempts++;
+                    checkReactionBtn.disabled = true;
+                    checkBottomBtn.disabled = true;
+                    nextStepBtn.disabled = true;
+                    setFeedback('✅', t('fbNoReaction'), '', 'success');
+
+                    if (reactionRow) {
+                        reactionRow.classList.add('hidden');
+                    }
+                    return;
+                }
+
+                productRow.style.display = 'flex';
+                document.querySelectorAll('#productGroup .prod-btn').forEach(b => {
+                    b.disabled = false;
+                    b.classList.remove('correct', 'incorrect');
+                });
+                checkReactionBtn.disabled = true;
+                nextStepBtn.disabled = false;
+                setFeedback('✏️', currentLang === 'zh' ? '✅ 反應正確！請選擇產物（可複選），然後按「下一步」' :
+                    '✅ Reaction correct! Select products (select all), then click "Next Step"', '', 'success');
+
+                if (reactionRow) {
+                    reactionRow.classList.add('hidden');
+                }
+            }
+
+            function handleProductClick(e) {
+                if (isAnswered || isSpinning) return;
+                if (selectedReaction === 'no' || !reactionChecked) return;
+                const btn = e.currentTarget;
+                const key = btn.dataset.prod;
+                if (selectedProducts.has(key)) {
+                    selectedProducts.delete(key);
+                    btn.classList.remove('selected');
+                } else {
+                    selectedProducts.add(key);
+                    btn.classList.add('selected');
+                }
+                productFeedback.textContent = '';
+                productFeedback.className = 'product-feedback';
+                document.querySelectorAll('.prod-btn').forEach(b => { b.classList.remove('correct', 'incorrect'); });
+            }
+
+            function handleNextStep() {
+                if (isAnswered || isSpinning) return;
+                if (!reactionChecked || selectedReaction !== 'yes') {
+                    setFeedback('⚠️', currentLang === 'zh' ? '請先確認反應狀態' : 'Please confirm reaction status first', '',
+                        'error');
+                    return;
+                }
+                const result = currentResult;
+                if (!result) {
+                    setFeedback('⚠️', currentLang === 'zh' ? '請先抽題' : 'Please spin first', '', 'error');
+                    return;
+                }
+                const correctProds = result.prod || [];
+                const userProds = Array.from(selectedProducts);
+                if (userProds.length === 0) {
+                    productFeedback.textContent = '⚠️ ' + (currentLang === 'zh' ? '請至少選擇一個產物' :
+                        'Please select at least one product');
+                    productFeedback.className = 'product-feedback error';
+                    setFeedback('⚠️', currentLang === 'zh' ? '請選擇產物' : 'Please select products', '', 'error');
+                    return;
+                }
+                const missingProds = correctProds.filter(p => !userProds.includes(p));
+                const extraProds = userProds.filter(p => !correctProds.includes(p));
+
+                document.querySelectorAll('.prod-btn').forEach(b => {
+                    const key = b.dataset.prod;
+                    b.classList.remove('correct', 'incorrect');
+                    if (correctProds.includes(key)) {
+                        if (userProds.includes(key)) {
+                            b.classList.add('correct');
+                        } else {
+                            b.classList.add('incorrect');
+                        }
+                    } else {
+                        if (userProds.includes(key)) {
+                            b.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                if (missingProds.length === 0 && extraProds.length === 0) {
+                    productsCorrect = true;
+                    productCheckDone = true;
+                    productFeedback.textContent = t('productsCorrect');
+                    productFeedback.className = 'product-feedback success';
+                    showBalanceAndObs = true;
+                    obsSection.style.display = 'flex';
+                    updateObsVisibility(correctProds);
+                    document.querySelectorAll(
+                        '#obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn').forEach(
+                        b => b.disabled = false);
+                    if (currentMetal && currentReagent) {
+                        renderBalanceEquation(currentMetal, currentReagent);
+                    }
+                    checkReactionBtn.disabled = true;
+                    checkBottomBtn.disabled = false;
+                    nextStepBtn.disabled = true;
+                    spinBtn.disabled = true;
+                    nextQuestionBtn.disabled = false;
+                    nextQuestionBtn.style.display = 'inline-block';
+                    setFeedback('✏️', currentLang === 'zh' ? '產物正確！請平衡方程式並選擇觀察' :
+                        'Products correct! Balance the equation and select observations', '', null);
+                } else {
+                    productsCorrect = false;
+                    productCheckDone = true;
+                    let errMsg = '';
+                    if (missingProds.length > 0) {
+                        const missingLabels = missingProds.map(p => t('prod_' + p)).join('、');
+                        errMsg += (currentLang === 'zh' ? '漏選：' : 'Missing: ') + missingLabels;
+                    }
+                    if (extraProds.length > 0) {
+                        const extraLabels = extraProds.map(p => t('prod_' + p)).join('、');
+                        if (errMsg) errMsg += '；';
+                        errMsg += (currentLang === 'zh' ? '多選：' : 'Extra: ') + extraLabels;
+                    }
+                    productFeedback.textContent = '❌ ' + errMsg;
+                    productFeedback.className = 'product-feedback error';
+                    showBalanceAndObs = false;
+                    balanceArea.style.display = 'none';
+                    obsSection.style.display = 'none';
+                    checkReactionBtn.disabled = true;
+                    checkBottomBtn.disabled = true;
+                    nextStepBtn.disabled = false;
+                    spinBtn.disabled = true;
+                    nextQuestionBtn.disabled = true;
+                    nextQuestionBtn.style.display = 'none';
+                    let trapNote = '';
+                    if (result.trap) {
+                        const hasDeposit = selectedDeposit.has('deposit_brown') || selectedDeposit.has(
+                            'deposit_silver');
+                        const hasMetal = selectedProducts.has('metal');
+                        if (hasDeposit || hasMetal) {
+                            trapNote = ' ' + (result.trapNote || t('fbTrap'));
+                        }
+                    }
+                    setFeedback('⚠️', t('productFeedbackError'), errMsg + trapNote, 'error');
+                }
+            }
+
+            function checkAnswer() {
+                if (isAnswered) {
+                    setFeedback('✅', t('fbCorrect'), '', 'success');
+                    return;
+                }
+                if (!currentMetal || !currentReagent) {
+                    setFeedback('⚠️', currentLang === 'zh' ? '請先抽題' : 'Please spin first', '', 'error');
+                    return;
+                }
+                if (!reactionChecked || selectedReaction !== 'yes') {
+                    setFeedback('⚠️', currentLang === 'zh' ? '請先確認反應狀態' : 'Please confirm reaction status first', '',
+                        'error');
+                    return;
+                }
+
+                if (!productsCorrect || !productCheckDone) {
+                    setFeedback('⚠️', currentLang === 'zh' ? '請先按「下一步」確認產物' :
+                        'Please click "Next Step" to confirm products', '', 'error');
+                    return;
+                }
+
+                const balanceOk = checkBalance(currentMetal, currentReagent);
+                if (!balanceOk && balanceActive) {
+                    let msg = t('balWrong');
+                    let detail = '';
+                    const eq = getBalancedEquation(currentMetal, currentReagent);
+                    if (eq) {
+                        const correctCoeffs = eq.coeffs.join(', ');
+                        detail = currentLang === 'zh' ? `✅ 正確係數：${correctCoeffs}` :
+                            `✅ Correct coefficients: ${correctCoeffs}`;
+                    }
+                    setFeedback('❌', msg, detail, 'error');
+                    return;
+                }
+
+                const userObs = [];
+                const flameVal = obsFlame.value;
+                if (flameVal && flameVal !== 'none') userObs.push(flameVal.trim());
+
+                const solidVal = obsSolid.value;
+                if (solidVal && solidVal !== 'none') {
+                    userObs.push(solidVal.trim());
+                    if (solidVal === 'color_temp') {
+                        const hot = colorTempHot.value;
+                        const cold = colorTempCold.value;
+                        if (hot && hot !== 'none' && cold && cold !== 'none') {
+                            let tempKey = '';
+                            if (currentMetal === 'Zn') {
+                                if (hot === 'yellow' && cold === 'white') tempKey = 'color_temp_white_yellow';
+                            } else if (currentMetal === 'Pb') {
+                                if (hot === 'orange' && cold === 'yellow') tempKey = 'color_temp_yellow_orange';
+                            }
+                            if (tempKey) userObs.push(tempKey);
+                        }
+                    }
+                }
+
+                const solVal = obsSolution.value;
+                if (solVal && solVal !== 'none') userObs.push(solVal.trim());
+
+                selectedDeposit.forEach(o => { if (o) userObs.push(o.trim()); });
+                selectedPpt.forEach(o => { if (o) userObs.push(o.trim()); });
+                selectedOther.forEach(o => { if (o) userObs.push(o.trim()); });
+
+                const filteredUserObs = userObs.filter(o => o && o.length > 0);
+                const correctObs = (currentResult.obs || []).map(o => o.trim()).filter(o => o && o.length > 0);
+
+                const userSet = new Set(filteredUserObs);
+                const correctSet = new Set(correctObs);
+
+                const missingObs = correctObs.filter(o => !userSet.has(o));
+                const extraObs = filteredUserObs.filter(o => !correctSet.has(o));
+
+                let obsError = false;
+                let obsMsg = '';
+
+                if (missingObs.length > 0) {
+                    obsError = true;
+                    const missingLabels = missingObs.map(o => t(o) || o).join('、');
+                    obsMsg += (currentLang === 'zh' ? '漏選：' : 'Missing: ') + missingLabels;
+                }
+                if (extraObs.length > 0) {
+                    obsError = true;
+                    const extraLabels = extraObs.map(o => t(o) || o).join('、');
+                    if (obsMsg) obsMsg += '；';
+                    obsMsg += (currentLang === 'zh' ? '多選：' : 'Extra: ') + extraLabels;
+                }
+
+                if (obsError) {
+                    let trapHint = '';
+                    if (currentResult.trap) {
+                        const hasDeposit = selectedDeposit.has('deposit_brown') || selectedDeposit.has(
+                            'deposit_silver');
+                        const hasMetal = selectedProducts.has('metal');
+                        if (hasDeposit || hasMetal) {
+                            trapHint = ' ' + (currentResult.trapNote || t('fbTrap'));
+                        }
+                    }
+                    setFeedback('⚠️', currentLang === 'zh' ? '觀察選擇有誤' : 'Observation selection incorrect', obsMsg +
+                        trapHint, 'error');
+                    return;
+                }
+
+                isAnswered = true;
+                spinBtn.disabled = false;
+                spinBtn.textContent = t('nextBtn');
+                totalAttempts++;
+                correctAttempts++;
+                document.querySelectorAll(
+                    '.opt-btn, #productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn, .coeff-box'
+                    ).forEach(b => b.disabled = true);
+                checkReactionBtn.disabled = true;
+                checkBottomBtn.disabled = true;
+                nextStepBtn.disabled = true;
+                nextQuestionBtn.disabled = false;
+                nextQuestionBtn.style.display = 'inline-block';
+                let trapMsg = currentResult.trap ? ' ' + t('fbTrap') : '';
+                let balMsg = balanceOk || !balanceActive ? ' ' + t('balCheck') : '';
+                setFeedback('✅', t('fbCorrect') + balMsg, `${t('fbProducts')} ${currentResult.products}${trapMsg}`,
+                    'success');
+            }
+
+            function nextQuestion() {
+                if (!isAnswered) return;
+                isAnswered = false;
+                selectedReaction = null;
+                selectedPpt = new Set();
+                selectedOther = new Set();
+                selectedDeposit = new Set();
+                selectedProducts = new Set();
+                productsCorrect = false;
+                showBalanceAndObs = false;
+                productCheckDone = false;
+                reactionChecked = false;
+                currentMetal = null;
+                currentReagent = null;
+                currentResult = null;
+                balanceArea.style.display = 'none';
+                productRow.style.display = 'none';
+                obsSection.style.display = 'none';
+                colorTempSub.style.display = 'none';
+                metalDisplay.textContent = '—';
+                reagentDisplay.textContent = '—';
+                reactionQuestionMark.textContent = '→ ?';
+                productFeedback.textContent = '';
+                productFeedback.className = 'product-feedback';
+                document.querySelectorAll('.prod-btn').forEach(b => b.classList.remove('correct', 'incorrect'));
+                document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+                document.querySelectorAll(
+                    '#productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn'
+                    ).forEach(b => b.classList.remove('selected'));
+                document.querySelectorAll(
+                    '.opt-btn, #productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn'
+                    ).forEach(b => b.disabled = false);
+                document.querySelectorAll(
+                    '#productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn'
+                    ).forEach(b => b.disabled = true);
+                nextStepBtn.disabled = true;
+                checkReactionBtn.disabled = true;
+                checkBottomBtn.disabled = true;
+                nextQuestionBtn.disabled = true;
+                nextQuestionBtn.style.display = 'none';
+                spinBtn.disabled = false;
+                spinBtn.textContent = t('spinBtn');
+                setFeedback('✏️', t('fbSpin'), '', null);
+                spinWheel();
+            }
+
+            // ============================================================
+            // 語言切換
+            // ============================================================
+            function setLanguage(lang) {
+                currentLang = lang;
+                langBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+                updateObsOptions();
+                renderReferenceTable();
+
+                const selector = document.getElementById('practiceSelector');
+                if (selector) {
+                    selector.options[0].text = currentLang === 'zh' ? '🧪 離子與化合物 (Ch.7)' :
+                        '🧪 Ionic Compounds (Ch.7)';
+                    selector.options[1].text = currentLang === 'zh' ? '⚙️ 金屬反應 (Ch.11)' : '⚙️ Metal Reactions (Ch.11)';
+                    selector.options[2].text = currentLang === 'zh' ? '🏠 返回目錄' : '🏠 Home';
+                }
+
+                if (balanceArea.style.display !== 'none') {
+                    renderBalanceEquation(currentMetal, currentReagent);
+                }
+                if (productCheckDone) {
+                    if (productsCorrect) {
+                        productFeedback.textContent = t('productsCorrect');
+                        productFeedback.className = 'product-feedback success';
+                    }
+                }
+                spinBtn.textContent = isAnswered ? t('nextBtn') : t('spinBtn');
+                checkReactionBtn.textContent = t('checkBtn');
+                checkBottomBtn.textContent = t('checkBtn');
+                nextStepBtn.textContent = t('nextStepBtn');
+                nextQuestionBtn.textContent = t('nextQuestionBtn');
+                if (currentMetal && currentReagent) {
+                    const reagentLabel = getReagentLabel(currentReagent, currentMetal);
+                    reactionQuestionMark.textContent = `→ ?`;
+                }
+                if (!isAnswered && !isSpinning) {
+                    setFeedback('✏️', t('fbSpin'), '', null);
+                }
+            }
+
+            // ============================================================
+            // 初始化
+            // ============================================================
+            function initApp(lang) {
+                const urlLang = getUrlParameter('lang');
+                if (urlLang && (urlLang === 'zh' || urlLang === 'en')) { lang = urlLang; }
+                currentLang = lang;
+                mainCard.style.display = 'flex';
+                langBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+
+                practiceSelector.addEventListener('change', function() {
+                    const value = this.value;
+                    const lang = currentLang || 'en';
+                    if (value === 'home') {
+                        window.location.href = 'index.html?lang=' + lang;
+                    } else if (value === 'ions') {
+                        window.location.href = 'ions.html?lang=' + lang;
+                    } else if (value === 'rxn') {
+                        window.location.href = 'rxn.html?lang=' + lang;
+                    }
+                });
+
+                spinBtn.addEventListener('click', function() {
+                    if (isAnswered) { nextQuestion(); } else { spinWheel(); }
+                });
+                checkReactionBtn.addEventListener('click', handleCheckReaction);
+                checkBottomBtn.addEventListener('click', checkAnswer);
+                nextStepBtn.addEventListener('click', handleNextStep);
+                nextQuestionBtn.addEventListener('click', function() {
+                    if (isAnswered) { nextQuestion(); }
+                });
+
+                document.querySelectorAll('.opt-btn').forEach(b => {
+                    b.addEventListener('click', handleOptClick);
+                });
+
+                document.querySelectorAll('#productGroup .prod-btn').forEach(b => {
+                    b.addEventListener('click', handleProductClick);
+                });
+
+                document.querySelectorAll('#obsDepositGroup .obs-btn').forEach(b => {
+                    b.addEventListener('click', function() {
+                        if (isAnswered || isSpinning || selectedReaction === 'no' || !reactionChecked) return;
+                        const key = this.dataset.obs;
+                        if (selectedDeposit.has(key)) {
+                            selectedDeposit.delete(key);
+                            this.classList.remove('selected');
+                        } else {
+                            selectedDeposit.add(key);
+                            this.classList.add('selected');
+                        }
+                    });
+                });
+                document.querySelectorAll('#obsPptGroup .obs-btn').forEach(b => {
+                    b.addEventListener('click', function() {
+                        if (isAnswered || isSpinning || selectedReaction === 'no' || !reactionChecked) return;
+                        const key = this.dataset.obs;
+                        if (selectedPpt.has(key)) {
+                            selectedPpt.delete(key);
+                            this.classList.remove('selected');
+                        } else {
+                            selectedPpt.add(key);
+                            this.classList.add('selected');
+                        }
+                    });
+                });
+                document.querySelectorAll('#obsOtherGroup .obs-btn').forEach(b => {
+                    b.addEventListener('click', function() {
+                        if (isAnswered || isSpinning || selectedReaction === 'no' || !reactionChecked) return;
+                        const key = this.dataset.obs;
+                        if (selectedOther.has(key)) {
+                            selectedOther.delete(key);
+                            this.classList.remove('selected');
+                        } else {
+                            selectedOther.add(key);
+                            this.classList.add('selected');
+                        }
+                    });
+                });
+
+                obsSolid.addEventListener('change', function() {
+                    if (this.value === 'color_temp') {
+                        colorTempSub.style.display = 'inline-flex';
+                    } else {
+                        colorTempSub.style.display = 'none';
+                    }
+                });
+
+                balanceCheckbox.addEventListener('change', function() {
+                    balanceActive = this.checked;
+                    if (!balanceActive) {
+                        balanceArea.style.display = 'none';
+                    } else if (showBalanceAndObs && currentMetal && currentReagent) {
+                        renderBalanceEquation(currentMetal, currentReagent);
+                    }
+                    setFeedback('✏️', currentLang === 'zh' ? '平衡功能已' + (balanceActive ? '啟用' : '關閉') :
+                        'Balance ' + (balanceActive ? 'enabled' : 'disabled'), '', null);
+                });
+
+                document.getElementById('btnMetalSeries').addEventListener('click', function() {
+                    document.getElementById('metalSeriesModal').classList.add('active');
+                    renderReferenceTable();
+                });
+                document.getElementById('modalClose').addEventListener('click', function() {
+                    document.getElementById('metalSeriesModal').classList.remove('active');
+                });
+                document.getElementById('metalSeriesModal').addEventListener('click', function(e) {
+                    if (e.target === this) this.classList.remove('active');
+                });
+
+                langBtns.forEach(b => {
+                    b.addEventListener('click', () => setLanguage(b.dataset.lang));
+                });
+
+                setupCoeffPopup();
+
+                setLanguage(lang);
+                setFeedback('✏️', t('fbSpin'), '', null);
+
+                metalDisplay.textContent = '—';
+                reagentDisplay.textContent = '—';
+                reactionQuestionMark.textContent = '→ ?';
+                document.querySelectorAll(
+                    '#productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn'
+                    ).forEach(b => b.disabled = true);
+                spinBtn.textContent = t('spinBtn');
+                checkReactionBtn.textContent = t('checkBtn');
+                checkBottomBtn.textContent = t('checkBtn');
+                nextStepBtn.textContent = t('nextStepBtn');
+                nextQuestionBtn.textContent = t('nextQuestionBtn');
+                nextQuestionBtn.style.display = 'none';
+                balanceActive = true;
+                balanceCheckbox.checked = true;
+                obsRowFlame.style.display = 'flex';
+                obsRowSolid.style.display = 'none';
+                obsRowDeposit.style.display = 'none';
+                obsRowPpt.style.display = 'none';
+                obsRowOther.style.display = 'flex';
+
+                updateObsOptions();
+            }
+
+            const initialLang = getUrlParameter('lang') || 'en';
+            initApp(initialLang);
+            console.log('⚙️ 金屬反應練習已啟動 (最終完整版)');
+        })();
+    </script>
+</body>
+</html>
