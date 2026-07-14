@@ -990,8 +990,7 @@
                 align-items: center;
                 width: 100% !important;
             }
-            
-            /* 產物按鈕 - 完美均分三欄 */
+
             .product-group .prod-btn {
                 flex: 1 0 calc(33.33% - 4px) !important;
                 max-width: calc(33.33% - 4px) !important;
@@ -1005,8 +1004,8 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
-            
-            /* 產物正確！- 和「下一步」同一行 */
+
+            /* 產物正確！和下一步同一行 */
             .product-group .product-feedback {
                 flex: 0 1 auto;
                 font-size: 0.85rem;
@@ -1018,8 +1017,7 @@
                 font-weight: 600;
                 white-space: nowrap;
             }
-            
-            /* 下一步 - 推到最右邊 */
+
             .product-group .btn-next-step {
                 flex: 0 1 auto;
                 padding: 6px 20px;
@@ -1031,7 +1029,6 @@
                 max-width: none;
             }
 
-            /* 覆蓋原來的 product-feedback 樣式 */
             .product-feedback {
                 display: inline-flex !important;
                 width: auto !important;
@@ -1082,6 +1079,28 @@
                 padding: 2px 6px;
                 flex: 1 0 calc(50% - 4px);
             }
+
+            /* ===== 火焰和溶液同一行 ===== */
+            #obsRowFlame {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 4px 8px;
+            }
+            #obsRowFlame .obs-label {
+                font-size: 0.6rem;
+                min-width: auto;
+                width: auto;
+                margin-bottom: 0;
+            }
+            #obsRowFlame select {
+                font-size: 0.6rem;
+                min-height: 30px;
+                min-width: 60px;
+                padding: 2px 6px;
+                flex: 0 1 auto;
+            }
+
             .obs-row .obs-btn-group {
                 display: flex;
                 flex-wrap: wrap;
@@ -3825,7 +3844,7 @@
 
             const initialLang = getUrlParameter('lang') || 'en';
             initApp(initialLang);
-            console.log('⚙️ 金屬反應練習已啟動 (手機版產物完美均分 + feedback同行)');
+            console.log('⚙️ 金屬反應練習已啟動 (手機版產物完美均分 + feedback同行 + 火焰溶液同行)');
         })();
     </script>
 </body>
