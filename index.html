@@ -14,65 +14,67 @@
         }
         html, body {
             min-height: 100vh;
-            overflow-y: auto;
+            overflow: hidden;
+            height: 100%;
         }
         body {
             background: linear-gradient(145deg, #f0f4ff 0%, #d4dcec 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 12px;
             min-height: 100vh;
+            height: 100%;
         }
 
         .home-container {
-            max-width: 700px;
+            max-width: 650px;
             width: 100%;
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-radius: 48px;
-            padding: 40px 36px;
-            box-shadow: 0 30px 60px rgba(40, 60, 120, 0.2);
+            border-radius: 40px;
+            padding: 20px 28px;
+            box-shadow: 0 20px 50px rgba(40, 60, 120, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.5);
             text-align: center;
             transition: all 0.2s ease;
-            margin: 20px auto;
+            margin: auto;
         }
         .home-container .icon {
-            font-size: 3.2rem;
-            margin-bottom: 4px;
+            font-size: 2.6rem;
+            margin-bottom: 0px;
         }
         .home-container h1 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #2a3a6a;
-            margin-bottom: 2px;
+            margin-bottom: 0px;
             letter-spacing: -0.5px;
         }
         .home-container .sub {
             color: #5a6a8a;
-            font-size: 0.95rem;
-            margin-bottom: 24px;
+            font-size: 0.8rem;
+            margin-bottom: 14px;
             background: rgba(255, 255, 255, 0.5);
             display: inline-block;
-            padding: 0.2rem 1.8rem;
+            padding: 0.1rem 1.6rem;
             border-radius: 60px;
             border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         .lang-selector {
             display: flex;
-            gap: 14px;
+            gap: 10px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 28px;
+            margin-bottom: 14px;
         }
         .lang-selector button {
             border: none;
-            padding: 12px 36px;
+            padding: 8px 28px;
             border-radius: 60px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: 0.25s;
@@ -81,7 +83,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             border: 2px solid #c8d0e0;
             flex: 1 1 auto;
-            min-width: 100px;
+            min-width: 90px;
         }
         .lang-selector button:hover {
             transform: scale(1.02);
@@ -96,24 +98,24 @@
         }
 
         .topic-title {
-            font-size: 0.8rem;
+            font-size: 0.65rem;
             font-weight: 600;
             color: #5a6a8a;
             letter-spacing: 1px;
-            margin-bottom: 14px;
+            margin-bottom: 10px;
         }
         .topic-grid {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
         }
         .topic-btn {
             display: block;
             width: 100%;
             border: 2px solid #d0d8e8;
             background: white;
-            border-radius: 20px;
-            padding: 16px 18px;
+            border-radius: 18px;
+            padding: 10px 16px;
             text-align: center;
             cursor: pointer;
             transition: 0.25s;
@@ -127,82 +129,105 @@
             background: #f8faff;
         }
         .topic-btn .topic-icon {
-            font-size: 1.6rem;
+            font-size: 1.3rem;
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 0px;
         }
         .topic-btn .topic-name {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             font-weight: 700;
         }
         .topic-btn .topic-sub {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: #6a7a8a;
             font-weight: 400;
         }
 
         .footer {
-            margin-top: 24px;
-            font-size: 0.7rem;
+            margin-top: 14px;
+            font-size: 0.6rem;
             color: #8a9aaa;
             border-top: 1px solid #e8eef8;
-            padding-top: 16px;
+            padding-top: 10px;
         }
 
         /* ===== 手機版 ===== */
         @media (max-width: 600px) {
+            body {
+                padding: 8px;
+                align-items: center;
+            }
             .home-container {
-                padding: 24px 18px;
-                border-radius: 32px;
-                margin: 12px auto;
+                padding: 16px 16px;
+                border-radius: 28px;
+                margin: auto;
             }
             .home-container h1 {
-                font-size: 1.5rem;
+                font-size: 1.4rem;
             }
             .home-container .sub {
-                font-size: 0.85rem;
-                padding: 0.15rem 1.4rem;
-            }
-            .topic-btn {
-                padding: 12px 14px;
-            }
-            .topic-btn .topic-name {
-                font-size: 0.95rem;
-            }
-            .topic-btn .topic-sub {
-                font-size: 0.75rem;
-            }
-            .lang-selector button {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.1rem 1.2rem;
+                margin-bottom: 12px;
             }
             .home-container .icon {
-                font-size: 2.6rem;
+                font-size: 2.2rem;
+            }
+            .topic-btn {
+                padding: 8px 12px;
+            }
+            .topic-btn .topic-name {
+                font-size: 0.85rem;
+            }
+            .topic-btn .topic-sub {
+                font-size: 0.65rem;
+            }
+            .topic-btn .topic-icon {
+                font-size: 1.1rem;
+            }
+            .lang-selector button {
+                padding: 6px 18px;
+                font-size: 0.8rem;
+                min-width: 70px;
+            }
+            .lang-selector {
+                gap: 6px;
+                margin-bottom: 10px;
+            }
+            .topic-title {
+                font-size: 0.55rem;
+                margin-bottom: 8px;
+            }
+            .topic-grid {
+                gap: 6px;
+            }
+            .footer {
+                margin-top: 10px;
+                padding-top: 8px;
+                font-size: 0.55rem;
             }
         }
         @media (max-width: 400px) {
             .home-container {
-                padding: 18px 12px;
-                border-radius: 24px;
-                margin: 8px auto;
+                padding: 12px 10px;
+                border-radius: 20px;
             }
             .home-container h1 {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
             }
             .topic-btn {
-                padding: 10px 10px;
+                padding: 6px 10px;
             }
             .topic-btn .topic-name {
-                font-size: 0.85rem;
+                font-size: 0.75rem;
             }
             .lang-selector button {
-                padding: 8px 14px;
-                font-size: 0.8rem;
-                min-width: 70px;
+                padding: 5px 12px;
+                font-size: 0.7rem;
+                min-width: 60px;
             }
             .home-container .icon {
-                font-size: 2.2rem;
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -237,6 +262,12 @@
 
     <script>
         (function() {
+            // 桌面版自動隱藏網址列
+            if (window.innerWidth >= 1024 && !('ontouchstart' in window)) {
+                window.scrollTo(0, 0);
+                setTimeout(() => window.scrollTo(0, 0), 100);
+            }
+
             // ============================================================
             // 語言文字
             // ============================================================

@@ -894,6 +894,164 @@
             display: inline-block;
         }
 
+        /* ===== 桌面版縮小間距 ===== */
+        @media (min-width: 769px) {
+            .card {
+                padding: 0.3rem 0.8rem;
+                height: 96vh;
+                max-height: 96vh;
+            }
+            .header-top {
+                gap: 2px;
+            }
+            .header-left select {
+                font-size: 0.9rem;
+            }
+            .top-row {
+                padding: 2px 0;
+                gap: 2px 6px;
+            }
+            .top-row .spin-box {
+                padding: 2px 8px;
+            }
+            .top-row .spin-box .value {
+                font-size: 1.1rem;
+                min-height: 1.2rem;
+            }
+            .top-row .btn-spin {
+                padding: 4px 16px;
+                font-size: 0.85rem;
+                min-height: 32px;
+            }
+            .question-block {
+                gap: 3px;
+            }
+            .product-group {
+                gap: 3px;
+                padding: 2px 0;
+            }
+            .product-group .prod-btn {
+                font-size: 0.85rem;
+                padding: 3px 10px;
+                min-height: 28px;
+            }
+            .product-group .btn-next-step {
+                font-size: 0.85rem;
+                padding: 3px 14px;
+                min-height: 28px;
+            }
+            .balance-area {
+                padding: 3px 0;
+                gap: 4px;
+            }
+            .balance-row .term {
+                font-size: 1rem;
+            }
+            .balance-row .coeff-box {
+                min-width: 28px;
+                height: 28px;
+                line-height: 24px;
+                font-size: 1rem;
+            }
+            .obs-section {
+                padding: 3px 0;
+                gap: 3px;
+            }
+            .obs-row {
+                gap: 3px 8px;
+            }
+            .obs-row .obs-btn {
+                font-size: 0.75rem;
+                padding: 2px 10px;
+                min-height: 28px;
+            }
+            .feedback-area {
+                padding: 4px 14px;
+                min-height: 34px;
+                font-size: 0.9rem;
+                margin-top: 4px;
+            }
+            .feedback-area .fb-text {
+                font-size: 0.9rem;
+            }
+            .bottom-check-row {
+                padding: 3px 0 0 0;
+            }
+            .bottom-check-row .btn-check,
+            .bottom-check-row .btn-next-question {
+                font-size: 0.85rem;
+                padding: 3px 14px;
+                min-height: 32px;
+            }
+            .question-area {
+                padding: 0.05rem 0.2rem;
+            }
+            .reaction-row {
+                gap: 3px 6px;
+            }
+            .q-label {
+                font-size: 0.9rem;
+                min-width: 50px;
+            }
+            .q-options .opt-btn {
+                font-size: 0.9rem;
+                padding: 3px 14px;
+                min-height: 30px;
+            }
+            .hint-row-wrap {
+                padding: 1px 0;
+            }
+            .hint-row-wrap .hint-text {
+                font-size: 0.8rem;
+            }
+            .hint-row-wrap .balance-toggle-compact {
+                font-size: 0.7rem;
+                padding: 1px 6px 1px 4px;
+            }
+            .split-panel {
+                gap: 2px;
+            }
+            .split-left {
+                gap: 1px;
+            }
+            .top-row .spin-box .label {
+                font-size: 0.6rem;
+            }
+            .btn-check {
+                font-size: 0.9rem;
+                padding: 3px 14px;
+                min-height: 30px;
+            }
+            .obs-row .obs-label {
+                font-size: 0.8rem;
+                min-width: 40px;
+            }
+            .obs-row select {
+                font-size: 0.8rem;
+                min-height: 28px;
+                padding: 2px 8px;
+            }
+            .balance-row .arrow-symbol {
+                font-size: 1rem;
+            }
+            .ref-table {
+                font-size: 0.55rem;
+            }
+            .ref-table th {
+                font-size: 0.45rem;
+                padding: 2px 4px;
+            }
+            .ref-table td {
+                padding: 2px 4px;
+            }
+            .modal-box {
+                padding: 14px 18px;
+            }
+            .modal-header h2 {
+                font-size: 0.85rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .card {
                 padding: 0.3rem 0.4rem;
@@ -1555,6 +1713,12 @@
 
     <script>
         (function() {
+            // 桌面版自動隱藏網址列
+            if (window.innerWidth >= 1024 && !('ontouchstart' in window)) {
+                window.scrollTo(0, 0);
+                setTimeout(() => window.scrollTo(0, 0), 100);
+            }
+
             // ============================================================
             // 跨頁面導航
             // ============================================================
