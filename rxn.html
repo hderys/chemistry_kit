@@ -2201,30 +2201,39 @@
                     'SnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] }
                 },
                 'Pb': {
-                    'O2(g)': { reaction: true, products: '2Pb + O₂ → 2PbO', obs: ['color_temp_yellow_orange'],
-                        prod: ['oxide'] },
-                    'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
-                    'H2O(g)': { reaction: false, products: '', obs: [], prod: [] },
-                    'HCl(aq)': { reaction: true, products: 'Pb + 2HCl → PbCl₂ + H₂', obs: ['gas', 'dissolve', 'stop'],
-                        note: 'slow, stops', prod: ['salt', 'hydrogen'] },
-                    'CuSO4(aq)': { reaction: true, products: 'Pb + CuSO₄ → PbSO₄ + Cu',
-                        obs: ['dissolve', 'deposit_brown', 'solid_white'], prod: ['salt', 'metal'] },
-                    'AgNO3(aq)': { reaction: true, products: 'Pb + 2AgNO₃ → Pb(NO₃)₂ + 2Ag',
-                        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
-                    'Pb(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
-                    'ZnSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
-                    'FeSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
-                    'FeCl3(aq)': { reaction: false, products: '', obs: [], prod: [] },
-                    'Cu(NO3)2(aq)': { reaction: true, products: 'Pb + Cu(NO₃)₂ → Pb(NO₃)₂ + Cu',
-                        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
-                    'CuCl2(aq)': { reaction: true, products: 'Pb + CuCl₂ → PbCl₂ + Cu',
-                        obs: ['dissolve', 'deposit_brown', 'solid_white'], prod: ['salt', 'metal'] },
-                    'Zn(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
-                    'ZnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
-                    'Fe(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
-                    'FeCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
-                    'SnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] }
-                },
+    'O2(g)': { reaction: true, products: '2Pb + O₂ → 2PbO', obs: ['color_temp_yellow_orange'],
+        prod: ['oxide'] },
+    'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
+    'H2O(g)': { reaction: false, products: '', obs: [], prod: [] },
+    'HCl(aq)': { reaction: true, products: 'Pb + 2HCl → PbCl₂ + H₂', 
+        obs: ['gas', 'dissolve', 'stop', 'ppt_white'],
+        note_zh: '慢，因 PbCl₂ 不溶層而停止',
+        note_en: 'slow, stops due to PbCl₂ layer',
+        prod: ['salt', 'hydrogen'] },
+    'CuSO4(aq)': { reaction: true, products: 'Pb + CuSO₄ → PbSO₄ + Cu',
+        obs: ['dissolve', 'deposit_brown', 'ppt_white', 'stop'], 
+        note_zh: '慢，因 PbSO₄ 不溶層而停止',
+        note_en: 'slow, stops due to PbSO₄ layer',
+        prod: ['salt', 'metal'] },
+    'AgNO3(aq)': { reaction: true, products: 'Pb + 2AgNO₃ → Pb(NO₃)₂ + 2Ag',
+        obs: ['dissolve', 'deposit_silver'], prod: ['salt', 'metal'] },
+    'Pb(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+    'ZnSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+    'FeSO4(aq)': { reaction: false, products: '', obs: [], prod: [] },
+    'FeCl3(aq)': { reaction: false, products: '', obs: [], prod: [] },
+    'Cu(NO3)2(aq)': { reaction: true, products: 'Pb + Cu(NO₃)₂ → Pb(NO₃)₂ + Cu',
+        obs: ['dissolve', 'deposit_brown', 'sol_fade'], prod: ['salt', 'metal'] },
+    'CuCl2(aq)': { reaction: true, products: 'Pb + CuCl₂ → PbCl₂ + Cu',
+        obs: ['dissolve', 'deposit_brown', 'ppt_white', 'stop'],
+        note_zh: '慢，因 PbCl₂ 不溶層而停止',
+        note_en: 'slow, stops due to PbCl₂ layer',
+        prod: ['salt', 'metal'] },
+    'Zn(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+    'ZnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+    'Fe(NO3)2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+    'FeCl2(aq)': { reaction: false, products: '', obs: [], prod: [] },
+    'SnCl2(aq)': { reaction: false, products: '', obs: [], prod: [] }
+},
                 'Cu': {
                     'O2(g)': { reaction: true, products: '2Cu + O₂ → 2CuO', obs: ['solid_black'], prod: ['oxide'] },
                     'H2O(l)': { reaction: false, products: '', obs: [], prod: [] },
@@ -3293,360 +3302,366 @@
             }
 
             function handleCheckReaction() {
-                if (isAnswered || isSpinning) return;
-                if (!selectedReaction) {
-                    setFeedback('⚠️', currentLang === 'zh' ? '請先選擇「有反應」或「無反應」' :
-                        'Please select reaction or no reaction', '', 'error');
-                    return;
-                }
-                if (!currentMetal || !currentReagent) {
-                    setFeedback('⚠️', currentLang === 'zh' ? '請先抽題' : 'Please spin first', '', 'error');
-                    return;
-                }
-                const result = currentResult;
-                if (!result) {
-                    setFeedback('⚠️', currentLang === 'zh' ? '資料錯誤，請重新抽題' : 'Data error, please spin again', '',
-                        'error');
-                    return;
-                }
-                const correctReaction = result.reaction;
-                const userReaction = selectedReaction === 'yes';
+    if (isAnswered || isSpinning) return;
+    if (!selectedReaction) {
+        setFeedback('⚠️', currentLang === 'zh' ? '請先選擇「有反應」或「無反應」' :
+            'Please select reaction or no reaction', '', 'error');
+        return;
+    }
+    if (!currentMetal || !currentReagent) {
+        setFeedback('⚠️', currentLang === 'zh' ? '請先抽題' : 'Please spin first', '', 'error');
+        return;
+    }
+    const result = currentResult;
+    if (!result) {
+        setFeedback('⚠️', currentLang === 'zh' ? '資料錯誤，請重新抽題' : 'Data error, please spin again', '',
+            'error');
+        return;
+    }
+    const correctReaction = result.reaction;
+    const userReaction = selectedReaction === 'yes';
 
-                if (userReaction !== correctReaction) {
-                    let msg, detail;
-                    if (correctReaction) {
-                        msg = currentLang === 'zh' ? '❌ 這組合其實有反應！' : '❌ This combination actually reacts!';
-                        detail = `${t('correctAnswer')} ${result.products}`;
-                        if (result.trap) detail += ' ' + t('fbTrap');
-                    } else {
-                        msg = currentLang === 'zh' ? '❌ 這組合其實無反應！' : '❌ This combination actually does not react!';
-                        detail = currentLang === 'zh' ? '💡 提示：此組合不會產生任何變化。' :
-                            '💡 Hint: This combination produces no observable change.';
-                    }
-                    setFeedback('❌', msg, detail, 'error');
-                    checkReactionBtn.disabled = true;
-                    spinBtn.disabled = false;
-                    spinBtn.textContent = t('spinBtn');
-                    return;
-                }
-
-                reactionChecked = true;
-
-                if (!correctReaction) {
-                    isAnswered = true;
-                    spinBtn.disabled = false;
-                    spinBtn.textContent = t('nextBtn');
-                    totalAttempts++;
-                    correctAttempts++;
-                    checkReactionBtn.disabled = true;
-                    checkBottomBtn.disabled = true;
-                    nextStepBtn.disabled = true;
-                    setFeedback('✅', t('fbNoReaction'), '', 'success');
-
-                    if (reactionRow) {
-                        reactionRow.classList.add('hidden');
-                    }
-                    return;
-                }
-
-                productRow.style.display = 'flex';
-                document.querySelectorAll('#productGroup .prod-btn').forEach(b => {
-                    b.disabled = false;
-                    b.classList.remove('correct', 'incorrect');
-                });
-                checkReactionBtn.disabled = true;
-                nextStepBtn.disabled = false;
-                setFeedback('✏️', currentLang === 'zh' ? '✅ 反應正確！請選擇產物（可複選），然後按「下一步」' :
-                    '✅ Reaction correct! Select products (select all), then click "Next Step"', '', 'success');
-
-                if (reactionRow) {
-                    reactionRow.classList.add('hidden');
-                }
+    if (userReaction !== correctReaction) {
+        let msg, detail;
+        if (correctReaction) {
+            msg = currentLang === 'zh' ? '❌ 這組合其實有反應！' : '❌ This combination actually reacts!';
+            detail = `${t('correctAnswer')} ${result.products}`;
+            if (result.trap) detail += ' ' + t('fbTrap');
+            if (result.note_zh && result.note_en) {
+                detail += ' ' + (currentLang === 'zh' ? result.note_zh : result.note_en);
             }
+        } else {
+            msg = currentLang === 'zh' ? '❌ 這組合其實無反應！' : '❌ This combination actually does not react!';
+            detail = currentLang === 'zh' ? '💡 提示：此組合不會產生任何變化。' :
+                '💡 Hint: This combination produces no observable change.';
+        }
+        setFeedback('❌', msg, detail, 'error');
+        checkReactionBtn.disabled = true;
+        spinBtn.disabled = false;
+        spinBtn.textContent = t('spinBtn');
+        return;
+    }
 
-            function handleProductClick(e) {
-                if (isAnswered || isSpinning) return;
-                if (selectedReaction === 'no' || !reactionChecked) return;
-                const btn = e.currentTarget;
-                const key = btn.dataset.prod;
-                if (selectedProducts.has(key)) {
-                    selectedProducts.delete(key);
-                    btn.classList.remove('selected');
-                } else {
-                    selectedProducts.add(key);
-                    btn.classList.add('selected');
-                }
-                productFeedback.textContent = '';
-                productFeedback.className = 'product-feedback';
-                document.querySelectorAll('.prod-btn').forEach(b => { b.classList.remove('correct', 'incorrect'); });
+    reactionChecked = true;
+
+    if (!correctReaction) {
+        isAnswered = true;
+        spinBtn.disabled = false;
+        spinBtn.textContent = t('nextBtn');
+        totalAttempts++;
+        correctAttempts++;
+        checkReactionBtn.disabled = true;
+        checkBottomBtn.disabled = true;
+        nextStepBtn.disabled = true;
+        setFeedback('✅', t('fbNoReaction'), '', 'success');
+
+        if (reactionRow) {
+            reactionRow.classList.add('hidden');
+        }
+        return;
+    }
+
+    productRow.style.display = 'flex';
+    document.querySelectorAll('#productGroup .prod-btn').forEach(b => {
+        b.disabled = false;
+        b.classList.remove('correct', 'incorrect');
+    });
+    checkReactionBtn.disabled = true;
+    nextStepBtn.disabled = false;
+    setFeedback('✏️', currentLang === 'zh' ? '✅ 反應正確！請選擇產物（可複選），然後按「下一步」' :
+        '✅ Reaction correct! Select products (select all), then click "Next Step"', '', 'success');
+
+    if (reactionRow) {
+        reactionRow.classList.add('hidden');
+    }
+}
+
+function handleProductClick(e) {
+    if (isAnswered || isSpinning) return;
+    if (selectedReaction === 'no' || !reactionChecked) return;
+    const btn = e.currentTarget;
+    const key = btn.dataset.prod;
+    if (selectedProducts.has(key)) {
+        selectedProducts.delete(key);
+        btn.classList.remove('selected');
+    } else {
+        selectedProducts.add(key);
+        btn.classList.add('selected');
+    }
+    productFeedback.textContent = '';
+    productFeedback.className = 'product-feedback';
+    document.querySelectorAll('.prod-btn').forEach(b => { b.classList.remove('correct', 'incorrect'); });
+}
+
+function handleNextStep() {
+    if (isAnswered || isSpinning) return;
+    if (!reactionChecked || selectedReaction !== 'yes') {
+        setFeedback('⚠️', currentLang === 'zh' ? '請先確認反應狀態' : 'Please confirm reaction status first', '',
+            'error');
+        return;
+    }
+    const result = currentResult;
+    if (!result) {
+        setFeedback('⚠️', currentLang === 'zh' ? '請先抽題' : 'Please spin first', '', 'error');
+        return;
+    }
+    const correctProds = result.prod || [];
+    const userProds = Array.from(selectedProducts);
+    if (userProds.length === 0) {
+        productFeedback.textContent = '⚠️ ' + (currentLang === 'zh' ? '請至少選擇一個產物' :
+            'Please select at least one product');
+        productFeedback.className = 'product-feedback error';
+        setFeedback('⚠️', currentLang === 'zh' ? '請選擇產物' : 'Please select products', '', 'error');
+        return;
+    }
+    const missingProds = correctProds.filter(p => !userProds.includes(p));
+    const extraProds = userProds.filter(p => !correctProds.includes(p));
+
+    document.querySelectorAll('.prod-btn').forEach(b => {
+        const key = b.dataset.prod;
+        b.classList.remove('correct', 'incorrect');
+        if (correctProds.includes(key)) {
+            if (userProds.includes(key)) {
+                b.classList.add('correct');
+            } else {
+                b.classList.add('incorrect');
             }
-
-            function handleNextStep() {
-                if (isAnswered || isSpinning) return;
-                if (!reactionChecked || selectedReaction !== 'yes') {
-                    setFeedback('⚠️', currentLang === 'zh' ? '請先確認反應狀態' : 'Please confirm reaction status first', '',
-                        'error');
-                    return;
-                }
-                const result = currentResult;
-                if (!result) {
-                    setFeedback('⚠️', currentLang === 'zh' ? '請先抽題' : 'Please spin first', '', 'error');
-                    return;
-                }
-                const correctProds = result.prod || [];
-                const userProds = Array.from(selectedProducts);
-                if (userProds.length === 0) {
-                    productFeedback.textContent = '⚠️ ' + (currentLang === 'zh' ? '請至少選擇一個產物' :
-                        'Please select at least one product');
-                    productFeedback.className = 'product-feedback error';
-                    setFeedback('⚠️', currentLang === 'zh' ? '請選擇產物' : 'Please select products', '', 'error');
-                    return;
-                }
-                const missingProds = correctProds.filter(p => !userProds.includes(p));
-                const extraProds = userProds.filter(p => !correctProds.includes(p));
-
-                document.querySelectorAll('.prod-btn').forEach(b => {
-                    const key = b.dataset.prod;
-                    b.classList.remove('correct', 'incorrect');
-                    if (correctProds.includes(key)) {
-                        if (userProds.includes(key)) {
-                            b.classList.add('correct');
-                        } else {
-                            b.classList.add('incorrect');
-                        }
-                    } else {
-                        if (userProds.includes(key)) {
-                            b.classList.add('incorrect');
-                        }
-                    }
-                });
-
-                if (missingProds.length === 0 && extraProds.length === 0) {
-                    productsCorrect = true;
-                    productCheckDone = true;
-                    productFeedback.textContent = t('productsCorrect');
-                    productFeedback.className = 'product-feedback success';
-                    showBalanceAndObs = true;
-                    obsSection.style.display = 'flex';
-                    updateObsVisibility(correctProds);
-                    document.querySelectorAll(
-                        '#obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn').forEach(
-                        b => b.disabled = false);
-                    if (currentMetal && currentReagent) {
-                        renderBalanceEquation(currentMetal, currentReagent);
-                    }
-                    checkReactionBtn.disabled = true;
-                    checkBottomBtn.disabled = false;
-                    nextStepBtn.disabled = true;
-                    spinBtn.disabled = true;
-                    nextQuestionBtn.disabled = false;
-                    nextQuestionBtn.style.display = 'inline-block';
-                    setFeedback('✏️', currentLang === 'zh' ? '產物正確！請平衡方程式並選擇觀察' :
-                        'Products correct! Balance the equation and select observations', '', null);
-                } else {
-                    productsCorrect = false;
-                    productCheckDone = true;
-                    let errMsg = '';
-                    if (missingProds.length > 0) {
-                        const missingLabels = missingProds.map(p => t('prod_' + p)).join('、');
-                        errMsg += (currentLang === 'zh' ? '漏選：' : 'Missing: ') + missingLabels;
-                    }
-                    if (extraProds.length > 0) {
-                        const extraLabels = extraProds.map(p => t('prod_' + p)).join('、');
-                        if (errMsg) errMsg += '；';
-                        errMsg += (currentLang === 'zh' ? '多選：' : 'Extra: ') + extraLabels;
-                    }
-                    productFeedback.textContent = '❌ ' + errMsg;
-                    productFeedback.className = 'product-feedback error';
-                    showBalanceAndObs = false;
-                    balanceArea.style.display = 'none';
-                    obsSection.style.display = 'none';
-                    checkReactionBtn.disabled = true;
-                    checkBottomBtn.disabled = true;
-                    nextStepBtn.disabled = false;
-                    spinBtn.disabled = true;
-                    nextQuestionBtn.disabled = true;
-                    nextQuestionBtn.style.display = 'none';
-                    let trapNote = '';
-                    if (result.trap) {
-                        const hasDeposit = selectedDeposit.has('deposit_brown') || selectedDeposit.has(
-                            'deposit_silver');
-                        const hasMetal = selectedProducts.has('metal');
-                        if (hasDeposit || hasMetal) {
-                            trapNote = ' ' + (result.trapNote || t('fbTrap'));
-                        }
-                    }
-                    setFeedback('⚠️', t('productFeedbackError'), errMsg + trapNote, 'error');
-                }
+        } else {
+            if (userProds.includes(key)) {
+                b.classList.add('incorrect');
             }
+        }
+    });
 
-            function checkAnswer() {
-                if (isAnswered) {
-                    setFeedback('✅', t('fbCorrect'), '', 'success');
-                    return;
-                }
-                if (!currentMetal || !currentReagent) {
-                    setFeedback('⚠️', currentLang === 'zh' ? '請先抽題' : 'Please spin first', '', 'error');
-                    return;
-                }
-                if (!reactionChecked || selectedReaction !== 'yes') {
-                    setFeedback('⚠️', currentLang === 'zh' ? '請先確認反應狀態' : 'Please confirm reaction status first', '',
-                        'error');
-                    return;
-                }
-
-                if (!productsCorrect || !productCheckDone) {
-                    setFeedback('⚠️', currentLang === 'zh' ? '請先按「下一步」確認產物' :
-                        'Please click "Next Step" to confirm products', '', 'error');
-                    return;
-                }
-
-                const balanceOk = checkBalance(currentMetal, currentReagent);
-                if (!balanceOk && balanceActive) {
-                    let msg = t('balWrong');
-                    let detail = '';
-                    const eq = getBalancedEquation(currentMetal, currentReagent);
-                    if (eq) {
-                        const correctCoeffs = eq.coeffs.join(', ');
-                        detail = currentLang === 'zh' ? `✅ 正確係數：${correctCoeffs}` :
-                            `✅ Correct coefficients: ${correctCoeffs}`;
-                    }
-                    setFeedback('❌', msg, detail, 'error');
-                    return;
-                }
-
-                const userObs = [];
-                const flameVal = obsFlame.value;
-                if (flameVal && flameVal !== 'none') userObs.push(flameVal.trim());
-
-                const solidVal = obsSolid.value;
-                if (solidVal && solidVal !== 'none') {
-                    userObs.push(solidVal.trim());
-                    if (solidVal === 'color_temp') {
-                        const hot = colorTempHot.value;
-                        const cold = colorTempCold.value;
-                        if (hot && hot !== 'none' && cold && cold !== 'none') {
-                            let tempKey = '';
-                            if (currentMetal === 'Zn') {
-                                if (hot === 'yellow' && cold === 'white') tempKey = 'color_temp_white_yellow';
-                            } else if (currentMetal === 'Pb') {
-                                if (hot === 'orange' && cold === 'yellow') tempKey = 'color_temp_yellow_orange';
-                            }
-                            if (tempKey) userObs.push(tempKey);
-                        }
-                    }
-                }
-
-                const solVal = obsSolution.value;
-                if (solVal && solVal !== 'none') userObs.push(solVal.trim());
-
-                selectedDeposit.forEach(o => { if (o) userObs.push(o.trim()); });
-                selectedPpt.forEach(o => { if (o) userObs.push(o.trim()); });
-                selectedOther.forEach(o => { if (o) userObs.push(o.trim()); });
-
-                const filteredUserObs = userObs.filter(o => o && o.length > 0);
-                const correctObs = (currentResult.obs || []).map(o => o.trim()).filter(o => o && o.length > 0);
-
-                const userSet = new Set(filteredUserObs);
-                const correctSet = new Set(correctObs);
-
-                const missingObs = correctObs.filter(o => !userSet.has(o));
-                const extraObs = filteredUserObs.filter(o => !correctSet.has(o));
-
-                let obsError = false;
-                let obsMsg = '';
-
-                if (missingObs.length > 0) {
-                    obsError = true;
-                    const missingLabels = missingObs.map(o => t(o) || o).join('、');
-                    obsMsg += (currentLang === 'zh' ? '漏選：' : 'Missing: ') + missingLabels;
-                }
-                if (extraObs.length > 0) {
-                    obsError = true;
-                    const extraLabels = extraObs.map(o => t(o) || o).join('、');
-                    if (obsMsg) obsMsg += '；';
-                    obsMsg += (currentLang === 'zh' ? '多選：' : 'Extra: ') + extraLabels;
-                }
-
-                if (obsError) {
-                    let trapHint = '';
-                    if (currentResult.trap) {
-                        const hasDeposit = selectedDeposit.has('deposit_brown') || selectedDeposit.has(
-                            'deposit_silver');
-                        const hasMetal = selectedProducts.has('metal');
-                        if (hasDeposit || hasMetal) {
-                            trapHint = ' ' + (currentResult.trapNote || t('fbTrap'));
-                        }
-                    }
-                    setFeedback('⚠️', currentLang === 'zh' ? '觀察選擇有誤' : 'Observation selection incorrect', obsMsg +
-                        trapHint, 'error');
-                    return;
-                }
-
-                isAnswered = true;
-                spinBtn.disabled = false;
-                spinBtn.textContent = t('nextBtn');
-                totalAttempts++;
-                correctAttempts++;
-                document.querySelectorAll(
-                    '.opt-btn, #productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn, .coeff-box'
-                    ).forEach(b => b.disabled = true);
-                checkReactionBtn.disabled = true;
-                checkBottomBtn.disabled = true;
-                nextStepBtn.disabled = true;
-                nextQuestionBtn.disabled = false;
-                nextQuestionBtn.style.display = 'inline-block';
-                let trapMsg = currentResult.trap ? ' ' + t('fbTrap') : '';
-                let balMsg = balanceOk || !balanceActive ? ' ' + t('balCheck') : '';
-                setFeedback('✅', t('fbCorrect') + balMsg, `${t('fbProducts')} ${currentResult.products}${trapMsg}`,
-                    'success');
+    if (missingProds.length === 0 && extraProds.length === 0) {
+        productsCorrect = true;
+        productCheckDone = true;
+        productFeedback.textContent = t('productsCorrect');
+        productFeedback.className = 'product-feedback success';
+        showBalanceAndObs = true;
+        obsSection.style.display = 'flex';
+        updateObsVisibility(correctProds);
+        document.querySelectorAll(
+            '#obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn').forEach(
+            b => b.disabled = false);
+        if (currentMetal && currentReagent) {
+            renderBalanceEquation(currentMetal, currentReagent);
+        }
+        checkReactionBtn.disabled = true;
+        checkBottomBtn.disabled = false;
+        nextStepBtn.disabled = true;
+        spinBtn.disabled = true;
+        nextQuestionBtn.disabled = false;
+        nextQuestionBtn.style.display = 'inline-block';
+        setFeedback('✏️', currentLang === 'zh' ? '產物正確！請平衡方程式並選擇觀察' :
+            'Products correct! Balance the equation and select observations', '', null);
+    } else {
+        productsCorrect = false;
+        productCheckDone = true;
+        let errMsg = '';
+        if (missingProds.length > 0) {
+            const missingLabels = missingProds.map(p => t('prod_' + p)).join('、');
+            errMsg += (currentLang === 'zh' ? '漏選：' : 'Missing: ') + missingLabels;
+        }
+        if (extraProds.length > 0) {
+            const extraLabels = extraProds.map(p => t('prod_' + p)).join('、');
+            if (errMsg) errMsg += '；';
+            errMsg += (currentLang === 'zh' ? '多選：' : 'Extra: ') + extraLabels;
+        }
+        productFeedback.textContent = '❌ ' + errMsg;
+        productFeedback.className = 'product-feedback error';
+        showBalanceAndObs = false;
+        balanceArea.style.display = 'none';
+        obsSection.style.display = 'none';
+        checkReactionBtn.disabled = true;
+        checkBottomBtn.disabled = true;
+        nextStepBtn.disabled = false;
+        spinBtn.disabled = true;
+        nextQuestionBtn.disabled = true;
+        nextQuestionBtn.style.display = 'none';
+        let trapNote = '';
+        if (result.trap) {
+            const hasDeposit = selectedDeposit.has('deposit_brown') || selectedDeposit.has(
+                'deposit_silver');
+            const hasMetal = selectedProducts.has('metal');
+            if (hasDeposit || hasMetal) {
+                trapNote = ' ' + (result.trapNote || t('fbTrap'));
             }
+        }
+        setFeedback('⚠️', t('productFeedbackError'), errMsg + trapNote, 'error');
+    }
+}
 
-            function nextQuestion() {
-                if (!isAnswered) return;
-                isAnswered = false;
-                selectedReaction = null;
-                selectedPpt = new Set();
-                selectedOther = new Set();
-                selectedDeposit = new Set();
-                selectedProducts = new Set();
-                productsCorrect = false;
-                showBalanceAndObs = false;
-                productCheckDone = false;
-                reactionChecked = false;
-                currentMetal = null;
-                currentReagent = null;
-                currentResult = null;
-                balanceArea.style.display = 'none';
-                productRow.style.display = 'none';
-                obsSection.style.display = 'none';
-                colorTempSub.style.display = 'none';
-                metalDisplay.textContent = '—';
-                reagentDisplay.textContent = '—';
-                reactionQuestionMark.textContent = '→ ?';
-                productFeedback.textContent = '';
-                productFeedback.className = 'product-feedback';
-                document.querySelectorAll('.prod-btn').forEach(b => b.classList.remove('correct', 'incorrect'));
-                document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
-                document.querySelectorAll(
-                    '#productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn'
-                    ).forEach(b => b.classList.remove('selected'));
-                document.querySelectorAll(
-                    '.opt-btn, #productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn'
-                    ).forEach(b => b.disabled = false);
-                document.querySelectorAll(
-                    '#productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn'
-                    ).forEach(b => b.disabled = true);
-                nextStepBtn.disabled = true;
-                checkReactionBtn.disabled = true;
-                checkBottomBtn.disabled = true;
-                nextQuestionBtn.disabled = true;
-                nextQuestionBtn.style.display = 'none';
-                spinBtn.disabled = false;
-                spinBtn.textContent = t('spinBtn');
-                setFeedback('✏️', t('fbSpin'), '', null);
-                spinWheel();
+function checkAnswer() {
+    if (isAnswered) {
+        setFeedback('✅', t('fbCorrect'), '', 'success');
+        return;
+    }
+    if (!currentMetal || !currentReagent) {
+        setFeedback('⚠️', currentLang === 'zh' ? '請先抽題' : 'Please spin first', '', 'error');
+        return;
+    }
+    if (!reactionChecked || selectedReaction !== 'yes') {
+        setFeedback('⚠️', currentLang === 'zh' ? '請先確認反應狀態' : 'Please confirm reaction status first', '',
+            'error');
+        return;
+    }
+
+    if (!productsCorrect || !productCheckDone) {
+        setFeedback('⚠️', currentLang === 'zh' ? '請先按「下一步」確認產物' :
+            'Please click "Next Step" to confirm products', '', 'error');
+        return;
+    }
+
+    const balanceOk = checkBalance(currentMetal, currentReagent);
+    if (!balanceOk && balanceActive) {
+        let msg = t('balWrong');
+        let detail = '';
+        const eq = getBalancedEquation(currentMetal, currentReagent);
+        if (eq) {
+            const correctCoeffs = eq.coeffs.join(', ');
+            detail = currentLang === 'zh' ? `✅ 正確係數：${correctCoeffs}` :
+                `✅ Correct coefficients: ${correctCoeffs}`;
+        }
+        setFeedback('❌', msg, detail, 'error');
+        return;
+    }
+
+    const userObs = [];
+    const flameVal = obsFlame.value;
+    if (flameVal && flameVal !== 'none') userObs.push(flameVal.trim());
+
+    const solidVal = obsSolid.value;
+    if (solidVal && solidVal !== 'none') {
+        userObs.push(solidVal.trim());
+        if (solidVal === 'color_temp') {
+            const hot = colorTempHot.value;
+            const cold = colorTempCold.value;
+            if (hot && hot !== 'none' && cold && cold !== 'none') {
+                let tempKey = '';
+                if (currentMetal === 'Zn') {
+                    if (hot === 'yellow' && cold === 'white') tempKey = 'color_temp_white_yellow';
+                } else if (currentMetal === 'Pb') {
+                    if (hot === 'orange' && cold === 'yellow') tempKey = 'color_temp_yellow_orange';
+                }
+                if (tempKey) userObs.push(tempKey);
             }
+        }
+    }
+
+    const solVal = obsSolution.value;
+    if (solVal && solVal !== 'none') userObs.push(solVal.trim());
+
+    selectedDeposit.forEach(o => { if (o) userObs.push(o.trim()); });
+    selectedPpt.forEach(o => { if (o) userObs.push(o.trim()); });
+    selectedOther.forEach(o => { if (o) userObs.push(o.trim()); });
+
+    const filteredUserObs = userObs.filter(o => o && o.length > 0);
+    const correctObs = (currentResult.obs || []).map(o => o.trim()).filter(o => o && o.length > 0);
+
+    const userSet = new Set(filteredUserObs);
+    const correctSet = new Set(correctObs);
+
+    const missingObs = correctObs.filter(o => !userSet.has(o));
+    const extraObs = filteredUserObs.filter(o => !correctSet.has(o));
+
+    let obsError = false;
+    let obsMsg = '';
+
+    if (missingObs.length > 0) {
+        obsError = true;
+        const missingLabels = missingObs.map(o => t(o) || o).join('、');
+        obsMsg += (currentLang === 'zh' ? '漏選：' : 'Missing: ') + missingLabels;
+    }
+    if (extraObs.length > 0) {
+        obsError = true;
+        const extraLabels = extraObs.map(o => t(o) || o).join('、');
+        if (obsMsg) obsMsg += '；';
+        obsMsg += (currentLang === 'zh' ? '多選：' : 'Extra: ') + extraLabels;
+    }
+
+    if (obsError) {
+        let trapHint = '';
+        if (currentResult.trap) {
+            const hasDeposit = selectedDeposit.has('deposit_brown') || selectedDeposit.has(
+                'deposit_silver');
+            const hasMetal = selectedProducts.has('metal');
+            if (hasDeposit || hasMetal) {
+                trapHint = ' ' + (currentResult.trapNote || t('fbTrap'));
+            }
+        }
+        setFeedback('⚠️', currentLang === 'zh' ? '觀察選擇有誤' : 'Observation selection incorrect', obsMsg +
+            trapHint, 'error');
+        return;
+    }
+
+    isAnswered = true;
+    spinBtn.disabled = false;
+    spinBtn.textContent = t('nextBtn');
+    totalAttempts++;
+    correctAttempts++;
+    document.querySelectorAll(
+        '.opt-btn, #productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn, .coeff-box'
+        ).forEach(b => b.disabled = true);
+    checkReactionBtn.disabled = true;
+    checkBottomBtn.disabled = true;
+    nextStepBtn.disabled = true;
+    nextQuestionBtn.disabled = false;
+    nextQuestionBtn.style.display = 'inline-block';
+    let trapMsg = currentResult.trap ? ' ' + t('fbTrap') : '';
+    if (currentResult.note_zh && currentResult.note_en) {
+        trapMsg += ' ' + (currentLang === 'zh' ? currentResult.note_zh : currentResult.note_en);
+    }
+    let balMsg = balanceOk || !balanceActive ? ' ' + t('balCheck') : '';
+    setFeedback('✅', t('fbCorrect') + balMsg, `${t('fbProducts')} ${currentResult.products}${trapMsg}`,
+        'success');
+}
+
+function nextQuestion() {
+    if (!isAnswered) return;
+    isAnswered = false;
+    selectedReaction = null;
+    selectedPpt = new Set();
+    selectedOther = new Set();
+    selectedDeposit = new Set();
+    selectedProducts = new Set();
+    productsCorrect = false;
+    showBalanceAndObs = false;
+    productCheckDone = false;
+    reactionChecked = false;
+    currentMetal = null;
+    currentReagent = null;
+    currentResult = null;
+    balanceArea.style.display = 'none';
+    productRow.style.display = 'none';
+    obsSection.style.display = 'none';
+    colorTempSub.style.display = 'none';
+    metalDisplay.textContent = '—';
+    reagentDisplay.textContent = '—';
+    reactionQuestionMark.textContent = '→ ?';
+    productFeedback.textContent = '';
+    productFeedback.className = 'product-feedback';
+    document.querySelectorAll('.prod-btn').forEach(b => b.classList.remove('correct', 'incorrect'));
+    document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll(
+        '#productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn'
+        ).forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll(
+        '.opt-btn, #productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn'
+        ).forEach(b => b.disabled = false);
+    document.querySelectorAll(
+        '#productGroup .prod-btn, #obsPptGroup .obs-btn, #obsOtherGroup .obs-btn, #obsDepositGroup .obs-btn'
+        ).forEach(b => b.disabled = true);
+    nextStepBtn.disabled = true;
+    checkReactionBtn.disabled = true;
+    checkBottomBtn.disabled = true;
+    nextQuestionBtn.disabled = true;
+    nextQuestionBtn.style.display = 'none';
+    spinBtn.disabled = false;
+    spinBtn.textContent = t('spinBtn');
+    setFeedback('✏️', t('fbSpin'), '', null);
+    spinWheel();
+}
 
             // ============================================================
             // 語言切換
