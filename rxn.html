@@ -2983,7 +2983,6 @@
     balanceTerms.forEach((_, idx) => { balanceCoeffs[idx] = 1; });
     
     let html = '';
-    const half = Math.floor(balanceTerms.length / 2);
     balanceTerms.forEach((term, idx) => {
         const coeff = balanceCoeffs[idx] || 1;
         const displayCoeff = coeff === 1 ? '' : coeff;
@@ -2991,7 +2990,7 @@
         html += `<span class="coeff-box" data-idx="${idx}" data-value="${coeff}">${displayCoeff || '&nbsp;'}</span>`;
         html += `${term}</span>`;
         if (idx < balanceTerms.length - 1) {
-            if (idx === half - 1) {
+            if (idx === 1) {
                 html += `<span class="arrow-symbol"> → </span>`;
             } else {
                 html += `<span class="arrow-symbol"> + </span>`;
