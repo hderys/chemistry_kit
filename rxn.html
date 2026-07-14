@@ -1746,8 +1746,8 @@
                     'H2O(l)': { reaction: true, products: '2K + 2H₂O → 2KOH + H₂', obs: ['flame_lilac', 'gas', 'float',
                             'dissolve'
                         ], prod: ['hydroxide', 'hydrogen'] },
-                    'H2O(g)': { reaction: true, products: '2K + 2H₂O → 2KOH + H₂', obs: ['solid_white'],
-                        prod: ['hydroxide', 'hydrogen'] },
+                    'H2O(g)': { reaction: true, products: '2K + H₂O → K₂O + H₂', obs: ['solid_white'],
+        prod: ['oxide', 'hydrogen'] },
                     'HCl(aq)': { reaction: true, products: '2K + 2HCl → 2KCl + H₂', obs: ['flame_lilac', 'gas',
                             'dissolve'
                         ], prod: ['salt', 'hydrogen'] },
@@ -1823,8 +1823,8 @@
                     'H2O(l)': { reaction: true, products: '2Na + 2H₂O → 2NaOH + H₂', obs: ['flame_golden', 'gas', 'float',
                             'dissolve'
                         ], prod: ['hydroxide', 'hydrogen'] },
-                    'H2O(g)': { reaction: true, products: '2Na + 2H₂O → 2NaOH + H₂', obs: ['solid_white'],
-                        prod: ['hydroxide', 'hydrogen'] },
+                    'H2O(g)': { reaction: true, products: '2Na + H₂O → Na₂O + H₂', obs: ['solid_white'],
+        prod: ['oxide', 'hydrogen'] },
                     'HCl(aq)': { reaction: true, products: '2Na + 2HCl → 2NaCl + H₂', obs: ['flame_golden', 'gas',
                             'dissolve'
                         ], prod: ['salt', 'hydrogen'] },
@@ -2697,11 +2697,11 @@
                 const eqMap = {
                     'K_O2(g)': { terms: ['K', 'O₂', 'K₂O'], coeffs: [4, 1, 2] },
                     'K_H2O(l)': { terms: ['K', 'H₂O', 'KOH', 'H₂'], coeffs: [2, 2, 2, 1] },
-                    'K_H2O(g)': { terms: ['K', 'H₂O', 'KOH', 'H₂'], coeffs: [2, 2, 2, 1] },
+                    'K_H2O(g)': { terms: ['K', 'H₂O', 'K₂O', 'H₂'], coeffs: [2, 1, 1, 1] },
                     'K_HCl(aq)': { terms: ['K', 'HCl', 'KCl', 'H₂'], coeffs: [2, 2, 2, 1] },
                     'Na_O2(g)': { terms: ['Na', 'O₂', 'Na₂O'], coeffs: [4, 1, 2] },
                     'Na_H2O(l)': { terms: ['Na', 'H₂O', 'NaOH', 'H₂'], coeffs: [2, 2, 2, 1] },
-                    'Na_H2O(g)': { terms: ['Na', 'H₂O', 'NaOH', 'H₂'], coeffs: [2, 2, 2, 1] },
+                    'Na_H2O(g)': { terms: ['Na', 'H₂O', 'Na₂O', 'H₂'], coeffs: [2, 1, 1, 1] },
                     'Na_HCl(aq)': { terms: ['Na', 'HCl', 'NaCl', 'H₂'], coeffs: [2, 2, 2, 1] },
                     'Ba_O2(g)': { terms: ['Ba', 'O₂', 'BaO'], coeffs: [2, 1, 2] },
                     'Ba_H2O(l)': { terms: ['Ba', 'H₂O', 'Ba(OH)₂', 'H₂'], coeffs: [1, 2, 1, 1] },
