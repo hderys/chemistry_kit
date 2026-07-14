@@ -981,7 +981,7 @@
                 flex: 0 1 auto;
             }
 
-            /* ===== 產物區域 - 手機版修正 ===== */
+            /* ===== 產物區域 - 手機版完整修正 ===== */
             .product-group {
                 display: flex;
                 flex-wrap: wrap;
@@ -990,35 +990,53 @@
                 align-items: center;
                 width: 100% !important;
             }
+            
+            /* 產物按鈕 - 完美均分三欄 */
             .product-group .prod-btn {
-                font-size: 0.8rem;
-                padding: 6px 4px;
-                min-height: 32px;
-                flex: 0 0 calc(33.33% - 4px);
-                max-width: calc(33.33% - 4px);
+                flex: 1 0 calc(33.33% - 4px) !important;
+                max-width: calc(33.33% - 4px) !important;
+                min-width: calc(33.33% - 4px) !important;
+                font-size: 0.85rem;
+                padding: 8px 4px;
+                min-height: 36px;
                 border-radius: 20px;
                 text-align: center;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
-            .product-group .btn-next-step {
-                font-size: 0.9rem;
-                padding: 6px 20px;
-                min-height: 34px;
-                width: auto;
+            
+            /* 產物正確！- 和「下一步」同一行 */
+            .product-group .product-feedback {
                 flex: 0 1 auto;
-                max-width: none;
-                text-align: center;
-                margin-top: 4px;
-            }
-            .product-feedback {
                 font-size: 0.85rem;
-                width: 100%;
-                margin-left: 0;
-                margin-top: 4px;
-                display: block;
-                text-align: left;
+                padding: 4px 8px;
+                margin: 0;
+                display: inline-flex;
+                align-items: center;
+                color: #155724;
+                font-weight: 600;
+                white-space: nowrap;
+            }
+            
+            /* 下一步 - 推到最右邊 */
+            .product-group .btn-next-step {
+                flex: 0 1 auto;
+                padding: 6px 20px;
+                font-size: 0.9rem;
+                min-height: 36px;
+                margin-left: auto;
+                margin-top: 0;
+                width: auto;
+                max-width: none;
+            }
+
+            /* 覆蓋原來的 product-feedback 樣式 */
+            .product-feedback {
+                display: inline-flex !important;
+                width: auto !important;
+                margin-left: 0 !important;
+                margin-top: 0 !important;
             }
 
             .balance-area {
@@ -1228,19 +1246,21 @@
                 min-height: 28px;
             }
             .product-group .prod-btn {
-                font-size: 0.7rem;
-                padding: 5px 3px;
-                min-height: 28px;
-                flex: 0 0 calc(33.33% - 4px);
-                max-width: calc(33.33% - 4px);
+                font-size: 0.75rem;
+                padding: 6px 3px;
+                min-height: 32px;
+                flex: 1 0 calc(33.33% - 4px) !important;
+                max-width: calc(33.33% - 4px) !important;
+                min-width: calc(33.33% - 4px) !important;
             }
             .product-group .btn-next-step {
-                font-size: 0.75rem;
+                font-size: 0.8rem;
                 padding: 5px 14px;
-                min-height: 30px;
+                min-height: 32px;
             }
-            .product-feedback {
+            .product-group .product-feedback {
                 font-size: 0.75rem;
+                padding: 2px 6px;
             }
             #obsRowDeposit .obs-btn,
             #obsRowPpt .obs-btn,
@@ -1373,9 +1393,9 @@
                                     <button class="prod-btn" data-prod="salt">鹽</button>
                                     <button class="prod-btn" data-prod="hydrogen">氫氣</button>
                                     <button class="prod-btn" data-prod="metal">金屬</button>
+                                    <span class="product-feedback" id="productFeedback"></span>
                                     <button class="btn-next-step" id="nextStepBtn" disabled>➡️ 下一步</button>
                                 </div>
-                                <span class="product-feedback" id="productFeedback"></span>
                             </div>
 
                             <div class="balance-area" id="balanceArea" style="display:none;">
@@ -3805,7 +3825,7 @@
 
             const initialLang = getUrlParameter('lang') || 'en';
             initApp(initialLang);
-            console.log('⚙️ 金屬反應練習已啟動 (手機版產物修正完成)');
+            console.log('⚙️ 金屬反應練習已啟動 (手機版產物完美均分 + feedback同行)');
         })();
     </script>
 </body>
