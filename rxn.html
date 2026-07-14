@@ -381,7 +381,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            padding: 4px 0;
+            padding: 0;
             align-items: center;
         }
         .product-group .prod-btn {
@@ -488,12 +488,12 @@
             flex: 1;
         }
         .balance-row .term {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
             color: #2a3a6a;
         }
         .balance-row .arrow-symbol {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
             color: #6a8aba;
         }
@@ -502,11 +502,11 @@
             border: 2px solid #c8d4e8;
             border-radius: 5px;
             background: white;
-            min-width: 30px;
-            height: 30px;
-            line-height: 26px;
+            min-width: 36px;
+            height: 36px;
+            line-height: 32px;
             text-align: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #2a3a6a;
             cursor: pointer;
@@ -986,7 +986,7 @@
                 display: flex;
                 flex-wrap: wrap;
                 gap: 4px;
-                padding: 2px 0;
+                padding: 0;
                 align-items: center;
                 width: 100% !important;
             }
@@ -1005,7 +1005,6 @@
                 text-overflow: ellipsis;
             }
 
-            /* 產物正確！和下一步同一行 */
             .product-group .product-feedback {
                 flex: 0 1 auto;
                 font-size: 0.85rem;
@@ -1046,17 +1045,17 @@
                 text-align: center;
             }
             .balance-row .term {
-                font-size: 0.65rem;
+                font-size: 0.85rem;
             }
             .balance-row .arrow-symbol {
-                font-size: 0.65rem;
+                font-size: 0.85rem;
             }
             .balance-row .coeff-box {
-                min-width: 26px;
-                height: 26px;
-                line-height: 22px;
-                font-size: 0.65rem;
-                padding: 0 4px;
+                min-width: 32px;
+                height: 32px;
+                line-height: 28px;
+                font-size: 0.85rem;
+                padding: 0 6px;
             }
             .obs-section .obs-title {
                 font-size: 0.6rem;
@@ -1085,20 +1084,21 @@
                 display: flex;
                 flex-wrap: wrap;
                 align-items: center;
-                gap: 4px 8px;
+                gap: 3px 6px;
             }
             #obsRowFlame .obs-label {
-                font-size: 0.6rem;
+                font-size: 0.5rem;
                 min-width: auto;
                 width: auto;
                 margin-bottom: 0;
             }
             #obsRowFlame select {
-                font-size: 0.6rem;
-                min-height: 30px;
-                min-width: 60px;
-                padding: 2px 6px;
+                font-size: 0.5rem;
+                min-height: 26px;
+                min-width: 50px;
+                padding: 2px 4px;
                 flex: 0 1 auto;
+                max-width: 80px;
             }
 
             .obs-row .obs-btn-group {
@@ -1575,7 +1575,7 @@
             }
 
             // ============================================================
-            // 資料庫 - 金屬
+            // 資料庫 - 金屬（Ba 保留在 METALS 中用於抽題，但從 METAL_DATA 移除）
             // ============================================================
             const METALS = ['K', 'Na', 'Ba', 'Ca', 'Mg', 'Al', 'Zn', 'Fe', 'Sn', 'Pb', 'Cu', 'Hg', 'Ag', 'Pt', 'Au'];
 
@@ -1598,15 +1598,7 @@
                     ionColor: { en: 'Colourless', zh: '無色' },
                     flame: { en: 'Golden yellow', zh: '金黃色' }
                 },
-                'Ba': {
-                    symbol: 'Ba',
-                    english: 'Barium',
-                    chinese: '鋇',
-                    metalColor: { en: 'Silvery white', zh: '銀白色' },
-                    oxideColor: { en: 'White', zh: '白色' },
-                    ionColor: { en: 'Colourless', zh: '無色' },
-                    flame: { en: 'Apple green', zh: '蘋果綠色' }
-                },
+                // Ba 已從此處移除（不出現在活性序表格）
                 'Ca': {
                     symbol: 'Ca',
                     english: 'Calcium',
@@ -1749,7 +1741,7 @@
             // ============================================================
             const REACTION_MAP = {
                 'K': {
-                    'O2(g)': { reaction: true, products: '4K + O₂ → 2K₂O', obs: ['solid_white'],
+                    'O2(g)': { reaction: true, products: '4K + O₂ → 2K₂O', obs: ['flame_lilac', 'solid_white'],
                         prod: ['oxide'] },
                     'H2O(l)': { reaction: true, products: '2K + 2H₂O → 2KOH + H₂', obs: ['flame_lilac', 'gas', 'float',
                             'dissolve'
@@ -1826,7 +1818,7 @@
                         trapNote: '⚠️ 此金屬非常活潑，會優先與水反應。本題的主要觀察來自「金屬與水反應」和「後續沉澱反應」。' }
                 },
                 'Na': {
-                    'O2(g)': { reaction: true, products: '4Na + O₂ → 2Na₂O', obs: ['solid_white'],
+                    'O2(g)': { reaction: true, products: '4Na + O₂ → 2Na₂O', obs: ['flame_golden', 'solid_white'],
                         prod: ['oxide'] },
                     'H2O(l)': { reaction: true, products: '2Na + 2H₂O → 2NaOH + H₂', obs: ['flame_golden', 'gas', 'float',
                             'dissolve'
@@ -2441,7 +2433,7 @@
                     obsFlameLabel: '🔥 Flame',
                     obsSolidLabel: '🧊 Solid formed',
                     obsDepositLabel: '🔄 Solid deposit',
-                    obsSolutionLabel: '🎨 Solution',
+                    obsSolutionLabel: '🎨 Sol.',  // 改為 Sol.
                     obsPptLabel: '🟦 Precipitate',
                     obsOtherLabel: '🔦 Other',
                     hintText: 'Press "Spin" to start!｜Reaction → Products → Equation → Observations',
@@ -2582,6 +2574,7 @@
             const langBtns = document.querySelectorAll('.lang-btn');
             const practiceSelector = document.getElementById('practiceSelector');
             const reactionRow = document.getElementById('reactionRow');
+            const btnMetalSeries = document.getElementById('btnMetalSeries');
 
             // ============================================================
             // 工具函數
@@ -2656,7 +2649,7 @@
                 const lang = currentLang;
                 metals.forEach((m, i) => {
                     const data = METAL_DATA[m];
-                    if (!data) return;
+                    if (!data) return;  // 沒有資料就不顯示（Ba 已移除）
                     const rowClass = i % 2 === 0 ? '' : 'row-highlight';
                     const metalColor = lang === 'zh' ? data.metalColor.zh : data.metalColor.en;
                     const oxideColor = lang === 'zh' ? data.oxideColor.zh : data.oxideColor.en;
@@ -3020,6 +3013,7 @@
                 document.getElementById('metalLabel').textContent = t('metalLabel');
                 document.getElementById('reagentLabel').textContent = t('reagentLabel');
                 hintText.innerHTML = t('hintText');
+                btnMetalSeries.textContent = currentLang === 'zh' ? '📊 活性序' : '📊 Metal Reactivity Series';
 
                 document.getElementById('tempHotLabel').textContent = t('tempHotLabel');
                 document.getElementById('tempColdLabel').textContent = t('tempColdLabel');
@@ -3844,7 +3838,7 @@
 
             const initialLang = getUrlParameter('lang') || 'en';
             initApp(initialLang);
-            console.log('⚙️ 金屬反應練習已啟動 (手機版產物完美均分 + feedback同行 + 火焰溶液同行)');
+            console.log('⚙️ 金屬反應練習已啟動 (最終版：K/Na火焰修正 + Ba移除 + Sol. + 活性序英文 + padding歸零 + 方程式字體放大)');
         })();
     </script>
 </body>
