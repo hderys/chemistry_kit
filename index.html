@@ -12,17 +12,17 @@
             margin: 0;
             padding: 0;
         }
-        html,
-        body {
-            height: 100%;
-            overflow: hidden;
+        html, body {
+            min-height: 100vh;
+            overflow-y: auto;
         }
         body {
             background: linear-gradient(145deg, #f0f4ff 0%, #d4dcec 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 20px;
+            min-height: 100vh;
         }
 
         .home-container {
@@ -30,40 +30,49 @@
             width: 100%;
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 48px;
             padding: 40px 36px;
             box-shadow: 0 30px 60px rgba(40, 60, 120, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.5);
             text-align: center;
+            transition: all 0.2s ease;
+            margin: 20px auto;
         }
         .home-container .icon {
-            font-size: 3.6rem;
-            margin-bottom: 6px;
+            font-size: 3.2rem;
+            margin-bottom: 4px;
         }
         .home-container h1 {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: #2a3a6a;
             margin-bottom: 2px;
+            letter-spacing: -0.5px;
         }
         .home-container .sub {
             color: #5a6a8a;
-            font-size: 1.05rem;
-            margin-bottom: 28px;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.5);
+            display: inline-block;
+            padding: 0.2rem 1.8rem;
+            border-radius: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         .lang-selector {
             display: flex;
-            gap: 16px;
+            gap: 14px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
         }
         .lang-selector button {
             border: none;
-            padding: 14px 40px;
+            padding: 12px 36px;
             border-radius: 60px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: 0.25s;
@@ -72,7 +81,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             border: 2px solid #c8d0e0;
             flex: 1 1 auto;
-            min-width: 120px;
+            min-width: 100px;
         }
         .lang-selector button:hover {
             transform: scale(1.02);
@@ -87,16 +96,16 @@
         }
 
         .topic-title {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #5a6a8a;
             letter-spacing: 1px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         .topic-grid {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
         }
         .topic-btn {
             display: block;
@@ -104,7 +113,7 @@
             border: 2px solid #d0d8e8;
             background: white;
             border-radius: 20px;
-            padding: 18px 20px;
+            padding: 16px 18px;
             text-align: center;
             cursor: pointer;
             transition: 0.25s;
@@ -118,71 +127,82 @@
             background: #f8faff;
         }
         .topic-btn .topic-icon {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .topic-btn .topic-name {
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             font-weight: 700;
         }
         .topic-btn .topic-sub {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #6a7a8a;
             font-weight: 400;
         }
-        .topic-btn.disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
 
         .footer {
-            margin-top: 28px;
-            font-size: 0.75rem;
+            margin-top: 24px;
+            font-size: 0.7rem;
             color: #8a9aaa;
             border-top: 1px solid #e8eef8;
-            padding-top: 18px;
+            padding-top: 16px;
         }
 
+        /* ===== 手機版 ===== */
         @media (max-width: 600px) {
             .home-container {
-                padding: 28px 20px;
+                padding: 24px 18px;
                 border-radius: 32px;
+                margin: 12px auto;
             }
             .home-container h1 {
-                font-size: 1.7rem;
+                font-size: 1.5rem;
+            }
+            .home-container .sub {
+                font-size: 0.85rem;
+                padding: 0.15rem 1.4rem;
             }
             .topic-btn {
-                padding: 14px 16px;
+                padding: 12px 14px;
             }
             .topic-btn .topic-name {
-                font-size: 1rem;
+                font-size: 0.95rem;
+            }
+            .topic-btn .topic-sub {
+                font-size: 0.75rem;
             }
             .lang-selector button {
-                padding: 12px 24px;
-                font-size: 1rem;
-                min-width: 100px;
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                min-width: 80px;
+            }
+            .home-container .icon {
+                font-size: 2.6rem;
             }
         }
         @media (max-width: 400px) {
             .home-container {
-                padding: 20px 14px;
+                padding: 18px 12px;
                 border-radius: 24px;
+                margin: 8px auto;
             }
             .home-container h1 {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
             }
             .topic-btn {
-                padding: 12px 12px;
+                padding: 10px 10px;
             }
             .topic-btn .topic-name {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
             .lang-selector button {
-                padding: 10px 16px;
-                font-size: 0.85rem;
-                min-width: 80px;
+                padding: 8px 14px;
+                font-size: 0.8rem;
+                min-width: 70px;
+            }
+            .home-container .icon {
+                font-size: 2.2rem;
             }
         }
     </style>
@@ -194,8 +214,8 @@
         <div class="sub" id="homeSub">Mastering Science Chemistry</div>
 
         <div class="lang-selector" id="langSelector">
-            <button data-lang="zh" id="homeLangZh">🇹🇼 中文</button>
-            <button data-lang="en" id="homeLangEn">🇬🇧 English</button>
+            <button data-lang="zh" id="homeLangZh">中文</button>
+            <button data-lang="en" id="homeLangEn">English</button>
         </div>
 
         <div class="topic-title" id="topicTitle">— 選擇課題 —</div>
@@ -224,8 +244,8 @@
                 zh: {
                     title: '⚗️ 化學練習 · DSE',
                     sub: 'Mastering Science Chemistry',
-                    langZh: '🇹🇼 中文',
-                    langEn: '🇬🇧 English',
+                    langZh: '中文',
+                    langEn: 'English',
                     topicTitle: '— 選擇課題 —',
                     ionsName: '🧪 離子與化合物',
                     ionsSub: 'Ionic Compounds · Ch.7',
@@ -236,8 +256,8 @@
                 en: {
                     title: '⚗️ Chemistry Practice · DSE',
                     sub: 'Mastering Science Chemistry',
-                    langZh: '🇹🇼 中文',
-                    langEn: '🇬🇧 English',
+                    langZh: '中文',
+                    langEn: 'English',
                     topicTitle: '— Select Topic —',
                     ionsName: '🧪 Ionic Compounds',
                     ionsSub: 'Ionic Compounds · Ch.7',

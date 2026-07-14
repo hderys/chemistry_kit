@@ -383,7 +383,6 @@
             gap: 6px;
             padding: 4px 0;
             align-items: center;
-            flex: 1;
         }
         .product-group .prod-btn {
             border: 2px solid #d0d8e8;
@@ -981,39 +980,47 @@
                 min-height: 32px;
                 flex: 0 1 auto;
             }
+
+            /* ===== 產物區域 - 手機版修正 ===== */
             .product-group {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 4px;
                 padding: 2px 0;
                 align-items: center;
-                justify-content: flex-start;
+                width: 100% !important;
             }
             .product-group .prod-btn {
-                font-size: 0.7rem;
-                padding: 5px 4px;
-                min-height: 30px;
-                width: calc(33.33% - 4px);
+                font-size: 0.8rem;
+                padding: 6px 4px;
+                min-height: 32px;
                 flex: 0 0 calc(33.33% - 4px);
-                max-width: none;
+                max-width: calc(33.33% - 4px);
                 border-radius: 20px;
                 text-align: center;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             .product-group .btn-next-step {
-                font-size: 0.7rem;
-                padding: 5px 12px;
-                min-height: 30px;
+                font-size: 0.9rem;
+                padding: 6px 20px;
+                min-height: 34px;
                 width: auto;
                 flex: 0 1 auto;
                 max-width: none;
                 text-align: center;
+                margin-top: 4px;
             }
             .product-feedback {
-                font-size: 0.6rem;
+                font-size: 0.85rem;
                 width: 100%;
                 margin-left: 0;
-                margin-top: 2px;
+                margin-top: 4px;
+                display: block;
+                text-align: left;
             }
+
             .balance-area {
                 flex-direction: column;
                 align-items: stretch;
@@ -1221,16 +1228,19 @@
                 min-height: 28px;
             }
             .product-group .prod-btn {
-                font-size: 0.6rem;
-                padding: 4px 2px;
-                min-height: 26px;
-                flex: 0 0 calc(33.33% - 3px);
-                width: calc(33.33% - 3px);
+                font-size: 0.7rem;
+                padding: 5px 3px;
+                min-height: 28px;
+                flex: 0 0 calc(33.33% - 4px);
+                max-width: calc(33.33% - 4px);
             }
             .product-group .btn-next-step {
-                font-size: 0.6rem;
-                padding: 4px 2px;
-                min-height: 26px;
+                font-size: 0.75rem;
+                padding: 5px 14px;
+                min-height: 30px;
+            }
+            .product-feedback {
+                font-size: 0.75rem;
             }
             #obsRowDeposit .obs-btn,
             #obsRowPpt .obs-btn,
@@ -1696,7 +1706,7 @@
             let weightedReagents = buildWeightedArray();
 
             // ============================================================
-            // REACTION_MAP - 已按您最新指示修正
+            // REACTION_MAP
             // ============================================================
             const REACTION_MAP = {
                 'K': {
@@ -3051,7 +3061,7 @@
             }
 
             // ============================================================
-            // 轉盤抽題 - 排除 Al + H₂O(g) 同 Hg + AgNO3(aq)
+            // 轉盤抽題
             // ============================================================
             function spinWheel() {
                 if (isSpinning) return;
@@ -3611,6 +3621,12 @@
             function setLanguage(lang) {
                 currentLang = lang;
                 langBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+
+                // 更新 URL 參數
+                const url = new URL(window.location);
+                url.searchParams.set('lang', lang);
+                window.history.replaceState({}, '', url);
+
                 updateObsOptions();
                 renderReferenceTable();
 
@@ -3789,7 +3805,7 @@
 
             const initialLang = getUrlParameter('lang') || 'en';
             initApp(initialLang);
-            console.log('⚙️ 金屬反應練習已啟動 (最終完整版)');
+            console.log('⚙️ 金屬反應練習已啟動 (手機版產物修正完成)');
         })();
     </script>
 </body>
