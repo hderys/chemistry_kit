@@ -2960,62 +2960,69 @@
             }
 
             function renderBalanceEquation(metal, reagent) {
-                const eq = getBalancedEquation(metal, reagent);
-                const result = REACTION_MAP[metal]?.[reagent];
+    const eq = getBalancedEquation(metal, reagent);
+    const result = REACTION_MAP[metal]?.[reagent];
 
-                if (result && result.trap) {
-                    balanceArea.style.display = 'flex';
-                    balanceRow.innerHTML = '';
-                    balanceTrapHint.style.display = 'block';
-                    balTitle.textContent = t('balTitle');
-                    return;
-                }
+    if (result && result.trap) {
+        balanceArea.style.display = 'flex';
+        balanceRow.innerHTML = '';
+        balanceTrapHint.style.display = 'block';
+        balTitle.textContent = t('balTitle');
+        return;
+    }
 
-                balanceTrapHint.style.display = 'none';
+    balanceTrapHint.style.display = 'none';
 
-                if (!eq || !balanceActive || !showBalanceAndObs) {
-                    balanceArea.style.display = 'none';
-                    return;
-                }
-                balanceArea.style.display = 'flex';
-                balanceTerms = eq.terms;
-                balanceCoeffs = {};
-                balanceTerms.forEach((_, idx) => { balanceCoeffs[idx] = 1; });
-                let html = '';
-                balanceTerms.forEach((term, idx) => {
-                    const coeff = balanceCoeffs[idx] || 1;
-                    const displayCoeff = coeff === 1 ? '' : coeff;
-                    html += `<span class="term">`;
-                    html += `<span class="coeff-box" data-idx="${idx}" data-value="${coeff}">${displayCoeff || '&nbsp;'}</span>`;
-                    html += `${term}</span>`;
-                    if (idx < balanceTerms.length - 1) {
-                        html += `<span class="arrow-symbol"> → </span>`;
-                    }
-                });
-                balanceRow.innerHTML = html;
-                document.querySelectorAll('.coeff-box').forEach(box => {
-                    box.addEventListener('click', function(e) {
-                        if (isAnswered || isSpinning) return;
-                        const idx = parseInt(this.dataset.idx);
-                        currentCoeffTarget = idx;
-                        const rect = this.getBoundingClientRect();
-                        const popup = document.getElementById('coeffPopup');
-                        let left = rect.left + rect.width / 2 - 90;
-                        let top = rect.bottom + 8;
-                        if (left < 10) left = 10;
-                        if (top + 150 > window.innerHeight) top = rect.top - 150;
-                        popup.style.left = left + 'px';
-                        popup.style.top = top + 'px';
-                        const currentVal = parseInt(this.dataset.value) || 1;
-                        document.querySelectorAll('#coeffGrid button').forEach(b => {
-                            b.classList.toggle('selected', parseInt(b.dataset.val) === currentVal);
-                        });
-                        popup.classList.add('active');
-                        popupVisible = true;
-                    });
-                });
-                balTitle.textContent = t('balTitle');
+    if (!eq || !balanceActive || !showBalanceAndObs) {
+        balanceArea.style.display = 'none';
+        return;
+    }
+    balanceArea.style.display = 'flex';
+    balanceTerms = eq.terms;
+    balanceCoeffs = {};
+    balanceTerms.forEach((_, idx) => { balanceCoeffs[idx] = 1; });
+    
+    let html = '';
+    const half = Math.floor(balanceTerms.length / 2);
+    balanceTerms.forEach((term, idx) => {
+        const coeff = balanceCoeffs[idx] || 1;
+        const displayCoeff = coeff === 1 ? '' : coeff;
+        html += `<span class="term">`;
+        html += `<span class="coeff-box" data-idx="${idx}" data-value="${coeff}">${displayCoeff || '&nbsp;'}</span>`;
+        html += `${term}</span>`;
+        if (idx < balanceTerms.length - 1) {
+            if (idx === half - 1) {
+                html += `<span class="arrow-symbol"> → </span>`;
+            } else {
+                html += `<span class="arrow-symbol"> + </span>`;
             }
+        }
+    });
+    balanceRow.innerHTML = html;
+    
+    document.querySelectorAll('.coeff-box').forEach(box => {
+        box.addEventListener('click', function(e) {
+            if (isAnswered || isSpinning) return;
+            const idx = parseInt(this.dataset.idx);
+            currentCoeffTarget = idx;
+            const rect = this.getBoundingClientRect();
+            const popup = document.getElementById('coeffPopup');
+            let left = rect.left + rect.width / 2 - 90;
+            let top = rect.bottom + 8;
+            if (left < 10) left = 10;
+            if (top + 150 > window.innerHeight) top = rect.top - 150;
+            popup.style.left = left + 'px';
+            popup.style.top = top + 'px';
+            const currentVal = parseInt(this.dataset.value) || 1;
+            document.querySelectorAll('#coeffGrid button').forEach(b => {
+                b.classList.toggle('selected', parseInt(b.dataset.val) === currentVal);
+            });
+            popup.classList.add('active');
+            popupVisible = true;
+        });
+    });
+    balTitle.textContent = t('balTitle');
+}
 
             function setupCoeffPopup() {
                 document.querySelectorAll('#coeffGrid button').forEach(btn => {
