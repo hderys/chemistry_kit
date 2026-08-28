@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>⚗️ 化學練習 · DSE</title>
-    <base href="./">
+    <title>📁 Mastering Science · DSE 化學</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,376 +11,354 @@
             margin: 0;
             padding: 0;
         }
-        html, body {
-            min-height: 100vh;
-            overflow: hidden;
+        html,
+        body {
             height: 100%;
+            overflow: hidden;
         }
         body {
             background: linear-gradient(145deg, #f0f4ff 0%, #d4dcec 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 12px;
-            min-height: 100vh;
-            height: 100%;
+            padding: 20px;
         }
 
-        .home-container {
-            max-width: 650px;
+        .container {
+            max-width: 700px;
             width: 100%;
             background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 40px;
-            padding: 20px 28px;
-            box-shadow: 0 20px 50px rgba(40, 60, 120, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            padding: 2rem 1.8rem 2.2rem;
+            box-shadow: 0 20px 50px rgba(40, 60, 120, 0.12);
+            border: 1px solid rgba(180, 200, 220, 0.25);
             text-align: center;
-            transition: all 0.2s ease;
-            margin: auto;
         }
-        .home-container .icon {
-            font-size: 2.6rem;
-            margin-bottom: 0px;
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 6px;
         }
-        .home-container h1 {
+
+        .header h1 {
             font-size: 1.6rem;
             font-weight: 700;
-            color: #2a3a6a;
-            margin-bottom: 0px;
+            color: #1a2332;
             letter-spacing: -0.5px;
         }
-        .home-container .sub {
-            color: #5a6a8a;
-            font-size: 0.8rem;
-            margin-bottom: 14px;
-            background: rgba(255, 255, 255, 0.5);
-            display: inline-block;
-            padding: 0.1rem 1.6rem;
-            border-radius: 60px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+        .header h1 span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #6b7a8e;
         }
 
-        .lang-selector {
+        .lang-toggle {
             display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 14px;
-        }
-        .lang-selector button {
-            border: none;
-            padding: 8px 28px;
-            border-radius: 60px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.25s;
+            gap: 4px;
             background: white;
-            color: #2a3a6a;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            border: 2px solid #c8d0e0;
-            flex: 1 1 auto;
-            min-width: 90px;
+            padding: 3px;
+            border-radius: 30px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
-        .lang-selector button:hover {
-            transform: scale(1.02);
-            border-color: #4a6a9a;
-            background: #eef4fc;
+        .lang-btn {
+            padding: 5px 14px;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.15s;
+            background: transparent;
+            color: #5a6a8a;
         }
-        .lang-selector button.active {
+        .lang-btn.active {
             background: #4a6a9a;
             color: white;
-            border-color: #4a6a9a;
-            box-shadow: 0 4px 16px rgba(74, 106, 154, 0.3);
+            box-shadow: 0 2px 8px rgba(74, 106, 154, 0.3);
+        }
+        .lang-btn:hover:not(.active) {
+            background: #e8eef8;
         }
 
-        .topic-title {
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: #5a6a8a;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+        .subtitle {
+            font-size: 0.95rem;
+            color: #6b7a8e;
+            margin-bottom: 22px;
+            padding-bottom: 16px;
+            border-bottom: 2px dashed #e2e8f0;
+            font-weight: 500;
         }
+
         .topic-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .topic-btn {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-        }
-        .topic-btn {
-            display: block;
-            width: 100%;
-            border: 2px solid #d0d8e8;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 12px;
             background: white;
+            border: 2px solid #e2e8f0;
             border-radius: 18px;
-            padding: 10px 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.25s;
             text-decoration: none;
-            color: #2a3a6a;
+            color: #1a2332;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            gap: 4px;
+            min-height: 90px;
         }
+
         .topic-btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             border-color: #4a6a9a;
-            box-shadow: 0 8px 24px rgba(74, 106, 154, 0.12);
-            background: #f8faff;
+            box-shadow: 0 8px 25px rgba(74, 106, 154, 0.12);
         }
+
         .topic-btn .topic-icon {
-            font-size: 1.3rem;
-            display: block;
-            margin-bottom: 0px;
+            font-size: 2rem;
+            line-height: 1.2;
         }
+
         .topic-btn .topic-name {
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 700;
+            color: #1a2332;
         }
+
         .topic-btn .topic-sub {
-            font-size: 0.7rem;
-            color: #6a7a8a;
-            font-weight: 400;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #8a9aaa;
         }
 
         .footer {
-            margin-top: 14px;
-            font-size: 0.6rem;
+            font-size: 0.75rem;
             color: #8a9aaa;
-            border-top: 1px solid #e8eef8;
-            padding-top: 10px;
+            margin-top: 8px;
+            padding-top: 12px;
+            border-top: 1px solid #eef2f7;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 4px;
         }
 
         /* ===== 手機版 ===== */
-        @media (max-width: 600px) {
-            body {
-                padding: 8px;
-                align-items: center;
+        @media (max-width: 500px) {
+            .container {
+                padding: 1.2rem 1rem 1.6rem;
+                border-radius: 24px;
             }
-            .home-container {
-                padding: 16px 16px;
-                border-radius: 28px;
-                margin: auto;
+            .header h1 {
+                font-size: 1.2rem;
             }
-            .home-container h1 {
-                font-size: 1.4rem;
+            .header h1 span {
+                font-size: 0.75rem;
             }
-            .home-container .sub {
-                font-size: 0.7rem;
-                padding: 0.1rem 1.2rem;
-                margin-bottom: 12px;
+            .lang-btn {
+                font-size: 0.65rem;
+                padding: 3px 10px;
             }
-            .home-container .icon {
-                font-size: 2.2rem;
+            .subtitle {
+                font-size: 0.75rem;
+                margin-bottom: 14px;
+                padding-bottom: 10px;
+            }
+            .topic-grid {
+                gap: 8px;
             }
             .topic-btn {
-                padding: 8px 12px;
+                padding: 14px 8px;
+                min-height: 72px;
+                border-radius: 14px;
+            }
+            .topic-btn .topic-icon {
+                font-size: 1.6rem;
             }
             .topic-btn .topic-name {
                 font-size: 0.85rem;
             }
             .topic-btn .topic-sub {
-                font-size: 0.65rem;
-            }
-            .topic-btn .topic-icon {
-                font-size: 1.1rem;
-            }
-            .lang-selector button {
-                padding: 6px 18px;
-                font-size: 0.8rem;
-                min-width: 70px;
-            }
-            .lang-selector {
-                gap: 6px;
-                margin-bottom: 10px;
-            }
-            .topic-title {
-                font-size: 0.55rem;
-                margin-bottom: 8px;
-            }
-            .topic-grid {
-                gap: 6px;
+                font-size: 0.6rem;
             }
             .footer {
-                margin-top: 10px;
-                padding-top: 8px;
-                font-size: 0.55rem;
+                font-size: 0.6rem;
+                flex-direction: column;
+                align-items: center;
+                gap: 2px;
             }
         }
-        @media (max-width: 400px) {
-            .home-container {
-                padding: 12px 10px;
-                border-radius: 20px;
-            }
-            .home-container h1 {
-                font-size: 1.2rem;
+
+        @media (max-width: 380px) {
+            .topic-grid {
+                grid-template-columns: 1fr;
+                gap: 6px;
             }
             .topic-btn {
-                padding: 6px 10px;
+                min-height: 56px;
+                padding: 10px 8px;
+                flex-direction: row;
+                gap: 10px;
             }
-            .topic-btn .topic-name {
-                font-size: 0.75rem;
-            }
-            .lang-selector button {
-                padding: 5px 12px;
-                font-size: 0.7rem;
-                min-width: 60px;
-            }
-            .home-container .icon {
-                font-size: 1.8rem;
+            .topic-btn .topic-icon {
+                font-size: 1.4rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="home-container" id="homeContainer">
-        <div class="icon">⚗️</div>
-        <h1 id="homeTitle">Chemistry Practice · DSE</h1>
-        <div class="sub" id="homeSub">Mastering Science Chemistry</div>
 
-        <div class="lang-selector" id="langSelector">
-            <button data-lang="zh" id="homeLangZh">中文</button>
-            <button data-lang="en" id="homeLangEn">English</button>
+    <div class="container">
+        <div class="header">
+            <h1>📁 Mastering Science <span>DSE 化學</span></h1>
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang="zh" id="langZh">中文</button>
+                <button class="lang-btn" data-lang="en" id="langEn">English</button>
+            </div>
         </div>
 
-        <div class="topic-title" id="topicTitle">— 選擇課題 —</div>
+        <div class="subtitle" id="subtitle">選擇課題開始練習</div>
+
         <div class="topic-grid">
+            <!-- Ch.7 離子與化合物 -->
             <a class="topic-btn" id="topicIons" href="ions.html?lang=zh">
                 <span class="topic-icon">🧪</span>
                 <span class="topic-name" id="ionsName">離子與化合物</span>
                 <span class="topic-sub" id="ionsSub">Ionic Compounds · Ch.7</span>
             </a>
-            <a class="topic-btn" id="topicRxn" href="rxn.html?lang=zh">
+
+            <!-- Ch.9 結構 -->
+            <a class="topic-btn" id="topicStructure" href="structure.html?lang=zh">
+                <span class="topic-icon">🏗️</span>
+                <span class="topic-name" id="structureName">結構</span>
+                <span class="topic-sub" id="structureSub">Structure · Ch.9</span>
+            </a>
+
+            <!-- Ch.11 金屬反應 -->
+            <a class="topic-btn" id="topicRxn" href="rxn.html?lang=zh" style="grid-column: 1 / -1; max-width: 50%; justify-self: center; min-width: 200px;">
                 <span class="topic-icon">⚙️</span>
                 <span class="topic-name" id="rxnName">金屬反應</span>
                 <span class="topic-sub" id="rxnSub">Metal Reactions · Ch.11</span>
             </a>
         </div>
 
-        <div class="footer" id="footerText">⚗️ DSE Chemistry · 2026</div>
+        <div class="footer">
+            <span id="footerLeft">💡 按課題開始練習</span>
+            <span id="footerRight">DSE Chemistry · 持續更新中</span>
+        </div>
     </div>
 
     <script>
-        (function() {
-            // 桌面版自動隱藏網址列
-            if (window.innerWidth >= 1024 && !('ontouchstart' in window)) {
-                window.scrollTo(0, 0);
-                setTimeout(() => window.scrollTo(0, 0), 100);
-            }
+        // ============================================================
+        // 語言系統
+        // ============================================================
+        let currentLang = 'zh';
 
-            // ============================================================
-            // 語言文字
-            // ============================================================
-            const LANG = {
-                zh: {
-                    title: '⚗️ 化學練習 · DSE',
-                    sub: 'Mastering Science Chemistry',
-                    langZh: '中文',
-                    langEn: 'English',
-                    topicTitle: '— 選擇課題 —',
-                    ionsName: '🧪 離子與化合物',
-                    ionsSub: 'Ionic Compounds · Ch.7',
-                    rxnName: '⚙️ 金屬反應',
-                    rxnSub: 'Metal Reactions · Ch.11',
-                    footer: '⚗️ DSE 化學 · 2026'
-                },
-                en: {
-                    title: '⚗️ Chemistry Practice · DSE',
-                    sub: 'Mastering Science Chemistry',
-                    langZh: '中文',
-                    langEn: 'English',
-                    topicTitle: '— Select Topic —',
-                    ionsName: '🧪 Ionic Compounds',
-                    ionsSub: 'Ionic Compounds · Ch.7',
-                    rxnName: '⚙️ Metal Reactions',
-                    rxnSub: 'Metal Reactions · Ch.11',
-                    footer: '⚗️ DSE Chemistry · 2026'
+        const LANG = {
+            zh: {
+                subtitle: '選擇課題開始練習',
+                ionsName: '離子與化合物',
+                ionsSub: 'Ionic Compounds · Ch.7',
+                structureName: '結構',
+                structureSub: 'Structure · Ch.9',
+                rxnName: '金屬反應',
+                rxnSub: 'Metal Reactions · Ch.11',
+                footerLeft: '💡 按課題開始練習',
+                footerRight: 'DSE Chemistry · 持續更新中',
+                title: '📁 Mastering Science DSE 化學',
+            },
+            en: {
+                subtitle: 'Select a topic to start',
+                ionsName: 'Ionic Compounds',
+                ionsSub: 'Ionic Compounds · Ch.7',
+                structureName: 'Structure',
+                structureSub: 'Structure · Ch.9',
+                rxnName: 'Metal Reactions',
+                rxnSub: 'Metal Reactions · Ch.11',
+                footerLeft: '💡 Select a topic to start',
+                footerRight: 'DSE Chemistry · Continuously updated',
+                title: '📁 Mastering Science DSE Chemistry',
+            }
+        };
+
+        function t(key) {
+            return LANG[currentLang][key] || key;
+        }
+
+        function updateLanguage() {
+            document.getElementById('subtitle').textContent = t('subtitle');
+            document.getElementById('ionsName').textContent = t('ionsName');
+            document.getElementById('ionsSub').textContent = t('ionsSub');
+            document.getElementById('structureName').textContent = t('structureName');
+            document.getElementById('structureSub').textContent = t('structureSub');
+            document.getElementById('rxnName').textContent = t('rxnName');
+            document.getElementById('rxnSub').textContent = t('rxnSub');
+            document.getElementById('footerLeft').textContent = t('footerLeft');
+            document.getElementById('footerRight').textContent = t('footerRight');
+            document.querySelector('.header h1').innerHTML = t('title');
+
+            // 更新 URL 參數
+            const btns = document.querySelectorAll('.topic-btn');
+            btns.forEach(btn => {
+                const href = btn.getAttribute('href');
+                if (href) {
+                    const url = new URL(href, window.location.href);
+                    url.searchParams.set('lang', currentLang);
+                    btn.setAttribute('href', url.toString());
                 }
-            };
+            });
 
-            // ============================================================
-            // 狀態
-            // ============================================================
-            let currentLang = 'zh';
+            // 語言按鈕
+            document.querySelectorAll('.lang-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.lang === currentLang);
+            });
 
-            // ============================================================
-            // DOM 參考
-            // ============================================================
-            const homeTitle = document.getElementById('homeTitle');
-            const homeSub = document.getElementById('homeSub');
-            const topicTitle = document.getElementById('topicTitle');
-            const ionsName = document.getElementById('ionsName');
-            const ionsSub = document.getElementById('ionsSub');
-            const rxnName = document.getElementById('rxnName');
-            const rxnSub = document.getElementById('rxnSub');
-            const footerText = document.getElementById('footerText');
-            const langZh = document.getElementById('homeLangZh');
-            const langEn = document.getElementById('homeLangEn');
-            const topicIons = document.getElementById('topicIons');
-            const topicRxn = document.getElementById('topicRxn');
+            localStorage.setItem('index_lang', currentLang);
+        }
 
-            // ============================================================
-            // 工具函數
-            // ============================================================
-            function t(key) {
-                return LANG[currentLang][key] || key;
+        function setLanguage(lang) {
+            if (lang === currentLang) return;
+            currentLang = lang;
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState({}, '', url);
+            updateLanguage();
+        }
+
+        // ============================================================
+        // 初始化
+        // ============================================================
+        function init() {
+            const urlLang = new URLSearchParams(window.location.search).get('lang');
+            const storedLang = localStorage.getItem('index_lang');
+            const defaultLang = urlLang || storedLang || 'zh';
+
+            if (['zh', 'en'].includes(defaultLang)) {
+                currentLang = defaultLang;
+            } else {
+                currentLang = 'zh';
             }
 
-            function updateLanguage() {
-                homeTitle.textContent = t('title');
-                homeSub.textContent = t('sub');
-                topicTitle.textContent = t('topicTitle');
-                ionsName.textContent = t('ionsName');
-                ionsSub.textContent = t('ionsSub');
-                rxnName.textContent = t('rxnName');
-                rxnSub.textContent = t('rxnSub');
-                footerText.textContent = t('footer');
-                langZh.textContent = t('langZh');
-                langEn.textContent = t('langEn');
+            document.querySelectorAll('.lang-btn').forEach(b => {
+                b.addEventListener('click', () => setLanguage(b.dataset.lang));
+            });
 
-                document.querySelectorAll('.lang-selector button').forEach(b => {
-                    b.classList.toggle('active', b.dataset.lang === currentLang);
-                });
+            updateLanguage();
+        }
 
-                topicIons.href = 'ions.html?lang=' + currentLang;
-                topicRxn.href = 'rxn.html?lang=' + currentLang;
-            }
-
-            function setLanguage(lang) {
-                currentLang = lang;
-                updateLanguage();
-                try {
-                    localStorage.setItem('chem_lang', lang);
-                } catch (e) {}
-            }
-
-            // ============================================================
-            // 初始化
-            // ============================================================
-            function initApp() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const urlLang = urlParams.get('lang');
-                const storedLang = localStorage.getItem('chem_lang');
-
-                let lang = 'zh';
-                if (urlLang && (urlLang === 'zh' || urlLang === 'en')) {
-                    lang = urlLang;
-                } else if (storedLang && (storedLang === 'zh' || storedLang === 'en')) {
-                    lang = storedLang;
-                }
-
-                setLanguage(lang);
-
-                langZh.addEventListener('click', function() {
-                    setLanguage('zh');
-                });
-                langEn.addEventListener('click', function() {
-                    setLanguage('en');
-                });
-            }
-
-            initApp();
-            console.log('🏠 目錄頁已啟動');
-        })();
+        document.addEventListener('DOMContentLoaded', init);
+        console.log('📁 Mastering Science 主頁已啟動');
     </script>
 </body>
 </html>

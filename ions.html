@@ -13,7 +13,6 @@
             padding: 10px; padding-top: 10px;
         }
 
-        /* ===== 主卡片 ===== */
         .card {
             max-width: 950px; width: 100%; height: auto; max-height: 95vh;
             background: rgba(255,255,255,0.92);
@@ -23,7 +22,6 @@
             overflow: hidden; border: 1px solid rgba(180,120,220,0.2);
         }
 
-        /* ===== Header (與 rxn.html 一致) ===== */
         .header {
             display: flex; justify-content: space-between; align-items: center;
             flex-shrink: 0; margin-bottom: 6px; gap: 6px;
@@ -65,7 +63,6 @@
         .lang-btn.active { background: #7a4a9a; color: white; box-shadow: 0 2px 8px rgba(120,60,160,0.3); }
         .lang-btn:hover:not(.active) { background: #f0e8f8; }
 
-        /* ===== Modal 離子對照表 ===== */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 1000;
@@ -124,7 +121,6 @@
         .modal-body .reference-table .ion-symbol { font-weight: 700; color: #4a2a6a; font-size: 0.8rem; white-space: nowrap; }
         .modal-body .ref-empty { text-align: center; color: #8a6aaa; padding: 30px 0; font-size: 0.8rem; }
 
-        /* ===== 主內容區 ===== */
         .main-content { display: flex; gap: 12px; flex: 1; min-height: 0; overflow: hidden; }
 
         .left-sidebar {
@@ -168,7 +164,6 @@
         .toggle-btn.active { background: #ffd93d !important; color: #4a2a6a !important; box-shadow: 0 2px 6px rgba(255,217,61,0.4) !important; }
         .toggle-btn:hover:not(.active) { background: #e8d8f8 !important; }
 
-        /* ===== 題目區 ===== */
         .question-area {
             flex: 1; min-width: 0; padding: 0.2rem 0.6rem; overflow: hidden;
             border-radius: 16px; background: white; display: flex; flex-direction: column;
@@ -213,7 +208,6 @@
 
         .highlight-yellow { background: #ffd93d; padding: 0 4px; border-radius: 4px; font-weight: 700; }
 
-        /* ===== Tab 0 樣式 ===== */
         .mode0-display { font-size: 1.8rem; font-weight: 600; color: #4a2a6a; text-align: center; padding: 1px 0; flex-shrink: 0; }
         .mode0-display .chinese { font-weight: 400; color: #7a5a9a; font-size: 1.5rem; }
         .mode0-input-area { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 2px; margin: 1px 0 2px 0; min-height: 34px; padding: 0; flex-shrink: 0; }
@@ -325,7 +319,6 @@
             transition: 0.2s; color: #4a2a6a; white-space: nowrap; height: 50px; display: flex; align-items: center;
         }
 
-        /* ===== Tab 5: 電子圖練習 ===== */
         .elec-container { display: flex; flex-direction: column; gap: 4px; flex: 1; }
         .elec-question-area {
             background: #f8f4fc; border-radius: 12px; padding: 6px 10px;
@@ -438,7 +431,6 @@
         .elec-modal-option:hover { border-color: #7a4a9a; background: #f5effa; transform: scale(1.03); }
         .elec-modal-option img { width: 100%; max-width: 80px; height: auto; aspect-ratio: 1/1; object-fit: contain; display: block; }
 
-        /* ===== 手機版 ===== */
         @media (max-width: 600px) {
             .card { padding: 0.3rem 0.5rem; max-height: 95vh; height: auto; border-radius: 24px; }
             .header h1 { font-size: 0.85rem; }
@@ -541,7 +533,6 @@
 </head>
 <body>
 
-<!-- ===== Modal：離子對照表 ===== -->
 <div class="modal-overlay" id="refModal">
     <div class="modal-box">
         <div class="modal-header">
@@ -575,16 +566,10 @@
     </div>
 </div>
 
-<!-- ===== 主卡片 ===== -->
 <div class="card" id="mainCard">
-    <!-- ===== Header 與 rxn.html 一致：左側下拉選單 + 標題，右側對照表 + 語言切換 ===== -->
     <div class="header">
         <div class="header-left">
-            <select id="practiceSelector">
-                <option value="ions" selected>🧪 離子與化合物 (Ch.7)</option>
-                <option value="rxn">⚙️ 金屬反應 (Ch.11)</option>
-                <option value="home">🏠 返回目錄</option>
-            </select>
+           <select id="practiceSelector"></select>
             <h1 id="mainTitle">🧪 離子與化合物</h1>
         </div>
         <div class="header-right">
@@ -614,7 +599,6 @@
         </div>
 
         <div class="question-area" id="questionArea">
-            <!-- ===== Tab 0: 名稱 → 符號 ===== -->
             <div class="tab-content active" id="tabContent0">
                 <div class="hint-row" id="hintRow0">
                     <span class="highlight">⚠️ 符號必須區分大小寫</span>
@@ -662,7 +646,6 @@
                 </div>
             </div>
 
-            <!-- ===== Tab 1: 符號 → 名稱 ===== -->
             <div class="tab-content" id="tabContent1">
                 <div class="hint-row" id="hintRow1">
                     <span class="highlight">⚠️ 符號必須區分大小寫</span>
@@ -691,7 +674,6 @@
                 </div>
             </div>
 
-            <!-- ===== Tab 2: 名稱 → 化學式 ===== -->
             <div class="tab-content" id="tabContent2">
                 <div class="hint-row" id="hintRow2">
                     <span class="highlight">⚠️ 符號必須區分大小寫</span>
@@ -719,7 +701,6 @@
                 </div>
             </div>
 
-            <!-- ===== Tab 3: 化學式 → 名稱 ===== -->
             <div class="tab-content" id="tabContent3">
                 <div class="hint-row" id="hintRow3">
                     <span class="highlight">⚠️ 符號必須區分大小寫</span>
@@ -747,7 +728,6 @@
                 </div>
             </div>
 
-            <!-- ===== Tab 4: 溶解度與顏色 ===== -->
             <div class="tab-content" id="tabContent4">
                 <div class="hint-row" id="hintRow4">
                     <span class="highlight">💡 先選溶解度，再輸入顏色（如適用）</span>
@@ -781,7 +761,6 @@
                 </div>
             </div>
 
-            <!-- ===== Tab 5: 電子圖練習 ===== -->
             <div class="tab-content" id="tabContent5">
                 <div class="hint-row" id="hintRow5">
                     <span class="highlight">💡 點擊數字或圖片選擇，<span class="highlight-yellow">選 1 會自動隱藏</span></span>
@@ -840,7 +819,6 @@
     </div>
 </div>
 
-<!-- ===== Modal：電子圖選擇器 ===== -->
 <div class="elec-modal-overlay" id="elecModal">
     <div class="elec-modal-box">
         <div class="elec-modal-header">
@@ -850,6 +828,17 @@
         <div class="elec-modal-body" id="elecModalBody"></div>
     </div>
 </div>
+
+<script src="nav.js"></script>
+<script>
+    // ✅ 全域語言變數（供 nav.js 讀取）
+    let currentLang = 'en';
+    
+    // 初始化下拉選單
+    if (typeof initNavigation === 'function') {
+        initNavigation('ions');
+    }
+</script>
 
 <script>
     // ============================================================
@@ -987,7 +976,6 @@
         const EXCLUDED_SOL = new Set(['Na2O', 'K2O', 'CaO', 'BaO', 'MgO', 'NaH', 'KH', 'CaH2', 'BaH2', 'MgH2', 'AlH3']);
         const COMPOUNDS_SOL = COMPOUNDS_FULL.filter(c => !EXCLUDED_SOL.has(c.formula));
 
-        // ---- 電子圖專用離子資料庫 ----
         const ELEC_IMAGE_BASE = 'https://raw.githubusercontent.com/hderys/chemistry_kit/main/ions/';
         const ELEC_CATIONS = [
             { id: 'Li', symbol: 'Li', charge: 1, label_zh: '鋰', label_en: 'lithium', img: 'Li.webp' },
@@ -1011,7 +999,6 @@
             { id: 'I', symbol: 'I', charge: -1, label_zh: '碘', label_en: 'iodine', img: 'I.webp' }
         ];
 
-        let currentLang = 'en';
         let currentTab = 0;
         let currentIonDb = 'core';
         let ION_DB = [...CORE_ION_DB];
@@ -1032,7 +1019,6 @@
         let correctAttempts = 0;
         let colorEnabled = false;
 
-        // ---- 電子圖狀態 ----
         let elecSelectedCation = null;
         let elecSelectedAnion = null;
         let elecSelectedCationCount = 0;
@@ -1041,7 +1027,6 @@
         let elecQuestionPool = [];
         let elecIsAnsweredCorrectly = false;
 
-        // ---- DOM 參考 ----
         const mainCard = document.getElementById('mainCard');
         const mainTitle = document.getElementById('mainTitle');
         const practiceSelector = document.getElementById('practiceSelector');
@@ -1117,7 +1102,6 @@
         const colourInput = document.getElementById('colourInput');
         const btnColourless = document.getElementById('btnColourless');
 
-        // ---- 電子圖 DOM ----
         const cationImgBox = document.getElementById('cationImgBox');
         const anionImgBox = document.getElementById('anionImgBox');
         const cationPlaceholder = document.getElementById('cationPlaceholder');
@@ -1140,17 +1124,11 @@
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
 
-        // ============================================================
-        //  URL 參數讀取
-        // ============================================================
         function getUrlParameter(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
         }
 
-        // ============================================================
-        //  工具函數
-        // ============================================================
         function getSuffix() { return currentLang === 'zh' ? '離子' : 'ion'; }
         function getDisplaySuffix() { return currentLang === 'zh' ? '離子' : ' ion'; }
         function getColorlessText() { return currentLang === 'zh' ? '無色' : 'colourless'; }
@@ -1346,7 +1324,6 @@
             modalRefCount.textContent = `${currentLang === 'zh' ? '共' : 'Total'} ${db.length} ${currentLang === 'zh' ? '個離子' : 'ions'}`;
         }
 
-        // ---- Tab 0-4 功能 ----
         function pickRandomIon() {
             const idx = Math.floor(Math.random() * ION_DB.length);
             return { ...ION_DB[idx] };
@@ -1752,7 +1729,6 @@
             updateButtonLabels();
         }
 
-        // ---- 電子圖功能 ----
         function elecGcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a; }
 
         function elecGetImageUrl(ion) { return ELEC_IMAGE_BASE + ion.img; }
@@ -2069,7 +2045,6 @@
             });
         }
 
-        // ---- 頁籤切換 ----
         function switchTab(tabIndex) {
             currentTab = tabIndex;
             for (let i = 0; i < tabBtns.length; i++) {
@@ -2106,17 +2081,11 @@
         }
 
         function setLanguage(lang) {
+            if (lang === currentLang) return;
             currentLang = lang;
-            let btns = document.querySelectorAll('.lang-btn');
-            for (let i = 0; i < btns.length; i++) {
-                btns[i].classList.toggle('active', btns[i].dataset.lang === lang);
-            }
-
-            // 更新 URL 參數
             const url = new URL(window.location);
             url.searchParams.set('lang', lang);
             window.history.replaceState({}, '', url);
-
             updateTabLabels();
             updateButtonLabels();
 
@@ -2135,6 +2104,11 @@
             if (refModal.classList.contains('active')) renderModalTable();
             if (currentTab !== 4 && currentTab !== 5) {
                 getHintRow(currentTab).innerHTML = getHintText(currentTab);
+            }
+            
+            // ✅ 通知 nav.js 更新語言
+            if (typeof updateNavLanguage === 'function') {
+                updateNavLanguage(lang);
             }
         }
 
@@ -2164,13 +2138,6 @@
 
             elecQuestionPool = elecGenerateQuestionPool();
 
-            // 更新下拉選單的語言
-            if (practiceSelector) {
-                practiceSelector.options[0].text = currentLang === 'zh' ? '🧪 離子與化合物 (Ch.7)' : '🧪 Ionic Compounds (Ch.7)';
-                practiceSelector.options[1].text = currentLang === 'zh' ? '⚙️ 金屬反應 (Ch.11)' : '⚙️ Metal Reactions (Ch.11)';
-                practiceSelector.options[2].text = currentLang === 'zh' ? '🏠 返回目錄' : '🏠 Home';
-            }
-
             updateTabLabels();
             updateButtonLabels();
             switchTab(0);
@@ -2192,32 +2159,10 @@
             renderModalTable();
         }
 
-        // ---- 頁面切換（下拉選單） ----
-        function switchPractice(target) {
-            const lang = currentLang || 'zh';
-            if (target === 'home') {
-                window.location.href = 'index.html?lang=' + lang;
-            } else if (target === 'ions') {
-                window.location.href = 'ions.html?lang=' + lang;
-            } else if (target === 'rxn') {
-                window.location.href = 'rxn.html?lang=' + lang;
-            }
-        }
-
-        // ============================================================
-        //  事件綁定
-        // ============================================================
-        // 下拉選單
-        if (practiceSelector) {
-            practiceSelector.addEventListener('change', function() {
-                switchPractice(this.value);
-            });
-        }
-
-        let langBtns = document.querySelectorAll('.lang-btn');
-        for (let i = 0; i < langBtns.length; i++) {
-            langBtns[i].addEventListener('click', function() { setLanguage(this.dataset.lang); });
-        }
+        // 事件綁定
+        langBtns.forEach(b => {
+            b.addEventListener('click', function() { setLanguage(this.dataset.lang); });
+        });
 
         for (let i = 0; i < tabBtns.length; i++) {
             (function(index) {
@@ -2312,7 +2257,7 @@
             if (!colourInput.disabled) { colourInput.value = getColorlessText(); colourInput.focus(); }
         });
 
-        let solBtns = document.querySelectorAll('.sol-options button');
+        solBtns = document.querySelectorAll('.sol-options button');
         for (let i = 0; i < solBtns.length; i++) {
             solBtns[i].addEventListener('click', function() { onSolSelected(this.dataset.value); });
         }
@@ -2345,14 +2290,12 @@
             if (e.target === elecModal) elecModal.classList.remove('active');
         });
 
-        // ============================================================
-        //  啟動
-        // ============================================================
         const urlLang = getUrlParameter('lang');
         const initLang = (urlLang === 'zh' || urlLang === 'en') ? urlLang : 'zh';
         initApp(initLang);
-        console.log('🧪 離子與化合物練習已啟動！（歡迎畫面已移除，加入下拉選單）');
+        console.log('🧪 離子與化合物練習已啟動！');
     })();
 </script>
+
 </body>
 </html>

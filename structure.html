@@ -1,0 +1,3295 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>🏗️ 結構練習 · Ch.9</title>
+    <base href="./">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            background: linear-gradient(145deg, #f0f4ff 0%, #d4dcec 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 4px;
+        }
+
+        .card {
+            max-width: 1100px;
+            width: 100%;
+            height: 98vh;
+            max-height: 98vh;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(40, 60, 120, 0.12);
+            padding: 0.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(180, 200, 220, 0.25);
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex-shrink: 0;
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 3px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .header-left select {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            background: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 2px 0;
+            max-width: 200px;
+        }
+        .header-left select option {
+            font-weight: 600;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .lang-toggle {
+            display: flex;
+            gap: 2px;
+            background: white;
+            padding: 2px;
+            border-radius: 30px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+        .lang-btn {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.15s;
+            background: transparent;
+            color: #5a6a8a;
+        }
+        .lang-btn.active {
+            background: #4a6a9a;
+            color: white;
+            box-shadow: 0 2px 8px rgba(74, 106, 154, 0.3);
+        }
+        .lang-btn:hover:not(.active) {
+            background: #e8eef8;
+        }
+
+        .question-area {
+            flex: 1;
+            min-width: 0;
+            padding: 0.1rem 0.3rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-radius: 14px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .question-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .question-area::-webkit-scrollbar-thumb {
+            background: #c0c8d8;
+            border-radius: 10px;
+        }
+
+        .split-panel {
+            display: flex;
+            gap: 4px;
+            flex: 1;
+            min-height: 0;
+            align-items: flex-start;
+        }
+        .split-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 0;
+            min-height: 0;
+            height: 100%;
+        }
+
+        .hint-row-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px 8px;
+            flex-shrink: 0;
+            padding: 2px 0;
+        }
+        .hint-row-wrap .hint-text {
+            font-size: 1rem;
+            color: #6a7a8a;
+            flex: 1;
+            min-width: 150px;
+        }
+        .hint-row-wrap .hint-text .highlight {
+            color: #e74c3c;
+            font-weight: 700;
+        }
+
+        .step-progress {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+            padding: 4px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .step-dot {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #b0bcca;
+            padding: 4px 14px;
+            border-radius: 20px;
+            background: #f0f4f8;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+        .step-dot.active {
+            background: #1a2332;
+            color: white;
+            border-color: #1a2332;
+        }
+        .step-dot.done {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #22c55e;
+        }
+        .step-dot .num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.08);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        @media (min-width: 769px) {
+            .step-progress {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .step-progress {
+                display: flex !important;
+            }
+            .step-dot .step-label {
+                display: inline !important;
+            }
+        }
+
+        .top-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 4px 10px;
+            padding: 4px 0;
+            flex-shrink: 0;
+        }
+        .top-row .spin-box {
+            background: #f0f4fc;
+            border-radius: 10px;
+            padding: 3px 12px;
+            border: 2px solid #c8d4e8;
+            text-align: center;
+            min-width: 55px;
+        }
+        .top-row .spin-box .label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #5a6a8a;
+        }
+        .top-row .spin-box .value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            min-height: 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2px;
+        }
+        .top-row .btn-spin {
+            background: linear-gradient(145deg, #6a8aba, #4a6a9a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 22px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 20px rgba(74, 106, 154, 0.3);
+            min-height: 40px;
+            white-space: nowrap;
+            min-width: 80px;
+        }
+        .top-row .btn-spin:hover:not(:disabled) {
+            transform: scale(1.03);
+        }
+        .top-row .btn-spin:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .top-row .btn-spin.spinning {
+            animation: pulse 0.5s ease-in-out infinite alternate;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.03);
+                opacity: 0.8;
+            }
+        }
+        .top-row .operator-plus {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #6a8aba;
+        }
+
+        .q-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 10px;
+            padding: 2px 0;
+            transition: all 0.3s ease;
+        }
+        .q-row.hidden {
+            display: none !important;
+        }
+
+        .q-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #4a5a7a;
+            min-width: 60px;
+        }
+
+        .q-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .q-options .opt-btn {
+            border: 2px solid #d0d8e8;
+            background: white;
+            padding: 4px 18px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #2a3a6a;
+            min-height: 36px;
+            white-space: nowrap;
+        }
+        .q-options .opt-btn:hover:not(:disabled) {
+            background: #eef4fc;
+        }
+        .q-options .opt-btn.selected {
+            border-color: #4a6a9a;
+            background: #4a6a9a;
+            color: white;
+        }
+        .q-options .opt-btn.correct {
+            border-color: #22c55e;
+            background: #22c55e;
+            color: white;
+        }
+        .q-options .opt-btn.wrong {
+            border-color: #ef4444;
+            background: #ef4444;
+            color: white;
+        }
+        .q-options .opt-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .formula-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 10px;
+            padding: 2px 0;
+            width: 100%;
+        }
+        .formula-row input {
+            padding: 6px 14px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: 3px solid #d0c0e0;
+            border-radius: 12px;
+            background: white;
+            text-align: center;
+            transition: 0.15s;
+            color: #2a1a3a;
+            outline: none;
+            width: 200px;
+            height: 48px;
+        }
+        .formula-row input.correct {
+            border-color: #22c55e;
+            background: #ecfdf5;
+        }
+        .formula-row input.incorrect {
+            border-color: #ef4444;
+            background: #fce4e7;
+        }
+        .formula-row input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .formula-row .formula-hint {
+            font-size: 0.8rem;
+            color: #8a9aaa;
+            font-weight: 500;
+        }
+
+        .structure-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            width: 100%;
+            max-width: 480px;
+        }
+        .structure-grid .opt-btn {
+            padding: 10px 12px;
+            font-size: 0.85rem;
+            min-height: 44px;
+            border-radius: 14px;
+            text-align: center;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.3;
+            border: 2px solid #d0d8e8;
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #2a3a6a;
+        }
+        .structure-grid .opt-btn:hover:not(:disabled) {
+            background: #eef4fc;
+        }
+        .structure-grid .opt-btn.selected {
+            border-color: #4a6a9a;
+            background: #4a6a9a;
+            color: white;
+        }
+        .structure-grid .opt-btn.correct {
+            border-color: #22c55e;
+            background: #22c55e;
+            color: white;
+        }
+        .structure-grid .opt-btn.wrong {
+            border-color: #ef4444;
+            background: #ef4444;
+            color: white;
+        }
+        .structure-grid .opt-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .prop-section {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 4px 0;
+            flex-shrink: 0;
+            width: 100%;
+        }
+        .prop-section .prop-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #4a5a7a;
+        }
+        .prop-section .prop-title .multi-hint {
+            font-size: 0.7rem;
+            color: #e67e22;
+            font-weight: 600;
+            background: #fef9e7;
+            padding: 1px 8px;
+            border-radius: 12px;
+            border: 1px solid #f39c12;
+            margin-left: 6px;
+        }
+
+        .prop-group-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px 10px;
+            padding: 2px 0;
+        }
+        .prop-group-wrap .cat-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #6a7a8a;
+            min-width: 44px;
+        }
+        .prop-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            flex: 1;
+        }
+        .prop-group .prop-btn {
+            border: 2px solid #d0d8e8;
+            background: white;
+            padding: 3px 14px;
+            border-radius: 18px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #3a4a6a;
+            min-height: 30px;
+            white-space: nowrap;
+        }
+        .prop-group .prop-btn:hover:not(:disabled) {
+            background: #eef4fc;
+        }
+        .prop-group .prop-btn.selected {
+            border-color: #4a6a9a;
+            background: #4a6a9a;
+            color: white;
+        }
+        .prop-group .prop-btn.correct {
+            border-color: #22c55e;
+            background: #22c55e;
+            color: white;
+        }
+        .prop-group .prop-btn.wrong {
+            border-color: #ef4444;
+            background: #ef4444;
+            color: white;
+        }
+        .prop-group .prop-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .soluble-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 12px;
+            padding: 2px 0;
+            width: 100%;
+        }
+        .soluble-row .sol-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4a5a7a;
+            min-width: 100px;
+        }
+        .soluble-row .sol-options {
+            display: flex;
+            gap: 6px;
+        }
+        .soluble-row .sol-options button {
+            border: 2px solid #d0d8e8;
+            background: white;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #2a3a6a;
+            min-height: 34px;
+        }
+        .soluble-row .sol-options button:hover:not(:disabled) {
+            background: #eef4fc;
+        }
+        .soluble-row .sol-options button.selected {
+            border-color: #4a6a9a;
+            background: #4a6a9a;
+            color: white;
+        }
+        .soluble-row .sol-options button.correct {
+            border-color: #22c55e;
+            background: #22c55e;
+            color: white;
+        }
+        .soluble-row .sol-options button.wrong {
+            border-color: #ef4444;
+            background: #ef4444;
+            color: white;
+        }
+        .soluble-row .sol-options button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .reacts-hint {
+            display: inline-block;
+            line-height: 1.2;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #e67e22;
+            background: #fef9e7;
+            padding: 4px 16px;
+            border-radius: 30px;
+            border: 2px solid #f39c12;
+            margin-left: 4px;
+            vertical-align: middle;
+        }
+
+        .feedback-area {
+            padding: 8px 18px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: #e8f5e8;
+            border: 2px solid #6bcb77;
+            color: #0d553a;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            width: 100%;
+            min-height: 44px;
+            transition: 0.2s;
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+        .feedback-area.error {
+            background: #fce8e8;
+            border-color: #e74c3c;
+            color: #7a2a2a;
+        }
+        .feedback-area .fb-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+        .feedback-area .fb-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .feedback-area .fb-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .feedback-area .fb-detail {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #5a5a7a;
+            padding-left: 30px;
+        }
+
+        .bottom-check-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 6px 0 0 0;
+            margin-top: 4px;
+            border-top: 2px dashed #d0d8e8;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-check {
+            background: linear-gradient(145deg, #f5a623, #e0941a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 4px 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 20px rgba(245, 166, 35, 0.3);
+            min-height: 36px;
+            white-space: nowrap;
+        }
+        .btn-check:hover:not(:disabled) {
+            transform: scale(1.03);
+        }
+        .btn-check:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-next-question {
+            background: linear-gradient(145deg, #6a8aba, #4a6a9a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 4px 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            min-height: 36px;
+            white-space: nowrap;
+            box-shadow: 0 2px 10px rgba(74, 106, 154, 0.3);
+        }
+        .btn-next-question:hover:not(:disabled) {
+            transform: scale(1.03);
+        }
+        .btn-next-question:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        @media (min-width: 769px) {
+            .card {
+                padding: 0.3rem 0.8rem;
+                height: 96vh;
+                max-height: 96vh;
+            }
+            .header-left select {
+                font-size: 0.9rem;
+                max-width: 170px;
+            }
+            .top-row .spin-box .value {
+                font-size: 1.1rem;
+            }
+            .top-row .btn-spin {
+                padding: 4px 16px;
+                font-size: 0.85rem;
+                min-height: 32px;
+            }
+            .q-options .opt-btn {
+                font-size: 0.9rem;
+                padding: 3px 14px;
+                min-height: 30px;
+            }
+            .feedback-area {
+                padding: 4px 14px;
+                min-height: 34px;
+                font-size: 0.9rem;
+            }
+            .structure-grid {
+                max-width: 420px;
+            }
+            .structure-grid .opt-btn {
+                font-size: 0.8rem;
+                padding: 8px 10px;
+                min-height: 38px;
+            }
+            .formula-row input {
+                width: 180px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            .hint-row-wrap {
+                padding: 1px 0;
+            }
+            .step-progress {
+                padding: 2px 0;
+                gap: 4px;
+            }
+            .top-row {
+                padding: 2px 0;
+            }
+            .soluble-row {
+                gap: 4px 8px;
+                padding: 1px 0;
+            }
+            .prop-section {
+                gap: 2px;
+                padding: 2px 0;
+            }
+            .prop-section .prop-title {
+                font-size: 0.85rem;
+            }
+            .prop-group-wrap {
+                gap: 2px 8px;
+                padding: 1px 0;
+            }
+            .prop-group .prop-btn {
+                font-size: 0.78rem;
+                padding: 2px 12px;
+                min-height: 26px;
+            }
+            .bottom-check-row {
+                padding: 3px 0 0;
+                margin-top: 2px;
+            }
+            .feedback-area {
+                margin-top: 3px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 0.3rem 0.4rem;
+                border-radius: 16px;
+                max-height: 100vh;
+                height: 100vh;
+            }
+            .header-left select {
+                font-size: 0.55rem;
+                max-width: 85px;
+            }
+            .lang-btn {
+                font-size: 0.7rem;
+                padding: 2px 8px;
+            }
+            .top-row {
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                gap: 4px;
+            }
+            .top-row .spin-box {
+                flex: 1;
+                min-width: 0;
+                padding: 2px 4px;
+            }
+            .top-row .spin-box .label {
+                font-size: 0.4rem;
+            }
+            .top-row .spin-box .value {
+                font-size: 0.85rem;
+            }
+            .top-row .btn-spin {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+                min-height: 36px;
+                min-width: 56px;
+            }
+            .top-row .operator-plus {
+                font-size: 0.8rem;
+            }
+            .q-row .q-label {
+                font-size: 0.65rem;
+                min-width: 40px;
+                width: 100%;
+            }
+            .q-options {
+                gap: 4px;
+                width: 100%;
+            }
+            .q-options .opt-btn {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+                min-height: 32px;
+                flex: 1;
+                text-align: center;
+            }
+            .structure-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 4px;
+                max-width: 100%;
+            }
+            .structure-grid .opt-btn {
+                font-size: 0.65rem;
+                padding: 6px 8px;
+                min-height: 34px;
+            }
+            .prop-group .prop-btn {
+                font-size: 0.65rem;
+                padding: 2px 8px;
+                min-height: 26px;
+                flex: 1 0 calc(33.33% - 4px);
+                max-width: calc(33.33% - 4px);
+                text-align: center;
+            }
+            .soluble-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+            }
+            .soluble-row .sol-label {
+                font-size: 0.65rem;
+                min-width: auto;
+                width: 100%;
+            }
+            .soluble-row .sol-options {
+                justify-content: center;
+            }
+            .soluble-row .sol-options button {
+                font-size: 0.75rem;
+                padding: 3px 12px;
+                min-height: 30px;
+                flex: 1;
+            }
+            .feedback-area {
+                padding: 4px 10px;
+                font-size: 0.6rem;
+                min-height: 30px;
+            }
+            .bottom-check-row {
+                flex-direction: row;
+                justify-content: flex-end;
+                gap: 6px;
+            }
+            .bottom-check-row .btn-check,
+            .bottom-check-row .btn-next-question {
+                font-size: 0.75rem;
+                padding: 6px 16px;
+                min-height: 36px;
+            }
+            .hint-row-wrap .hint-text {
+                font-size: 0.5rem;
+            }
+            .question-area {
+                overflow-y: auto;
+            }
+            .question-area::-webkit-scrollbar {
+                width: 3px;
+            }
+            .question-area::-webkit-scrollbar-thumb {
+                background: #c0c8d8;
+                border-radius: 10px;
+            }
+            .formula-row input {
+                width: 150px;
+                height: 38px;
+                font-size: 1rem;
+            }
+        }
+
+        /* 縮放提示橫幅 */
+        .zoom-banner {
+            position: fixed;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff3cd;
+            border: 2px solid #f5a623;
+            color: #7a5a00;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 999;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            white-space: nowrap;
+            max-width: 90vw;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 流式縮放：隨有效視窗高度連續調整，抗瀏覽器縮放 */
+        @media (min-width: 769px) {
+            .card {
+                height: 100vh;
+                max-height: 100vh;
+            }
+            .header-top {
+                margin-bottom: clamp(0px, 0.4vh, 4px);
+            }
+            .hint-row-wrap .hint-text {
+                font-size: clamp(0.75rem, 1.6vh, 1rem);
+            }
+            .top-row {
+                padding: clamp(1px, 0.6vh, 4px) 0;
+            }
+            .top-row .spin-box .value {
+                font-size: clamp(0.9rem, 2.2vh, 1.3rem);
+            }
+            .top-row .btn-spin {
+                min-height: clamp(28px, 4.5vh, 40px);
+                font-size: clamp(0.78rem, 1.7vh, 1rem);
+                padding: clamp(2px, 0.6vh, 6px) clamp(12px, 2vw, 22px);
+            }
+            .q-options .opt-btn {
+                min-height: clamp(26px, 4.2vh, 36px);
+                font-size: clamp(0.8rem, 1.7vh, 1rem);
+                padding: clamp(2px, 0.6vh, 4px) clamp(10px, 1.6vw, 18px);
+            }
+            .soluble-row {
+                padding: clamp(0px, 0.5vh, 2px) 0;
+            }
+            .soluble-row .sol-options button {
+                min-height: clamp(24px, 3.8vh, 34px);
+                font-size: clamp(0.78rem, 1.6vh, 0.95rem);
+                padding: clamp(2px, 0.5vh, 4px) clamp(10px, 1.6vw, 16px);
+            }
+            .prop-section {
+                gap: clamp(1px, 0.5vh, 4px);
+                padding: clamp(1px, 0.5vh, 4px) 0;
+            }
+            .prop-section .prop-title {
+                font-size: clamp(0.8rem, 1.6vh, 0.95rem);
+            }
+            .prop-group-wrap {
+                padding: clamp(0px, 0.4vh, 2px) 0;
+            }
+            .prop-group .prop-btn {
+                min-height: clamp(22px, 3.6vh, 30px);
+                font-size: clamp(0.72rem, 1.5vh, 0.9rem);
+                padding: clamp(1px, 0.5vh, 3px) clamp(8px, 1.2vw, 14px);
+            }
+            .feedback-area {
+                min-height: clamp(22px, 3.6vh, 34px);
+                font-size: clamp(0.78rem, 1.6vh, 0.95rem);
+                padding: clamp(2px, 0.6vh, 5px) clamp(10px, 1.5vw, 14px);
+                margin-top: clamp(2px, 0.6vh, 6px);
+            }
+            .bottom-check-row {
+                padding: clamp(2px, 0.6vh, 4px) 0 0;
+                margin-top: clamp(1px, 0.5vh, 4px);
+            }
+            .bottom-check-row .btn-check,
+            .bottom-check-row .btn-next-question {
+                min-height: clamp(26px, 4vh, 36px);
+                font-size: clamp(0.8rem, 1.7vh, 1rem);
+                padding: clamp(2px, 0.6vh, 4px) clamp(12px, 2vw, 20px);
+            }
+        }
+
+        /* 短畫面：進一步壓縮，避免需要捲動或縮放 */
+        @media (max-height: 880px) {
+            .card {
+                padding: 0.2rem 0.6rem;
+                height: 100vh;
+                max-height: 100vh;
+            }
+            .step-progress {
+                display: none;
+            }
+            .hint-row-wrap .hint-text {
+                font-size: 0.8rem;
+            }
+            .top-row .spin-box .value {
+                font-size: 0.95rem;
+            }
+            .top-row .btn-spin {
+                min-height: 30px;
+                padding: 3px 14px;
+                font-size: 0.8rem;
+            }
+            .q-options .opt-btn {
+                min-height: 28px;
+                padding: 2px 12px;
+                font-size: 0.85rem;
+            }
+            .structure-grid .opt-btn {
+                min-height: 34px;
+                padding: 6px 8px;
+            }
+            .soluble-row .sol-options button {
+                min-height: 28px;
+                padding: 2px 12px;
+                font-size: 0.8rem;
+            }
+            .prop-group .prop-btn {
+                min-height: 24px;
+                padding: 1px 10px;
+                font-size: 0.72rem;
+            }
+            .feedback-area {
+                min-height: 26px;
+                padding: 2px 10px;
+                font-size: 0.8rem;
+            }
+            .bottom-check-row .btn-check,
+            .bottom-check-row .btn-next-question {
+                min-height: 30px;
+                font-size: 0.85rem;
+                padding: 2px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="zoomBanner" class="zoom-banner" style="display:none;"></div>
+
+    <div class="card">
+        <div class="header">
+            <div class="header-top">
+                <div class="header-left">
+                    <select id="practiceSelector">
+                        <option value="home">🏠 返回目錄</option>
+                        <option value="ions">🧪 離子與化合物 (Ch.7)</option>
+                        <option value="structure" selected>🏗️ 結構 (Ch.9)</option>
+                        <option value="rxn">⚙️ 金屬反應 (Ch.11)</option>
+                    </select>
+                </div>
+                <div class="header-right">
+                    <div class="lang-toggle">
+                        <button class="lang-btn" data-lang="zh" id="langZh">中文</button>
+                        <button class="lang-btn active" data-lang="en" id="langEn">English</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-area">
+            <div class="hint-row-wrap">
+                <span class="hint-text" id="hintText">
+                    <span class="highlight">按「抽題」開始！</span>
+                    <span>｜鍵結 → 化學式 → 結構 → 特性</span>
+                </span>
+            </div>
+
+            <div class="step-progress" id="stepProgress">
+                <div class="step-dot active" data-step="0">
+                    <span class="num">1</span>
+                    <span class="step-label" data-zh="鍵結" data-en="Bonding">鍵結</span>
+                </div>
+                <div class="step-dot" data-step="1">
+                    <span class="num">2</span>
+                    <span class="step-label" data-zh="化學式" data-en="Formula">化學式</span>
+                </div>
+                <div class="step-dot" data-step="2">
+                    <span class="num">3</span>
+                    <span class="step-label" data-zh="結構" data-en="Structure">結構</span>
+                </div>
+                <div class="step-dot" data-step="3">
+                    <span class="num">4</span>
+                    <span class="step-label" data-zh="特性" data-en="Properties">特性</span>
+                </div>
+            </div>
+
+            <div class="split-panel">
+                <div class="split-left">
+
+                    <div class="top-row">
+                        <div class="spin-box">
+                            <div class="label" id="ele1Label">🧪 元素 1</div>
+                            <div class="value" id="ele1Display">—</div>
+                        </div>
+                        <span class="operator-plus">+</span>
+                        <div class="spin-box">
+                            <div class="label" id="ele2Label">🧪 元素 2</div>
+                            <div class="value" id="ele2Display">—</div>
+                        </div>
+                        <button class="btn-spin" id="spinBtn">🎲 抽題</button>
+                    </div>
+
+                    <div class="q-row" id="step0Row">
+                        <span class="q-label" id="bondingLabel">🔗 鍵結？</span>
+                        <div class="q-options" id="bondingOptions">
+                            <button class="opt-btn" data-value="ionic">🧲 離子鍵</button>
+                            <button class="opt-btn" data-value="covalent">🔗 共價鍵</button>
+                            <button class="opt-btn" data-value="metallic">⚡ 金屬鍵</button>
+                            <button class="opt-btn" data-value="none">🚫 無化學鍵</button>
+                        </div>
+                    </div>
+
+                    <div class="q-row hidden" id="step1Row">
+                        <span class="q-label" id="formulaLabel">📝 化學式？</span>
+                        <div class="formula-row">
+                            <input type="text" id="formulaInput" placeholder="請輸入化學式..." autocomplete="off" spellcheck="false">
+                            <span class="formula-hint" id="formulaHint">(如 NaCl)</span>
+                        </div>
+                    </div>
+
+                    <div class="q-row hidden" id="step2Row">
+                        <span class="q-label" id="structureLabel">🏗️ 結構？</span>
+                        <div class="structure-grid" id="structureOptions">
+                            <button class="opt-btn" data-value="giant_ionic">巨型離子結構</button>
+                            <button class="opt-btn" data-value="giant_metallic">巨型金屬結構</button>
+                            <button class="opt-btn" data-value="giant_covalent">巨型共價結構</button>
+                            <button class="opt-btn" data-value="simple_molecular">簡單分子結構</button>
+                        </div>
+                    </div>
+
+                    <div class="q-row hidden" id="step3Row">
+                        <div class="prop-section">
+                            <div class="prop-title" id="propTitle">
+                                📋 特性 <span class="multi-hint">可複選</span>
+                            </div>
+
+                            <div class="soluble-row">
+                                <span class="sol-label" id="stateLabel">🌡️ 常溫狀態？</span>
+                                <div class="sol-options" id="stateOptions">
+                                    <button class="opt-btn" data-value="solid">🧊 固態</button>
+                                    <button class="opt-btn" data-value="liquid">💧 液態</button>
+                                    <button class="opt-btn" data-value="gas">💨 氣態</button>
+                                </div>
+                            </div>
+
+                            <div class="soluble-row">
+                                <span class="sol-label" id="mpLabel">🔥 熔點？</span>
+                                <div class="sol-options" id="mpOptions">
+                                    <button class="opt-btn" data-value="high">高熔點</button>
+                                    <button class="opt-btn" data-value="low">低熔點</button>
+                                </div>
+                            </div>
+
+                            <div class="soluble-row" id="solubilityRow">
+                                <span class="sol-label" id="solLabel">💧 溶於水？</span>
+                                <div class="sol-options" id="solOptions">
+                                    <button class="opt-btn" data-value="soluble">✅ 可溶</button>
+                                    <button class="opt-btn" data-value="insoluble">❌ 不溶</button>
+                                </div>
+                            </div>
+
+                            <div class="prop-group-wrap">
+                                <span class="cat-label" id="catElectrical">⚡ 導電性</span>
+                                <div class="prop-group" id="propGroupElectrical">
+                                    <button class="prop-btn" data-prop="conduct_solid">固態導電</button>
+                                    <button class="prop-btn" data-prop="conduct_liquid">熔融態導電</button>
+                                    <button class="prop-btn" data-prop="conduct_aqueous">水溶液導電</button>
+                                    <button class="prop-btn" data-prop="conduct_no">不導電</button>
+                                </div>
+                            </div>
+
+                            <div class="prop-group-wrap" id="mechanicalWrap">
+                                <span class="cat-label" id="catMechanical">🔧 機械性質</span>
+                                <div class="prop-group" id="propGroupMechanical">
+                                    <button class="prop-btn" data-prop="brittle">脆 (受力易碎)</button>
+                                    <button class="prop-btn" data-prop="malleable">可延展 (可錘成薄片)</button>
+                                    <button class="prop-btn" data-prop="ductile">可拉絲 (可抽成細絲)</button>
+                                </div>
+                            </div>
+
+                            <div class="prop-group-wrap" id="hardnessGroup">
+                                <span class="cat-label" id="catHardness">💎 硬度</span>
+                                <div class="prop-group" id="propGroupHardness">
+                                    <button class="prop-btn" data-prop="hard">堅硬</button>
+                                    <button class="prop-btn" data-prop="soft">柔軟</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="feedback-area" id="feedback0">
+                        <div class="fb-row">
+                            <span class="fb-icon">✏️</span>
+                            <span class="fb-text" id="fbText0">按「抽題」開始練習</span>
+                        </div>
+                        <div class="fb-detail" id="fbDetail0"></div>
+                    </div>
+
+                    <div class="bottom-check-row">
+                        <button class="btn-check" id="checkBtn">✔ 檢查</button>
+                        <button class="btn-next-question" id="nextBtn" disabled style="display:none;">➡️ 下一題</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 語言系統
+        // ============================================================
+        let currentLang = 'zh';
+
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        const LANG = {
+            zh: {
+                spinBtn: '🎲 抽題',
+                nextBtn: '➡️ 下一題',
+                nextStep: '➡️ 下一步',
+                checkBtn: '✔ 檢查',
+                ele1Label: '🧪 元素 1',
+                ele2Label: '🧪 元素 2',
+                hintText: '按「抽題」開始！｜鍵結 → 化學式 → 結構 → 特性',
+                bondingLabel: '🔗 鍵結？',
+                bonding_ionic: '🧲 離子鍵',
+                bonding_covalent: '🔗 共價鍵',
+                bonding_metallic: '⚡ 金屬鍵',
+                bonding_none: '🚫 無化學鍵',
+                formulaLabel: '📝 化學式？',
+                formulaHint: '(如 NaCl)',
+                structureLabel: '🏗️ 結構？',
+                structure_giant_ionic: '巨型離子結構',
+                structure_giant_metallic: '巨型金屬結構',
+                structure_giant_covalent: '巨型共價結構',
+                structure_simple_molecular: '簡單分子結構',
+                propTitle: '📋 {formula} 的特性',
+                stateLabel: '🌡️ 常溫狀態？',
+                state_solid: '🧊 固態',
+                state_liquid: '💧 液態',
+                state_gas: '💨 氣態',
+                mpLabel: '🔥 熔點？',
+                mp_high: '高熔點',
+                mp_low: '低熔點',
+                solLabel: '💧 溶於水？',
+                solSoluble: '✅ 可溶',
+                solInsoluble: '❌ 不溶',
+                reactsWithWater: '⚠️ 與水反應（不是單純溶解）',
+                catElectrical: '⚡ 導電性',
+                prop_conduct_solid: '固態導電',
+                prop_conduct_liquid: '熔融態導電',
+                prop_conduct_aqueous: '水溶液導電',
+                prop_conduct_no: '不導電',
+                catMechanical: '🔧 機械性質',
+                prop_brittle: '脆 (受力易碎)',
+                prop_malleable: '可延展 (可錘成薄片)',
+                prop_ductile: '可拉絲 (可抽成細絲)',
+                catHardness: '💎 硬度',
+                prop_hard: '堅硬',
+                prop_soft: '柔軟',
+                hardnessNotApplicable: '硬度（液/氣態不適用）',
+                fbSpin: '按「抽題」開始練習',
+                fbBondingCorrect: '✅ 鍵結判斷正確！',
+                fbBondingWrong: '❌ 鍵結判斷錯誤，正確是：',
+                fbFormulaCorrect: '✅ 化學式正確！',
+                fbFormulaWrong: '❌ 化學式錯誤，正確是：',
+                fbStructureCorrect: '✅ 結構判斷正確！',
+                fbStructureWrong: '❌ 結構判斷錯誤，正確是：',
+                fbPropsCorrect: '✅ 所有特性正確！',
+                fbPropsWrong: '❌ 特性選擇有誤',
+                fbPropsMissing: '⚠️ 漏選：',
+                fbPropsExtra: '⚠️ 多選：',
+                stepLabels: ['鍵結', '化學式', '結構', '特性'],
+                noReaction: '🚫 無化學鍵 (貴氣體)',
+                formulaPlaceholder: '請輸入化學式...',
+                nobleGasStructure: '貴氣體 → 簡單分子結構',
+                formulaHintSpecial: '有多種可能，請輸入其中一種',
+                slightlySoluble: '💡 這是微溶物質，揀「溶」或「不溶」都可接受',
+                cl2SolubilityHint: '💡 氯氣 (Cl₂) 微溶於水，亦會與水反應——揀「可溶」或「不溶」都可接受',
+                zoomHint: '🔍 偵測到瀏覽器縮放非 100%——部分內容可能被遮擋，請按 Ctrl+0 設回 100%',
+                polarHint: '💡 提示：{name} 係 {polar} 分子。極性分子通常溶於水，非極性分子通常不溶於水。',
+                isPolar: '極性',
+                isNonPolar: '非極性',
+                h2oInfo: '💧 這是水 (H₂O) — 常溫液態，低熔點（0°C）',
+                stateFeedback: '💡 提示：{formula} 實際上係 {state}。',
+                stateFeedbackGas: '💡 提示：{formula} 實際上係 {state}，但簡單分子結構推斷氣體係合理嘅。',
+                metallicBond: '⚡ 金屬鍵',
+                metalFormula: '金屬鍵，化學式為 {symbol}',
+            },
+            en: {
+                spinBtn: '🎲 Spin',
+                nextBtn: '➡️ Next',
+                nextStep: '➡️ Next Step',
+                checkBtn: '✔ Check',
+                ele1Label: '🧪 Element 1',
+                ele2Label: '🧪 Element 2',
+                hintText: 'Press "Spin" to start!｜Bonding → Formula → Structure → Properties',
+                bondingLabel: '🔗 Bonding?',
+                bonding_ionic: '🧲 Ionic',
+                bonding_covalent: '🔗 Covalent',
+                bonding_metallic: '⚡ Metallic',
+                bonding_none: '🚫 No bond',
+                formulaLabel: '📝 Formula?',
+                formulaHint: '(e.g. NaCl)',
+                structureLabel: '🏗️ Structure?',
+                structure_giant_ionic: 'Giant Ionic Structure',
+                structure_giant_metallic: 'Giant Metallic Structure',
+                structure_giant_covalent: 'Giant Covalent Structure',
+                structure_simple_molecular: 'Simple Molecular Structure',
+                propTitle: '📋 Properties of {formula}',
+                stateLabel: '🌡️ State at RTP?',
+                state_solid: '🧊 Solid',
+                state_liquid: '💧 Liquid',
+                state_gas: '💨 Gas',
+                mpLabel: '🔥 Melting Point?',
+                mp_high: 'High m.p.',
+                mp_low: 'Low m.p.',
+                solLabel: '💧 Soluble in water?',
+                solSoluble: '✅ Soluble',
+                solInsoluble: '❌ Insoluble',
+                reactsWithWater: '⚠️ Reacts with water (not simple dissolving)',
+                catElectrical: '⚡ Electrical Conductivity',
+                prop_conduct_solid: 'Solid',
+                prop_conduct_liquid: 'Molten',
+                prop_conduct_aqueous: 'Aqueous',
+                prop_conduct_no: 'Non-conductor',
+                catMechanical: '🔧 Mechanical Properties',
+                prop_brittle: 'Brittle',
+                prop_malleable: 'Malleable',
+                prop_ductile: 'Ductile',
+                catHardness: '💎 Hardness',
+                prop_hard: 'Hard',
+                prop_soft: 'Soft',
+                hardnessNotApplicable: 'Hardness (not applicable for liquid/gas)',
+                fbSpin: 'Press "Spin" to start',
+                fbBondingCorrect: '✅ Bonding correct!',
+                fbBondingWrong: '❌ Bonding wrong, correct: ',
+                fbFormulaCorrect: '✅ Formula correct!',
+                fbFormulaWrong: '❌ Formula wrong, correct: ',
+                fbStructureCorrect: '✅ Structure correct!',
+                fbStructureWrong: '❌ Structure wrong, correct: ',
+                fbPropsCorrect: '✅ All properties correct!',
+                fbPropsWrong: '❌ Property selection incorrect',
+                fbPropsMissing: '⚠️ Missing: ',
+                fbPropsExtra: '⚠️ Extra: ',
+                stepLabels: ['Bonding', 'Formula', 'Structure', 'Properties'],
+                noReaction: '🚫 No bond (noble gas)',
+                formulaPlaceholder: 'Enter formula...',
+                nobleGasStructure: 'Noble gas → Simple Molecular Structure',
+                formulaHintSpecial: 'Multiple possibilities, enter one',
+                slightlySoluble: '💡 This is slightly soluble — both "Soluble" and "Insoluble" are acceptable',
+                cl2SolubilityHint: '💡 Chlorine (Cl₂) is slightly soluble and also reacts with water — both "Soluble" and "Insoluble" are acceptable',
+                zoomHint: '🔍 Browser zoom is not 100% — some content may be hidden. Press Ctrl+0 to reset.',
+                polarHint: '💡 Hint: {name} is a {polar} molecule. Polar molecules are usually soluble in water, non-polar molecules are usually insoluble.',
+                isPolar: 'polar',
+                isNonPolar: 'non-polar',
+                h2oInfo: '💧 This is water (H₂O) — liquid at RTP, low melting point (0°C)',
+                stateFeedback: '💡 Hint: {formula} is actually {state}.',
+                stateFeedbackGas: '💡 Hint: {formula} is actually {state}, but inferring gas from simple molecular structure is reasonable.',
+                metallicBond: '⚡ Metallic Bond',
+                metalFormula: 'Metallic bond, formula is {symbol}',
+            }
+        };
+
+        function t(key) { return LANG[currentLang][key] || key; }
+
+        function tWith(key, replacements) {
+            let str = t(key);
+            for (let k in replacements) {
+                str = str.replace('{' + k + '}', replacements[k]);
+            }
+            return str;
+        }
+
+        // ============================================================
+        // 資料庫
+        // ============================================================
+        const ELEMENTS = [
+            { symbol: 'Na', type: 'metal' },
+            { symbol: 'Mg', type: 'metal' },
+            { symbol: 'Al', type: 'metal' },
+            { symbol: 'K', type: 'metal' },
+            { symbol: 'Ca', type: 'metal' },
+            { symbol: 'Fe', type: 'metal' },
+            { symbol: 'Cu', type: 'metal' },
+            { symbol: 'Zn', type: 'metal' },
+            { symbol: 'Ag', type: 'metal' },
+            { symbol: 'Au', type: 'metal' },
+            { symbol: 'Hg', type: 'metal' },
+            { symbol: 'H', type: 'nonmetal' },
+            { symbol: 'C', type: 'nonmetal' },
+            { symbol: 'N', type: 'nonmetal' },
+            { symbol: 'O', type: 'nonmetal' },
+            { symbol: 'F', type: 'nonmetal' },
+            { symbol: 'P', type: 'nonmetal' },
+            { symbol: 'S', type: 'nonmetal' },
+            { symbol: 'Cl', type: 'nonmetal' },
+            { symbol: 'Br', type: 'nonmetal' },
+            { symbol: 'I', type: 'nonmetal' },
+            { symbol: 'Si', type: 'nonmetal' },
+            { symbol: 'He', type: 'noble' },
+            { symbol: 'Ne', type: 'noble' },
+            { symbol: 'Ar', type: 'noble' },
+            { symbol: 'Kr', type: 'noble' },
+            { symbol: 'Xe', type: 'noble' },
+        ];
+
+        const STRUCTURE_PROPS = {
+            giant_ionic: { state: 'solid', mp: 'high', soluble: true, conduct_solid: false, conduct_liquid: true,
+                conduct_aqueous: true, conduct_no: false, brittle: true, malleable: false, ductile: false, hard: true,
+                soft: false },
+            giant_metallic: { state: 'solid', mp: 'high', soluble: false, conduct_solid: true, conduct_liquid: true,
+                conduct_aqueous: false, conduct_no: false, brittle: false, malleable: true, ductile: true, hard: true,
+                soft: false },
+            giant_covalent: { state: 'solid', mp: 'high', soluble: false, conduct_solid: false, conduct_liquid: false,
+                conduct_aqueous: false, conduct_no: true, brittle: true, malleable: false, ductile: false, hard: true,
+                soft: false },
+            simple_molecular: { state: 'solid/liquid/gas', mp: 'low', soluble: false, conduct_solid: false,
+                conduct_liquid: false, conduct_aqueous: false, conduct_no: true, brittle: false, malleable: false,
+                ductile: false, hard: false, soft: true },
+        };
+
+        // 配對定義
+        const PAIRS = {
+            ionic: [
+                ['Na', 'Cl'],
+                ['Na', 'O'],
+                ['Na', 'S'],
+                ['Na', 'N'],
+                ['Na', 'F'],
+                ['Na', 'P'],
+                ['Na', 'Br'],
+                ['Na', 'I'],
+                ['Mg', 'Cl'],
+                ['Mg', 'O'],
+                ['Mg', 'S'],
+                ['Mg', 'N'],
+                ['Mg', 'F'],
+                ['Mg', 'P'],
+                ['Mg', 'Br'],
+                ['Mg', 'I'],
+                ['Al', 'Cl'],
+                ['Al', 'O'],
+                ['Al', 'S'],
+                ['Al', 'N'],
+                ['Al', 'F'],
+                ['Al', 'P'],
+                ['Al', 'Br'],
+                ['Al', 'I'],
+                ['K', 'Cl'],
+                ['K', 'O'],
+                ['K', 'S'],
+                ['K', 'N'],
+                ['K', 'F'],
+                ['K', 'P'],
+                ['K', 'Br'],
+                ['K', 'I'],
+                ['Ca', 'Cl'],
+                ['Ca', 'O'],
+                ['Ca', 'S'],
+                ['Ca', 'N'],
+                ['Ca', 'F'],
+                ['Ca', 'P'],
+                ['Ca', 'Br'],
+                ['Ca', 'I'],
+                ['Fe', 'Cl'],
+                ['Fe', 'O'],
+                ['Fe', 'S'],
+                ['Fe', 'N'],
+                ['Fe', 'F'],
+                ['Fe', 'P'],
+                ['Fe', 'Br'],
+                ['Fe', 'I'],
+                ['Cu', 'Cl'],
+                ['Cu', 'O'],
+                ['Cu', 'S'],
+                ['Cu', 'N'],
+                ['Cu', 'F'],
+                ['Cu', 'P'],
+                ['Cu', 'Br'],
+                ['Cu', 'I'],
+                ['Zn', 'Cl'],
+                ['Zn', 'O'],
+                ['Zn', 'S'],
+                ['Zn', 'N'],
+                ['Zn', 'F'],
+                ['Zn', 'P'],
+                ['Zn', 'Br'],
+                ['Zn', 'I'],
+                ['Ag', 'Cl'],
+                ['Ag', 'O'],
+                ['Ag', 'S'],
+                ['Ag', 'N'],
+                ['Ag', 'F'],
+                ['Ag', 'P'],
+                ['Ag', 'Br'],
+                ['Ag', 'I'],
+            ],
+            covalent: [
+                ['H', 'H'],
+                ['N', 'N'],
+                ['O', 'O'],
+                ['F', 'F'],
+                ['Cl', 'Cl'],
+                ['Br', 'Br'],
+                ['I', 'I'],
+                ['P', 'P'],
+                ['S', 'S'],
+                ['O', 'O', 'ozone'],
+                ['H', 'Cl'],
+                ['H', 'O'],
+                ['H', 'S'],
+                ['H', 'N'],
+                ['H', 'F'],
+                ['H', 'P'],
+                ['H', 'Br'],
+                ['H', 'I'],
+                ['C', 'O'],
+                ['C', 'H'],
+                ['C', 'F'],
+                ['C', 'Cl'],
+                ['C', 'Br'],
+                ['C', 'I'],
+                ['N', 'H'],
+                ['N', 'O'],
+                ['N', 'F'],
+                ['N', 'Cl'],
+                ['N', 'Br'],
+                ['N', 'I'],
+                ['P', 'H'],
+                ['P', 'O'],
+                ['P', 'F'],
+                ['P', 'Cl'],
+                ['P', 'Br'],
+                ['P', 'I'],
+                ['S', 'O'],
+                ['S', 'F'],
+                ['S', 'Cl'],
+                ['S', 'Br'],
+                ['S', 'I'],
+                ['Si', 'O'],
+                ['Si', 'F'],
+                ['Si', 'Cl'],
+                ['Si', 'Br'],
+                ['Si', 'I'],
+                ['Cl', 'H'],
+                ['Cl', 'O'],
+                ['Cl', 'F'],
+                ['Cl', 'Br'],
+                ['Cl', 'I'],
+                ['Br', 'H'],
+                ['Br', 'O'],
+                ['Br', 'F'],
+                ['Br', 'Cl'],
+                ['Br', 'I'],
+                ['I', 'H'],
+                ['I', 'O'],
+                ['I', 'F'],
+                ['I', 'Cl'],
+                ['I', 'Br'],
+                ['C', 'C', 'diamond'],
+                ['C', 'C', 'graphite'],
+            ],
+            metallic: [
+                ['Na', 'Na'],
+                ['Mg', 'Mg'],
+                ['Al', 'Al'],
+                ['K', 'K'],
+                ['Ca', 'Ca'],
+                ['Fe', 'Fe'],
+                ['Cu', 'Cu'],
+                ['Zn', 'Zn'],
+                ['Ag', 'Ag'],
+                ['Au', 'Au'],
+                ['Hg', 'Hg'],
+            ],
+        };
+
+        // Formula map
+        const FORMULA_MAP = {
+            'Na_Cl': 'NaCl',
+            'Na_O': 'Na2O',
+            'Na_S': 'Na2S',
+            'Na_N': 'Na3N',
+            'Na_F': 'NaF',
+            'Na_P': 'Na3P',
+            'Na_Br': 'NaBr',
+            'Na_I': 'NaI',
+            'Mg_Cl': 'MgCl2',
+            'Mg_O': 'MgO',
+            'Mg_S': 'MgS',
+            'Mg_N': 'Mg3N2',
+            'Mg_F': 'MgF2',
+            'Mg_P': 'Mg3P2',
+            'Mg_Br': 'MgBr2',
+            'Mg_I': 'MgI2',
+            'Al_Cl': 'AlCl3',
+            'Al_O': 'Al2O3',
+            'Al_S': 'Al2S3',
+            'Al_N': 'AlN',
+            'Al_F': 'AlF3',
+            'Al_P': 'AlP',
+            'Al_Br': 'AlBr3',
+            'Al_I': 'AlI3',
+            'K_Cl': 'KCl',
+            'K_O': 'K2O',
+            'K_S': 'K2S',
+            'K_N': 'K3N',
+            'K_F': 'KF',
+            'K_P': 'K3P',
+            'K_Br': 'KBr',
+            'K_I': 'KI',
+            'Ca_Cl': 'CaCl2',
+            'Ca_O': 'CaO',
+            'Ca_S': 'CaS',
+            'Ca_N': 'Ca3N2',
+            'Ca_F': 'CaF2',
+            'Ca_P': 'Ca3P2',
+            'Ca_Br': 'CaBr2',
+            'Ca_I': 'CaI2',
+            'Fe_Cl': 'FeCl2/FeCl3',
+            'Fe_O': 'FeO/Fe2O3',
+            'Fe_S': 'FeS/Fe2S3',
+            'Fe_N': 'Fe3N2',
+            'Fe_F': 'FeF2/FeF3',
+            'Fe_P': 'Fe3P2',
+            'Fe_Br': 'FeBr2/FeBr3',
+            'Fe_I': 'FeI2/FeI3',
+            'Cu_Cl': 'CuCl2',
+            'Cu_O': 'CuO',
+            'Cu_S': 'CuS',
+            'Cu_N': 'Cu3N2',
+            'Cu_F': 'CuF2',
+            'Cu_P': 'Cu3P2',
+            'Cu_Br': 'CuBr2',
+            'Cu_I': 'CuI2',
+            'Zn_Cl': 'ZnCl2',
+            'Zn_O': 'ZnO',
+            'Zn_S': 'ZnS',
+            'Zn_N': 'Zn3N2',
+            'Zn_F': 'ZnF2',
+            'Zn_P': 'Zn3P2',
+            'Zn_Br': 'ZnBr2',
+            'Zn_I': 'ZnI2',
+            'Ag_Cl': 'AgCl',
+            'Ag_O': 'Ag2O',
+            'Ag_S': 'Ag2S',
+            'Ag_N': 'Ag3N',
+            'Ag_F': 'AgF',
+            'Ag_P': 'Ag3P',
+            'Ag_Br': 'AgBr',
+            'Ag_I': 'AgI',
+            'H_H': 'H2',
+            'N_N': 'N2',
+            'O_O': 'O2',
+            'F_F': 'F2',
+            'Cl_Cl': 'Cl2',
+            'Br_Br': 'Br2',
+            'I_I': 'I2',
+            'P_P': 'P4',
+            'S_S': 'S8',
+            'O_O_ozone': 'O3',
+            'H_Cl': 'HCl',
+            'H_O': 'H2O',
+            'H_S': 'H2S',
+            'H_N': 'NH3',
+            'H_F': 'HF',
+            'H_P': 'PH3',
+            'H_Br': 'HBr',
+            'H_I': 'HI',
+            'C_O': 'CO2',
+            'C_H': 'CH4',
+            'C_F': 'CF4',
+            'C_Cl': 'CCl4',
+            'C_Br': 'CBr4',
+            'C_I': 'CI4',
+            'N_H': 'NH3',
+            'N_O': 'NO/NO2',
+            'N_F': 'NF3',
+            'N_Cl': 'NCl3',
+            'N_Br': 'NBr3',
+            'N_I': 'NI3',
+            'P_H': 'PH3',
+            'P_O': 'P2O3',
+            'P_F': 'PF3',
+            'P_Cl': 'PCl3',
+            'P_Br': 'PBr3',
+            'P_I': 'PI3',
+            'S_O': 'SO2/SO3',
+            'S_F': 'SF2',
+            'S_Cl': 'SCl2',
+            'S_Br': 'SBr2',
+            'S_I': 'SI2',
+            'Si_O': 'SiO2',
+            'Si_F': 'SiF4',
+            'Si_Cl': 'SiCl4',
+            'Si_Br': 'SiBr4',
+            'Si_I': 'SiI4',
+            'Cl_H': 'HCl',
+            'Cl_O': 'Cl2O',
+            'Cl_F': 'ClF',
+            'Cl_Br': 'ClBr',
+            'Cl_I': 'ClI',
+            'Br_H': 'HBr',
+            'Br_O': 'Br2O',
+            'Br_F': 'BrF',
+            'Br_Cl': 'BrCl',
+            'Br_I': 'BrI',
+            'I_H': 'HI',
+            'I_O': 'I2O',
+            'I_F': 'IF',
+            'I_Cl': 'ICl',
+            'I_Br': 'IBr',
+            'C_C_diamond': 'C (diamond)',
+            'C_C_graphite': 'C (graphite)',
+        };
+
+        const SPECIAL_FORMULAS = {
+            'Fe_Cl': ['FeCl2', 'FeCl3'],
+            'Fe_O': ['FeO', 'Fe2O3'],
+            'Fe_S': ['FeS', 'Fe2S3'],
+            'Fe_F': ['FeF2', 'FeF3'],
+            'Fe_Br': ['FeBr2', 'FeBr3'],
+            'Fe_I': ['FeI2', 'FeI3'],
+            'N_O': ['NO', 'NO2'],
+            'S_O': ['SO2', 'SO3'],
+        };
+
+        // ===== 溶解度 MAP =====
+        const SOLUBILITY_MAP = {
+            // Ionic
+            'Na_Cl': true,
+            'Mg_Cl': true,
+            'Al_Cl': true,
+            'K_Cl': true,
+            'Ca_Cl': true,
+            'Fe_Cl': true,
+            'Cu_Cl': true,
+            'Zn_Cl': true,
+            'Ag_Cl': false,
+            'Na_O': true,
+            'Mg_O': false,
+            'Al_O': false,
+            'K_O': true,
+            'Ca_O': false,
+            'Fe_O': false,
+            'Cu_O': false,
+            'Zn_O': false,
+            'Ag_O': false,
+            'Na_S': true,
+            'Mg_S': false,
+            'Al_S': false,
+            'K_S': true,
+            'Ca_S': false,
+            'Fe_S': false,
+            'Cu_S': false,
+            'Zn_S': false,
+            'Ag_S': false,
+            'Na_N': true,
+            'Mg_N': false,
+            'Al_N': false,
+            'K_N': true,
+            'Ca_N': false,
+            'Fe_N': false,
+            'Cu_N': false,
+            'Zn_N': false,
+            'Ag_N': false,
+            'Na_F': true,
+            'Mg_F': false,
+            'Al_F': false,
+            'K_F': true,
+            'Ca_F': false,
+            'Fe_F': true,
+            'Cu_F': true,
+            'Zn_F': true,
+            'Ag_F': true,
+            'Na_P': true,
+            'Mg_P': false,
+            'Al_P': false,
+            'K_P': true,
+            'Ca_P': false,
+            'Fe_P': false,
+            'Cu_P': false,
+            'Zn_P': false,
+            'Ag_P': false,
+            'Na_Br': true,
+            'Mg_Br': true,
+            'Al_Br': true,
+            'K_Br': true,
+            'Ca_Br': true,
+            'Fe_Br': true,
+            'Cu_Br': true,
+            'Zn_Br': true,
+            'Ag_Br': false,
+            'Na_I': true,
+            'Mg_I': true,
+            'Al_I': true,
+            'K_I': true,
+            'Ca_I': true,
+            'Fe_I': true,
+            'Cu_I': true,
+            'Zn_I': true,
+            'Ag_I': false,
+
+            // Covalent
+            'H_H': false,
+            'N_N': false,
+            'O_O': 'slightly',
+            'F_F': 'reacts',
+            'Cl_Cl': 'mixed',
+            'Br_Br': 'slightly',
+            'I_I': 'slightly',
+            'P_P': false,
+            'S_S': false,
+            'O_O_ozone': false,
+            'H_Cl': true,
+            'H_O': 'h2o',
+            'H_S': 'slightly',
+            'H_N': true,
+            'H_F': true,
+            'H_P': false,
+            'H_Br': true,
+            'H_I': true,
+            'C_O': 'slightly',
+            'C_H': false,
+            'C_F': false,
+            'C_Cl': false,
+            'C_Br': false,
+            'C_I': false,
+            'N_H': true,
+            'N_O': false,
+            'N_O_NO2': true,
+            'N_F': false,
+            'N_Cl': false,
+            'N_Br': false,
+            'N_I': false,
+            'P_H': false,
+            'P_O': 'reacts',
+            'P_F': 'reacts',
+            'P_Cl': 'reacts',
+            'P_Br': 'reacts',
+            'P_I': 'reacts',
+            'S_O': true,
+            'S_O_SO3': 'reacts',
+            'S_F': false,
+            'S_Cl': 'reacts',
+            'S_Br': 'reacts',
+            'S_I': false,
+            'Si_O': false,
+            'Si_F': false,
+            'Si_Cl': 'reacts',
+            'Si_Br': 'reacts',
+            'Si_I': 'reacts',
+            'Cl_H': true,
+            'Cl_O': 'reacts',
+            'Cl_F': 'reacts',
+            'Cl_Br': false,
+            'Cl_I': false,
+            'Br_H': true,
+            'Br_O': 'reacts',
+            'Br_F': 'reacts',
+            'Br_Cl': false,
+            'Br_I': false,
+            'I_H': true,
+            'I_O': 'reacts',
+            'I_F': 'reacts',
+            'I_Cl': 'reacts',
+            'I_Br': 'reacts',
+            'C_C_diamond': false,
+            'C_C_graphite': false,
+        };
+
+        // ===== 接受掉轉寫嘅共價化合物 =====
+        const ALLOW_REVERSAL = [
+            'Cl_O', 'O_Cl',
+            'Cl_F', 'F_Cl',
+            'Cl_Br', 'Br_Cl',
+            'Cl_I', 'I_Cl',
+            'Br_O', 'O_Br',
+            'Br_F', 'F_Br',
+            'Br_Cl', 'Cl_Br',
+            'Br_I', 'I_Br',
+            'I_Cl', 'Cl_I',
+            'I_Br', 'Br_I',
+        ];
+
+        function isReversalAllowed(e1, e2) {
+            if (!e1 || !e2) return false;
+            const key = e1.symbol + '_' + e2.symbol;
+            const key2 = e2.symbol + '_' + e1.symbol;
+            return ALLOW_REVERSAL.includes(key) || ALLOW_REVERSAL.includes(key2);
+        }
+
+        // ===== 常溫狀態 =====
+        const STATE_MAP = {
+            'H_H': 'gas',
+            'N_N': 'gas',
+            'O_O': 'gas',
+            'F_F': 'gas',
+            'Cl_Cl': 'gas',
+            'Br_Br': 'liquid',
+            'I_I': 'solid',
+            'P_P': 'solid',
+            'S_S': 'solid',
+            'O_O_ozone': 'gas',
+            'H_Cl': 'gas',
+            'H_O': 'liquid',
+            'H_S': 'gas',
+            'H_N': 'gas',
+            'H_F': 'gas',
+            'H_P': 'gas',
+            'H_Br': 'gas',
+            'H_I': 'gas',
+            'C_O': 'gas',
+            'C_H': 'gas',
+            'C_F': 'gas',
+            'C_Cl': 'liquid',
+            'C_Br': 'liquid',
+            'C_I': 'solid',
+            'N_H': 'gas',
+            'N_O': 'gas',
+            'N_F': 'gas',
+            'N_Cl': 'liquid',
+            'N_Br': 'liquid',
+            'N_I': 'solid',
+            'P_H': 'gas',
+            'P_O': 'solid',
+            'P_F': 'gas',
+            'P_Cl': 'liquid',
+            'P_Br': 'liquid',
+            'P_I': 'solid',
+            'S_O': 'gas',
+            'S_F': 'gas',
+            'S_Cl': 'liquid',
+            'S_Br': 'liquid',
+            'S_I': 'liquid',
+            'Si_O': 'solid',
+            'Si_F': 'gas',
+            'Si_Cl': 'liquid',
+            'Si_Br': 'liquid',
+            'Si_I': 'solid',
+            'Cl_H': 'gas',
+            'Cl_O': 'gas',
+            'Cl_F': 'gas',
+            'Cl_Br': 'gas',
+            'Cl_I': 'gas',
+            'Br_H': 'gas',
+            'Br_O': 'gas',
+            'Br_F': 'gas',
+            'Br_Cl': 'gas',
+            'Br_I': 'gas',
+            'I_H': 'gas',
+            'I_O': 'solid',
+            'I_F': 'gas',
+            'I_Cl': 'gas',
+            'I_Br': 'gas',
+            'C_C_diamond': 'solid',
+            'C_C_graphite': 'solid',
+        };
+
+        // 極性 (用於提示)
+        const POLAR_MAP = {
+            'H_Cl': true,
+            'H_O': true,
+            'H_S': true,
+            'H_N': true,
+            'H_F': true,
+            'H_P': false,
+            'H_Br': true,
+            'H_I': true,
+            'C_O': false,
+            'C_H': false,
+            'C_F': false,
+            'C_Cl': false,
+            'C_Br': false,
+            'C_I': false,
+            'N_H': true,
+            'N_O': false,
+            'N_F': false,
+            'N_Cl': false,
+            'N_Br': false,
+            'N_I': false,
+            'P_H': false,
+            'P_O': false,
+            'P_F': false,
+            'P_Cl': false,
+            'P_Br': false,
+            'P_I': false,
+            'S_O': true,
+            'S_F': false,
+            'S_Cl': false,
+            'S_Br': false,
+            'S_I': false,
+            'Cl_O': false,
+            'Cl_F': false,
+            'Cl_Br': false,
+            'Cl_I': false,
+            'Br_O': false,
+            'Br_F': false,
+            'Br_Cl': false,
+            'Br_I': false,
+            'I_O': false,
+            'I_F': false,
+            'I_Cl': false,
+            'I_Br': false,
+            'H_H': false,
+            'N_N': false,
+            'O_O': false,
+            'F_F': false,
+            'Cl_Cl': false,
+            'Br_Br': false,
+            'I_I': false,
+            'P_P': false,
+            'S_S': false,
+            'O_O_ozone': false,
+            'Si_O': false,
+            'Si_F': false,
+            'Si_Cl': false,
+            'Si_Br': false,
+            'Si_I': false,
+            'C_C_diamond': false,
+            'C_C_graphite': false,
+        };
+
+        // DSE 已知狀態 (唔放寬)
+        const KNOWN_STATE = [
+            'H_H', 'N_N', 'O_O', 'F_F', 'Cl_Cl', 'Br_Br', 'I_I',
+            'P_P', 'S_S',
+            'H_O', 'H_Cl', 'H_S', 'H_N', 'H_F', 'H_P', 'H_Br', 'H_I',
+            'C_O', 'C_H', 'C_F',
+            'Si_O',
+            'C_C_diamond', 'C_C_graphite'
+        ];
+
+        function isKnownState(e1, e2, extra) {
+            if (!e1 || !e2) return false;
+            const key = e1.symbol + '_' + e2.symbol;
+            if (KNOWN_STATE.includes(key)) return true;
+            const key2 = e2.symbol + '_' + e1.symbol;
+            if (KNOWN_STATE.includes(key2)) return true;
+            if (extra && KNOWN_STATE.includes(key + '_' + extra)) return true;
+            return false;
+        }
+
+        function getKey(e1, e2) {
+            if (!e1 || !e2) return null;
+            const key = e1.symbol + '_' + e2.symbol;
+            const key2 = e2.symbol + '_' + e1.symbol;
+            if (SOLUBILITY_MAP[key] !== undefined || POLAR_MAP[key] !== undefined || STATE_MAP[key] !== undefined) return key;
+            if (SOLUBILITY_MAP[key2] !== undefined || POLAR_MAP[key2] !== undefined || STATE_MAP[key2] !== undefined)
+            return key2;
+            return null;
+        }
+
+        function getSolubility(e1, e2) {
+            const key = getKey(e1, e2);
+            if (key && SOLUBILITY_MAP[key] !== undefined) return SOLUBILITY_MAP[key];
+            return null;
+        }
+
+        function getPolar(e1, e2) {
+            const key = getKey(e1, e2);
+            if (key && POLAR_MAP[key] !== undefined) return POLAR_MAP[key];
+            return null;
+        }
+
+        function getState(e1, e2) {
+            const key = getKey(e1, e2);
+            if (key && STATE_MAP[key] !== undefined) return STATE_MAP[key];
+            return null;
+        }
+
+        // ✅ 金屬鍵 formula
+        function getFormula(e1, e2, extra) {
+            if (!e1 || !e2) return null;
+
+            // 金屬鍵：兩個相同金屬 → 回傳金屬符號
+            if (e1.symbol === e2.symbol && e1.type === 'metal') {
+                return e1.symbol;
+            }
+
+            const key = e1.symbol + '_' + e2.symbol;
+            const key2 = e2.symbol + '_' + e1.symbol;
+            let f = FORMULA_MAP[key];
+            if (!f) f = FORMULA_MAP[key2];
+            if (!f && extra) f = FORMULA_MAP[key + '_' + extra];
+            if (!f && extra) f = FORMULA_MAP[key2 + '_' + extra];
+            return f || null;
+        }
+
+        function getSpecialFormulaOptions(e1, e2) {
+            if (!e1 || !e2) return null;
+            const key = e1.symbol + '_' + e2.symbol;
+            const key2 = e2.symbol + '_' + e1.symbol;
+            return SPECIAL_FORMULAS[key] || SPECIAL_FORMULAS[key2] || null;
+        }
+
+        function isH2O(e1, e2) {
+            if (!e1 || !e2) return false;
+            return (e1.symbol === 'H' && e2.symbol === 'O') || (e1.symbol === 'O' && e2.symbol === 'H');
+        }
+
+        function isHg(e1, e2) {
+            if (!e1 || !e2) return false;
+            return e1.symbol === 'Hg' && e2.symbol === 'Hg';
+        }
+
+        function getElement(symbol) {
+            return ELEMENTS.find(e => e.symbol === symbol);
+        }
+
+        function formatSubscript(str) {
+            if (!str) return str;
+            const map = { '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉' };
+            return str.replace(/[0-9]/g, m => map[m] || m);
+        }
+
+        // ✅ 將化學式按元素符號重排（而非逐字元反轉），如 'Cl2O' → 'OCl2'
+        function reverseFormula(formula) {
+            if (!formula) return formula;
+            const tokens = formula.match(/[A-Z][a-z]?\d*|\d+/g);
+            if (!tokens || tokens.length < 2) return formula;
+            return tokens.reverse().join('');
+        }
+
+        // ✅ 正規化使用者輸入：去除 Unicode 下標與空白，如 'Na₂O' → 'Na2O'
+        function normalizeFormulaInput(str) {
+            if (!str) return '';
+            return str.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, '').replace(/\s/g, '');
+        }
+
+        // ============================================================
+        // 狀態
+        // ============================================================
+        const S = {
+            step: 0,
+            ele1: null,
+            ele2: null,
+            extra: null,
+            isNoble: false,
+            isMetallic: false,
+            correctBonding: null,
+            correctStructure: null,
+            correctFormula: null,
+            formulaDisplay: '',
+            isSpecialFormula: false,
+            specialOptions: null,
+            isH2O: false,
+            isHg: false,
+            currentSolubility: null,
+            solubilityType: 'normal',
+            currentPolar: null,
+            currentState: null,
+            selectedBonding: null,
+            selectedStructure: null,
+            selectedProps: [],
+            selectedSoluble: null,
+            selectedState: null,
+            selectedMp: null,
+            isSpinning: false,
+            isAnswered: false,
+            propsOverride: null,
+        };
+
+        // 避免立即抽到同一題
+        let lastQuestionKey = null;
+
+        // ============================================================
+        // DOM
+        // ============================================================
+        const D = {
+            ele1: document.getElementById('ele1Display'),
+            ele2: document.getElementById('ele2Display'),
+            spin: document.getElementById('spinBtn'),
+            check: document.getElementById('checkBtn'),
+            next: document.getElementById('nextBtn'),
+            feedback: document.getElementById('feedback0'),
+            fbText: document.getElementById('fbText0'),
+            fbDetail: document.getElementById('fbDetail0'),
+            step0: document.getElementById('step0Row'),
+            step1: document.getElementById('step1Row'),
+            step2: document.getElementById('step2Row'),
+            step3: document.getElementById('step3Row'),
+            bonding: document.getElementById('bondingOptions'),
+            formulaInput: document.getElementById('formulaInput'),
+            formulaHint: document.getElementById('formulaHint'),
+            structure: document.getElementById('structureOptions'),
+            stateOpts: document.getElementById('stateOptions'),
+            mpOpts: document.getElementById('mpOptions'),
+            solOpts: document.getElementById('solOptions'),
+            solLabel: document.getElementById('solLabel'),
+            solubilityRow: document.getElementById('solubilityRow'),
+            propTitle: document.getElementById('propTitle'),
+            hardnessGroup: document.getElementById('hardnessGroup'),
+            mechanicalWrap: document.getElementById('mechanicalWrap'),
+            stepDots: document.querySelectorAll('.step-dot'),
+            selector: document.getElementById('practiceSelector'),
+            langBtns: document.querySelectorAll('.lang-btn'),
+        };
+
+        // ============================================================
+        // 核心函數
+        // ============================================================
+
+        function setFeedback(icon, text, detail, isError) {
+            D.feedback.className = 'feedback-area';
+            if (isError) D.feedback.classList.add('error');
+            else D.feedback.classList.remove('error');
+            D.feedback.querySelector('.fb-icon').textContent = icon || '✏️';
+            D.fbText.textContent = text || '';
+            D.fbDetail.innerHTML = detail || '';
+        }
+
+        function updateStepUI(step) {
+            S.step = step;
+            D.stepDots.forEach((dot, i) => {
+                dot.classList.remove('active', 'done');
+                if (i < step) dot.classList.add('done');
+                else if (i === step) dot.classList.add('active');
+            });
+            D.step0.classList.toggle('hidden', step !== 0);
+            D.step1.classList.toggle('hidden', step !== 1);
+            D.step2.classList.toggle('hidden', step !== 2);
+            D.step3.classList.toggle('hidden', step !== 3);
+            D.check.disabled = true;
+            D.check.style.display = 'inline-block';
+            D.next.style.display = 'none';
+        }
+
+        function updateDisplay() {
+            if (S.isNoble) {
+                D.ele1.textContent = S.ele1.symbol;
+                D.ele2.textContent = '—';
+            } else {
+                let e2 = S.ele2.symbol;
+                if (S.extra === 'ozone') e2 = 'O₃';
+                else if (S.extra === 'diamond') e2 = 'C (diamond)';
+                else if (S.extra === 'graphite') e2 = 'C (graphite)';
+                D.ele1.textContent = S.ele1.symbol;
+                D.ele2.textContent = e2;
+            }
+        }
+
+        function updateButtonLabels() {
+            D.spin.textContent = t('spinBtn');
+            D.check.textContent = t('checkBtn');
+            D.next.textContent = t('nextBtn');
+            document.getElementById('bondingLabel').textContent = t('bondingLabel');
+            document.getElementById('formulaLabel').textContent = t('formulaLabel');
+            document.getElementById('structureLabel').textContent = t('structureLabel');
+            document.getElementById('ele1Label').textContent = t('ele1Label');
+            document.getElementById('ele2Label').textContent = t('ele2Label');
+            document.getElementById('hintText').innerHTML = t('hintText');
+
+            D.bonding.querySelectorAll('.opt-btn').forEach(b => {
+                const val = b.dataset.value;
+                if (val === 'ionic') b.textContent = t('bonding_ionic');
+                else if (val === 'covalent') b.textContent = t('bonding_covalent');
+                else if (val === 'metallic') b.textContent = t('bonding_metallic');
+                else if (val === 'none') b.textContent = t('bonding_none');
+            });
+
+            D.structure.querySelectorAll('.opt-btn').forEach(b => {
+                const val = b.dataset.value;
+                if (val === 'giant_ionic') b.textContent = t('structure_giant_ionic');
+                else if (val === 'giant_metallic') b.textContent = t('structure_giant_metallic');
+                else if (val === 'giant_covalent') b.textContent = t('structure_giant_covalent');
+                else if (val === 'simple_molecular') b.textContent = t('structure_simple_molecular');
+            });
+
+            D.stateOpts.querySelectorAll('.opt-btn').forEach(b => {
+                const val = b.dataset.value;
+                if (val === 'solid') b.textContent = t('state_solid');
+                else if (val === 'liquid') b.textContent = t('state_liquid');
+                else if (val === 'gas') b.textContent = t('state_gas');
+            });
+
+            D.mpOpts.querySelectorAll('.opt-btn').forEach(b => {
+                const val = b.dataset.value;
+                if (val === 'high') b.textContent = t('mp_high');
+                else if (val === 'low') b.textContent = t('mp_low');
+            });
+
+            D.solOpts.querySelectorAll('.opt-btn').forEach(b => {
+                const val = b.dataset.value;
+                b.textContent = val === 'soluble' ? t('solSoluble') : t('solInsoluble');
+            });
+
+            document.querySelectorAll('.prop-btn').forEach(b => {
+                b.textContent = t('prop_' + b.dataset.prop);
+            });
+
+            document.getElementById('stateLabel').textContent = t('stateLabel');
+            document.getElementById('mpLabel').textContent = t('mpLabel');
+            document.getElementById('solLabel').textContent = t('solLabel');
+            document.getElementById('catElectrical').textContent = t('catElectrical');
+            document.getElementById('catMechanical').textContent = t('catMechanical');
+            document.getElementById('catHardness').textContent = t('catHardness');
+
+            updatePropTitle();
+
+            D.stepDots.forEach((dot, i) => {
+                const label = dot.querySelector('.step-label');
+                if (label) {
+                    label.textContent = currentLang === 'zh' ?
+                        ['鍵結', '化學式', '結構', '特性'][i] :
+                        ['Bonding', 'Formula', 'Structure', 'Properties'][i];
+                }
+            });
+
+            D.langBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+
+            const sel = document.getElementById('practiceSelector');
+            if (sel) {
+                const labels = {
+                    home: currentLang === 'zh' ? '🏠 返回目錄' : '🏠 Home',
+                    ions: currentLang === 'zh' ? '🧪 離子與化合物 (Ch.7)' : '🧪 Ionic Compounds (Ch.7)',
+                    structure: currentLang === 'zh' ? '🏗️ 結構 (Ch.9)' : '🏗️ Structure (Ch.9)',
+                    rxn: currentLang === 'zh' ? '⚙️ 金屬反應 (Ch.11)' : '⚙️ Metal Reactions (Ch.11)',
+                };
+                for (let i = 0; i < sel.options.length; i++) {
+                    const val = sel.options[i].value;
+                    if (labels[val]) sel.options[i].textContent = labels[val];
+                }
+            }
+
+            detectZoom();
+        }
+
+        function updatePropTitle() {
+            let display = S.formulaDisplay || S.correctFormula || '';
+            if (S.isNoble && S.ele1) display = S.ele1.symbol;
+            if (!display) display = '?';
+            display = formatSubscript(display);
+            const title = t('propTitle').replace('{formula}', display);
+            D.propTitle.innerHTML = title + ' <span class="multi-hint">可複選</span>';
+        }
+
+        // ✅ 更新硬度和機械性質可見性
+        function updateHardnessAndMechanicalVisibility(state) {
+            const hardnessGroup = D.hardnessGroup;
+            const mechanicalWrap = D.mechanicalWrap;
+
+            if (state === 'solid') {
+                if (hardnessGroup) hardnessGroup.style.display = 'flex';
+                if (mechanicalWrap) mechanicalWrap.style.display = 'flex';
+            } else {
+                if (hardnessGroup) hardnessGroup.style.display = 'none';
+                if (mechanicalWrap) mechanicalWrap.style.display = 'none';
+                // 清除已選
+                ['hard', 'soft', 'brittle', 'malleable', 'ductile'].forEach(key => {
+                    if (S.selectedProps.includes(key)) {
+                        S.selectedProps = S.selectedProps.filter(p => p !== key);
+                        document.querySelectorAll(`.prop-btn[data-prop="${key}"]`).forEach(b => {
+                            b.classList.remove('selected');
+                        });
+                    }
+                });
+            }
+        }
+
+        function resetSelections() {
+            S.selectedBonding = null;
+            S.selectedStructure = null;
+            S.selectedProps = [];
+            S.selectedSoluble = null;
+            S.selectedState = null;
+            S.selectedMp = null;
+            S.isAnswered = false;
+            // isMetallic 同 isNoble 由 drawElements 控制，唔喺度 reset
+            D.formulaInput.value = '';
+            D.formulaInput.className = '';
+            D.formulaInput.disabled = true;
+            D.check.disabled = true;
+            D.next.style.display = 'none';
+            document.querySelectorAll('.opt-btn, .prop-btn').forEach(b => {
+                b.classList.remove('selected', 'correct', 'wrong');
+                b.disabled = true;
+            });
+        }
+
+        // ✅ Check 制啟用檢查 (已修復)
+        function checkPropsEnable() {
+            // 計算實際上顯示緊嘅特性數量 (冇 disabled 嘅 prop-btn)
+            let visibleProps = 0;
+            document.querySelectorAll('.prop-btn').forEach(b => {
+                // 只計算真正可見嘅特性按鈕（冇 disabled 且所在群組有顯示）
+                if (b.disabled) return;
+                const wrap = b.closest('.prop-group-wrap');
+                if (wrap && wrap.style.display === 'none') return;
+                visibleProps++;
+            });
+
+            // 如果已經揀咗常溫狀態同熔點
+            if (S.selectedState !== null && S.selectedMp !== null) {
+                // 如果冇顯示嘅特性，或者已經揀咗至少一個特性
+                if (visibleProps === 0 || S.selectedProps.length > 0) {
+                    D.check.disabled = false;
+                } else {
+                    D.check.disabled = true;
+                }
+            } else {
+                D.check.disabled = true;
+            }
+        }
+
+        // ============================================================
+        // 抽題
+        // ============================================================
+        function drawElements() {
+            if (S.isSpinning) return;
+
+            S.isSpinning = true;
+            D.spin.disabled = true;
+            D.spin.classList.add('spinning');
+            D.spin.textContent = currentLang === 'zh' ? '🌀 旋轉中...' : '🌀 Spinning...';
+
+            let step = 0;
+            const total = 8 + Math.floor(Math.random() * 6);
+
+            function doStep() {
+                const r1 = ELEMENTS[Math.floor(Math.random() * ELEMENTS.length)];
+                const r2 = ELEMENTS[Math.floor(Math.random() * ELEMENTS.length)];
+                D.ele1.textContent = r1.symbol;
+                D.ele2.textContent = r2.symbol;
+                step++;
+                if (step < total) {
+                    setTimeout(doStep, 60 + step * 15);
+                } else {
+                    completeSpin();
+                }
+            }
+
+            function completeSpin() {
+                // 重置金屬鍵同貴氣體標記
+                S.isMetallic = false;
+                S.isNoble = false;
+                S.propsOverride = null;
+
+                // Noble Gas 15%
+                if (Math.random() < 0.15) {
+                    const nobles = ELEMENTS.filter(e => e.type === 'noble');
+                    let el = nobles[Math.floor(Math.random() * nobles.length)];
+                    // 避免立即抽到同一種貴氣體
+                    if ('noble_' + el.symbol === lastQuestionKey) {
+                        const others = nobles.filter(n => 'noble_' + n.symbol !== lastQuestionKey);
+                        if (others.length) el = others[Math.floor(Math.random() * others.length)];
+                    }
+                    S.ele1 = el;
+                    S.ele2 = null;
+                    S.extra = null;
+                    S.isNoble = true;
+                    S.correctBonding = 'none';
+                    S.correctStructure = 'simple_molecular';
+                    S.correctFormula = null;
+                    S.isSpecialFormula = false;
+                    S.specialOptions = null;
+                    S.currentSolubility = false;
+                    S.currentPolar = null;
+                    S.currentState = 'gas';
+                    S.isH2O = false;
+                    S.isHg = false;
+                    S.solubilityType = 'normal';
+                    S.formulaDisplay = el.symbol;
+                    S.isMetallic = false;
+                    lastQuestionKey = 'noble_' + el.symbol;
+                } else {
+                    // 金屬鍵 20%
+                    let selected = null;
+                    let attempts = 0;
+                    const maxAttempts = 50;
+
+                    while (attempts < maxAttempts) {
+                        attempts++;
+                        if (Math.random() < 0.20) {
+                            const metalPair = PAIRS.metallic[Math.floor(Math.random() * PAIRS.metallic.length)];
+                            selected = { e1: metalPair[0], e2: metalPair[1], type: 'metallic', extra: null };
+                        } else {
+                            const allPairs = [];
+                            PAIRS.ionic.forEach(p => allPairs.push({ e1: p[0], e2: p[1], type: 'ionic', extra: null }));
+                            PAIRS.covalent.forEach(p => {
+                                allPairs.push({ e1: p[0], e2: p[1], type: 'covalent', extra: p.length === 3 ? p[2] :
+                                        null });
+                            });
+                            const rand = allPairs[Math.floor(Math.random() * allPairs.length)];
+                            selected = rand;
+                        }
+                        const qKey = selected.e1 + '_' + selected.e2 + (selected.extra ? '_' + selected.extra : '');
+                        if (qKey !== lastQuestionKey) break;
+                        selected = null;
+                    }
+
+                    if (!selected) {
+                        const allPairs = [];
+                        PAIRS.ionic.forEach(p => allPairs.push({ e1: p[0], e2: p[1], type: 'ionic', extra: null }));
+                        PAIRS.covalent.forEach(p => {
+                            allPairs.push({ e1: p[0], e2: p[1], type: 'covalent', extra: p.length === 3 ? p[2] :
+                                null });
+                        });
+                        selected = allPairs[Math.floor(Math.random() * allPairs.length)];
+                    }
+                    lastQuestionKey = selected.e1 + '_' + selected.e2 + (selected.extra ? '_' + selected.extra : '');
+
+                    S.ele1 = getElement(selected.e1);
+                    S.ele2 = getElement(selected.e2);
+                    S.extra = selected.extra;
+                    S.isNoble = false;
+                    S.isH2O = isH2O(S.ele1, S.ele2);
+                    S.isHg = isHg(S.ele1, S.ele2);
+                    S.isMetallic = (selected.type === 'metallic');
+
+                    if (selected.type === 'ionic') {
+                        S.correctBonding = 'ionic';
+                        S.correctStructure = 'giant_ionic';
+                    } else if (selected.type === 'covalent') {
+                        S.correctBonding = 'covalent';
+                        if ((selected.e1 === 'Si' && selected.e2 === 'O') ||
+                            (selected.e1 === 'O' && selected.e2 === 'Si')) {
+                            S.correctStructure = 'giant_covalent';
+                        } else if (selected.e1 === 'C' && selected.e2 === 'C') {
+                            S.correctStructure = 'giant_covalent';
+                        } else if (selected.e1 === 'Si' || selected.e2 === 'Si') {
+                            S.correctStructure = 'simple_molecular';
+                        } else {
+                            S.correctStructure = 'simple_molecular';
+                        }
+                        // 石墨特例：導電、柔軟（與金剛石不同）
+                        if (selected.extra === 'graphite') {
+                            S.propsOverride = {
+                                state: 'solid', mp: 'high', soluble: false, conduct_solid: true,
+                                conduct_liquid: false, conduct_aqueous: false, conduct_no: false,
+                                brittle: false, malleable: false, ductile: false, hard: false, soft: true,
+                            };
+                        }
+                    } else if (selected.type === 'metallic') {
+                        S.correctBonding = 'metallic';
+                        S.correctStructure = 'giant_metallic';
+                    }
+
+                    const sol = getSolubility(S.ele1, S.ele2);
+                    if (sol !== null) {
+                        S.currentSolubility = sol;
+                        if (sol === 'reacts') S.solubilityType = 'reacts';
+                        else if (sol === 'slightly') S.solubilityType = 'slightly';
+                        else if (sol === 'h2o') S.solubilityType = 'h2o';
+                        else if (sol === 'mixed') S.solubilityType = 'mixed';
+                        else S.solubilityType = 'normal';
+                    } else {
+const props = S.propsOverride || STRUCTURE_PROPS[S.correctStructure];
+                        S.currentSolubility = props ? props.soluble : false;
+                        S.solubilityType = 'normal';
+                    }
+
+                    S.currentPolar = getPolar(S.ele1, S.ele2);
+                    S.currentState = getState(S.ele1, S.ele2);
+                    if (S.isHg) S.currentState = 'liquid';
+
+                    const specialOpts = getSpecialFormulaOptions(S.ele1, S.ele2);
+                    if (specialOpts) {
+                        S.isSpecialFormula = true;
+                        S.specialOptions = specialOpts;
+                        D.formulaHint.textContent = t('formulaHintSpecial') + ' (' + specialOpts.join(' / ') + ')';
+                    } else {
+                        S.isSpecialFormula = false;
+                        S.specialOptions = null;
+                        D.formulaHint.textContent = t('formulaHint');
+                    }
+
+                    S.correctFormula = getFormula(S.ele1, S.ele2, S.extra);
+
+                    let display = S.correctFormula || '';
+                    if (S.extra === 'ozone') display = 'O₃';
+                    else if (S.extra === 'diamond') display = 'C (diamond)';
+                    else if (S.extra === 'graphite') display = 'C (graphite)';
+                    else if (S.isH2O) display = 'H₂O';
+                    else if (S.isMetallic) display = S.ele1.symbol;
+                    S.formulaDisplay = display;
+                }
+
+                updateDisplay();
+                setFeedback('✏️', t('fbSpin'), '', false);
+                D.spin.disabled = false;
+                D.spin.classList.remove('spinning');
+                D.spin.textContent = t('spinBtn');
+                S.isSpinning = false;
+
+                resetSelections();
+                updateStepUI(0);
+                renderStep0();
+                setFeedback('✏️', currentLang === 'zh' ? '請選擇鍵結類型' : 'Select bonding type', '', false);
+            }
+
+            doStep();
+        }
+
+        // ============================================================
+        // Step 0: 鍵結
+        // ============================================================
+        function renderStep0() {
+            const btns = D.bonding.querySelectorAll('.opt-btn');
+            btns.forEach(b => {
+                b.disabled = false;
+                b.classList.remove('selected', 'correct', 'wrong');
+                b.onclick = function() {
+                    if (S.isAnswered || S.step !== 0) return;
+                    btns.forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    S.selectedBonding = this.dataset.value;
+                    D.check.disabled = false;
+                    D.check.onclick = checkStep0;
+                };
+            });
+        }
+
+        function checkStep0() {
+            if (S.isAnswered || S.step !== 0) return;
+            if (!S.selectedBonding) {
+                setFeedback('⚠️', currentLang === 'zh' ? '請選擇一個鍵結類型' : 'Please select a bonding type', '', true);
+                return;
+            }
+            S.isAnswered = true;
+            const correct = S.selectedBonding === S.correctBonding;
+            const btns = D.bonding.querySelectorAll('.opt-btn');
+            btns.forEach(b => {
+                b.disabled = true;
+                if (b.dataset.value === S.correctBonding) b.classList.add('correct');
+                if (b.dataset.value === S.selectedBonding && !correct) b.classList.add('wrong');
+            });
+            const labels = { ionic: t('bonding_ionic'), covalent: t('bonding_covalent'), metallic: t('bonding_metallic'),
+                none: t('bonding_none') };
+            if (correct) {
+                setFeedback('✅', t('fbBondingCorrect'), '', false);
+            } else {
+                setFeedback('❌', t('fbBondingWrong') + labels[S.correctBonding], '', true);
+            }
+            D.check.disabled = true;
+            D.next.style.display = 'inline-block';
+            D.next.disabled = false;
+            D.next.textContent = t('nextStep');
+            D.next.onclick = function() {
+                resetSelections();
+                updateStepUI(1);
+                renderStep1();
+                setFeedback('✏️', currentLang === 'zh' ? '請輸入化學式' : 'Enter the formula', '', false);
+            };
+        }
+
+        // ============================================================
+        // Step 1: 化學式
+        // ============================================================
+        function renderStep1() {
+            // 金屬鍵跳過
+            if (S.isMetallic) {
+                const msg = tWith('metalFormula', { symbol: S.ele1.symbol });
+                setFeedback('✅', msg, '', false);
+                D.next.style.display = 'inline-block';
+                D.next.disabled = false;
+                D.next.textContent = t('nextStep');
+                D.next.onclick = function() {
+                    resetSelections();
+                    updateStepUI(2);
+                    renderStep2();
+                    setFeedback('✏️', currentLang === 'zh' ? '請選擇結構類型' : 'Select structure type', '', false);
+                };
+                return;
+            }
+
+            if (S.isNoble) {
+                setFeedback('✅', t('noReaction'), '', false);
+                D.next.style.display = 'inline-block';
+                D.next.disabled = false;
+                D.next.textContent = t('nextStep');
+                D.next.onclick = function() {
+                    resetSelections();
+                    updateStepUI(2);
+                    renderStep2();
+                    setFeedback('💡', t('nobleGasStructure'), '', false);
+                };
+                return;
+            }
+
+            // 金剛石/石墨：直接顯示化學式，跳過輸入
+            if (S.extra === 'diamond' || S.extra === 'graphite') {
+                const msg = currentLang === 'zh'
+                    ? '✅ 化學式為 ' + S.formulaDisplay
+                    : '✅ Formula is ' + S.formulaDisplay;
+                setFeedback('✅', msg, '', false);
+                D.next.style.display = 'inline-block';
+                D.next.disabled = false;
+                D.next.textContent = t('nextStep');
+                D.next.onclick = function() {
+                    resetSelections();
+                    updateStepUI(2);
+                    renderStep2();
+                    setFeedback('✏️', currentLang === 'zh' ? '請選擇結構類型' : 'Select structure type', '', false);
+                };
+                return;
+            }
+
+            D.formulaInput.disabled = false;
+            D.formulaInput.value = '';
+            D.formulaInput.className = '';
+            D.formulaInput.focus();
+            D.check.disabled = true;
+            D.formulaInput.oninput = function() {
+                if (this.disabled) return;
+                D.check.disabled = this.value.trim() === '';
+                if (this.value.trim() !== '') {
+                    D.check.onclick = checkStep1;
+                }
+            };
+            D.formulaInput.onkeydown = function(e) {
+                if (e.key === 'Enter' && !this.disabled && this.value.trim() !== '') {
+                    e.preventDefault();
+                    D.check.click();
+                }
+            };
+        }
+
+        function checkStep1() {
+            if (S.isAnswered || S.step !== 1) return;
+            const user = normalizeFormulaInput(D.formulaInput.value.trim());
+            if (user === '') {
+                setFeedback('⚠️', currentLang === 'zh' ? '請輸入化學式' : 'Please enter the formula', '', true);
+                return;
+            }
+            S.isAnswered = true;
+            let correct = false;
+            let caseOnlyIssue = false;
+            if (S.isSpecialFormula && S.specialOptions) {
+                const opts = S.specialOptions.map(normalizeFormulaInput);
+                if (opts.includes(user)) {
+                    correct = true;
+                } else if (opts.some(opt => opt && user.toUpperCase() === opt.toUpperCase())) {
+                    caseOnlyIssue = true;
+                }
+            } else {
+                const isCovalent = S.correctBonding === 'covalent';
+                const allowReversal = isCovalent && isReversalAllowed(S.ele1, S.ele2);
+                const normalFormula = normalizeFormulaInput(S.correctFormula);
+                const expectedList = [normalFormula];
+                if (allowReversal) expectedList.push(reverseFormula(normalFormula));
+                if (expectedList.includes(user)) {
+                    correct = true;
+                } else if (expectedList.some(opt => opt && user.toUpperCase() === opt.toUpperCase())) {
+                    caseOnlyIssue = true;
+                }
+            }
+            D.formulaInput.className = correct ? 'correct' : 'incorrect';
+            D.formulaInput.disabled = true;
+            if (correct) {
+                let detail = '';
+                if (S.isSpecialFormula && S.specialOptions) {
+                    detail = currentLang === 'zh' ?
+                        '✅ 正確！其他可能：' + S.specialOptions.filter(o => o !== user).join('、') :
+                        '✅ Correct! Other possibilities: ' + S.specialOptions.filter(o => o !== user).join(', ');
+                }
+                setFeedback('✅', t('fbFormulaCorrect'), detail, false);
+            } else {
+                let ans = S.isSpecialFormula ? S.specialOptions.join(' / ') : S.correctFormula;
+                if (!S.isSpecialFormula && S.correctBonding === 'covalent' && isReversalAllowed(S.ele1, S.ele2)) {
+                    ans = currentLang === 'zh'
+                        ? S.correctFormula + ' 或 ' + reverseFormula(S.correctFormula) + '（都可接受）'
+                        : S.correctFormula + ' or ' + reverseFormula(S.correctFormula) + ' (both acceptable)';
+                }
+                const detail = caseOnlyIssue
+                    ? (currentLang === 'zh' ? '💡 留意大小寫' : '💡 Mind the capitalization')
+                    : '';
+                setFeedback('❌', t('fbFormulaWrong') + ans, detail, true);
+            }
+            D.check.disabled = true;
+            D.next.style.display = 'inline-block';
+            D.next.disabled = false;
+            D.next.textContent = t('nextStep');
+            D.next.onclick = function() {
+                resetSelections();
+                updateStepUI(2);
+                renderStep2();
+                setFeedback('✏️', currentLang === 'zh' ? '請選擇結構類型' : 'Select structure type', '', false);
+            };
+        }
+
+        // ============================================================
+        // Step 2: 結構
+        // ============================================================
+        function renderStep2() {
+            const btns = D.structure.querySelectorAll('.opt-btn');
+            btns.forEach(b => {
+                b.disabled = false;
+                b.classList.remove('selected', 'correct', 'wrong');
+                b.onclick = function() {
+                    if (S.isAnswered || S.step !== 2) return;
+                    btns.forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    S.selectedStructure = this.dataset.value;
+                    D.check.disabled = false;
+                    D.check.onclick = checkStep2;
+                };
+            });
+        }
+
+        function checkStep2() {
+            if (S.isAnswered || S.step !== 2) return;
+            if (!S.selectedStructure) {
+                setFeedback('⚠️', currentLang === 'zh' ? '請選擇一個結構類型' : 'Please select a structure type', '', true);
+                return;
+            }
+            S.isAnswered = true;
+            const correct = S.selectedStructure === S.correctStructure;
+            const btns = D.structure.querySelectorAll('.opt-btn');
+            btns.forEach(b => {
+                b.disabled = true;
+                if (b.dataset.value === S.correctStructure) b.classList.add('correct');
+                if (b.dataset.value === S.selectedStructure && !correct) b.classList.add('wrong');
+            });
+            const labels = {
+                giant_ionic: t('structure_giant_ionic'),
+                giant_metallic: t('structure_giant_metallic'),
+                giant_covalent: t('structure_giant_covalent'),
+                simple_molecular: t('structure_simple_molecular'),
+            };
+            if (correct) {
+                setFeedback('✅', t('fbStructureCorrect'), '', false);
+            } else {
+                setFeedback('❌', t('fbStructureWrong') + labels[S.correctStructure], '', true);
+            }
+            D.check.disabled = true;
+            D.next.style.display = 'inline-block';
+            D.next.disabled = false;
+            D.next.textContent = t('nextStep');
+            D.next.onclick = function() {
+                resetSelections();
+                updateStepUI(3);
+                renderStep3();
+                setFeedback('✏️', currentLang === 'zh' ? '請選擇該結構的特性' : 'Select properties', '', false);
+            };
+        }
+
+        // ============================================================
+        // Step 3: 特性
+        // ============================================================
+        function renderStep3() {
+            updatePropTitle();
+
+            // H₂O 特例
+            if (S.isH2O) {
+                D.solubilityRow.style.display = 'none';
+                setFeedback('💧', t('h2oInfo'), '', false);
+            } else {
+                D.solubilityRow.style.display = 'flex';
+                if (S.solubilityType === 'reacts') {
+                    D.solOpts.style.display = 'none';
+                    D.solLabel.innerHTML = t('solLabel') + '<br><span class="reacts-hint">' + t('reactsWithWater') + '</span>';
+                } else {
+                    D.solOpts.style.display = 'flex';
+                    D.solLabel.textContent = t('solLabel');
+                    D.solLabel.style.color = '';
+                    D.solLabel.style.fontWeight = '';
+                    if (S.solubilityType === 'slightly') {
+                        D.solLabel.innerHTML = t('solLabel') + ' <span class="reacts-hint">' + t('slightlySoluble') + '</span>';
+                    } else if (S.solubilityType === 'mixed') {
+                        D.solLabel.innerHTML = t('solLabel') + ' <span class="reacts-hint">' + t('cl2SolubilityHint') + '</span>';
+                    }
+                }
+            }
+
+            // 常溫狀態
+            const stateBtns = D.stateOpts.querySelectorAll('.opt-btn');
+            stateBtns.forEach(b => {
+                b.disabled = false;
+                b.classList.remove('selected', 'correct', 'wrong');
+                b.onclick = function() {
+                    if (S.isAnswered || S.step !== 3) return;
+                    stateBtns.forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    S.selectedState = this.dataset.value;
+                    updateHardnessAndMechanicalVisibility(S.selectedState);
+                    checkPropsEnable();
+                };
+            });
+
+            // 熔點
+            const mpBtns = D.mpOpts.querySelectorAll('.opt-btn');
+            mpBtns.forEach(b => {
+                b.disabled = false;
+                b.classList.remove('selected', 'correct', 'wrong');
+                b.onclick = function() {
+                    if (S.isAnswered || S.step !== 3) return;
+                    mpBtns.forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    S.selectedMp = this.dataset.value;
+                    checkPropsEnable();
+                };
+            });
+
+            // 溶解度 (除非係 reacts 或 h2o)
+            if (S.solubilityType !== 'reacts' && !S.isH2O) {
+                const solBtns = D.solOpts.querySelectorAll('.opt-btn');
+                solBtns.forEach(b => {
+                    b.disabled = false;
+                    b.classList.remove('selected', 'correct', 'wrong');
+                    b.onclick = function() {
+                        if (S.isAnswered || S.step !== 3) return;
+                        solBtns.forEach(btn => btn.classList.remove('selected'));
+                        this.classList.add('selected');
+                        S.selectedSoluble = this.dataset.value;
+                        checkPropsEnable();
+                        if (this.dataset.value === 'insoluble') {
+                            const aq = document.querySelector('.prop-btn[data-prop="conduct_aqueous"]');
+                            if (aq) { aq.disabled = true;
+                                aq.classList.remove('selected');
+                                S.selectedProps = S.selectedProps.filter(p => p !== 'conduct_aqueous'); }
+                        } else {
+                            const aq = document.querySelector('.prop-btn[data-prop="conduct_aqueous"]');
+                            if (aq) aq.disabled = false;
+                        }
+                    };
+                });
+            }
+
+            // 其他特性
+            document.querySelectorAll('.prop-btn').forEach(b => {
+                b.disabled = false;
+                b.classList.remove('selected', 'correct', 'wrong');
+                b.onclick = function() {
+                    if (S.isAnswered || S.step !== 3) return;
+                    const key = this.dataset.prop;
+                    if (key === 'conduct_aqueous' && S.selectedSoluble === 'insoluble') {
+                        setFeedback('⚠️', currentLang === 'zh' ? '不溶於水，不能選水溶液導電' : 'Insoluble in water, cannot select aqueous conductivity',
+                            '', true);
+                        return;
+                    }
+                    if (S.selectedProps.includes(key)) {
+                        S.selectedProps = S.selectedProps.filter(p => p !== key);
+                        this.classList.remove('selected');
+                    } else {
+                        S.selectedProps.push(key);
+                        this.classList.add('selected');
+                    }
+                    checkPropsEnable();
+                };
+            });
+
+            // 硬度和機械性質初始顯示
+            D.hardnessGroup.style.display = 'flex';
+            D.mechanicalWrap.style.display = 'flex';
+
+            D.check.disabled = true;
+            D.check.onclick = checkStep3;
+
+            if (S.selectedState) {
+                updateHardnessAndMechanicalVisibility(S.selectedState);
+            }
+            // 呼叫 checkPropsEnable 檢查按鈕狀態
+            checkPropsEnable();
+        }
+
+        function checkStep3() {
+            if (S.isAnswered || S.step !== 3) return;
+
+            const props = S.propsOverride || STRUCTURE_PROPS[S.correctStructure];
+            if (!props) {
+                setFeedback('⚠️', '結構資料錯誤', '', true);
+                return;
+            }
+            let slightHint = '';
+
+            // 常溫狀態
+            let stateOk = true,
+                stateFeedback = '';
+            if (S.selectedState === null) {
+                setFeedback('⚠️', currentLang === 'zh' ? '請選擇常溫狀態' : 'Please select state at RTP', '', true);
+                return;
+            }
+            const realState = S.currentState;
+            const isKnown = isKnownState(S.ele1, S.ele2, S.extra);
+            const isSimple = S.correctStructure === 'simple_molecular';
+            const stateLabels = currentLang === 'zh' ? { solid: '固態', liquid: '液態', gas: '氣態' } : { solid: 'solid',
+                liquid: 'liquid', gas: 'gas' };
+
+            if (isKnown || !isSimple || !realState) {
+                const expected = realState || props.state;
+                stateOk = (S.selectedState === expected);
+                if (!stateOk) {
+                    stateFeedback = tWith('stateFeedback', { formula: S.formulaDisplay, state: stateLabels[expected] ||
+                            expected });
+                }
+            } else {
+                if (realState === 'liquid') {
+                    stateOk = (S.selectedState === 'gas' || S.selectedState === 'liquid');
+                } else if (realState === 'solid') {
+                    stateOk = true;
+                } else {
+                    stateOk = (S.selectedState === realState);
+                }
+                if (S.selectedState !== realState && stateOk) {
+                    stateFeedback = tWith('stateFeedbackGas', { formula: S.formulaDisplay, state: stateLabels[
+                        realState] || realState });
+                }
+            }
+
+            // 熔點
+            let mpOk = true;
+            if (S.selectedMp === null) {
+                setFeedback('⚠️', currentLang === 'zh' ? '請選擇熔點' : 'Please select melting point', '', true);
+                return;
+            }
+            if (S.isHg) {
+                mpOk = true;
+            } else {
+                mpOk = (S.selectedMp === props.mp);
+            }
+
+            // 溶解度
+            let solOk = true;
+            let expectedSoluble = S.currentSolubility;
+            if (S.isH2O) {
+                solOk = true;
+            } else if (S.solubilityType === 'reacts') {
+                solOk = true;
+            } else if (S.solubilityType === 'slightly') {
+                if (S.selectedSoluble === null) {
+                    setFeedback('⚠️', currentLang === 'zh' ? '請選擇溶解度' : 'Please select solubility', '', true);
+                    return;
+                }
+                solOk = true;
+                slightHint = t('slightlySoluble');
+            } else if (S.solubilityType === 'mixed') {
+                if (S.selectedSoluble === null) {
+                    setFeedback('⚠️', currentLang === 'zh' ? '請選擇溶解度' : 'Please select solubility', '', true);
+                    return;
+                }
+                solOk = true;
+                slightHint = t('cl2SolubilityHint');
+            } else {
+                if (S.selectedSoluble === null) {
+                    setFeedback('⚠️', currentLang === 'zh' ? '請選擇溶解度' : 'Please select solubility', '', true);
+                    return;
+                }
+                const userSoluble = S.selectedSoluble === 'soluble';
+                solOk = (userSoluble === expectedSoluble);
+            }
+
+            // 其他特性
+            const propKeys = ['conduct_solid', 'conduct_liquid', 'conduct_aqueous', 'conduct_no',
+                'brittle', 'malleable', 'ductile', 'hard', 'soft'
+            ];
+            const filteredKeys = propKeys.filter(k => {
+                if (k === 'conduct_aqueous' && (!expectedSoluble || S.solubilityType === 'reacts')) return false;
+                if ((k === 'hard' || k === 'soft') && S.selectedState !== 'solid') return false;
+                return true;
+            });
+            let wrong = 0,
+                missing = 0;
+            S.selectedProps.forEach(k => {
+                if (k === 'conduct_aqueous' && (!expectedSoluble || S.solubilityType === 'reacts')) { wrong++; return; }
+                if ((k === 'hard' || k === 'soft') && S.selectedState !== 'solid') { wrong++; return; }
+                if (props[k] !== true) wrong++;
+            });
+            filteredKeys.forEach(k => {
+                if (props[k] === true && !S.selectedProps.includes(k)) missing++;
+            });
+            const propsOk = (wrong === 0 && missing === 0);
+
+            // 高亮
+            document.querySelectorAll('.prop-btn').forEach(b => {
+                b.disabled = true;
+                const k = b.dataset.prop;
+                if (k === 'conduct_aqueous' && (!expectedSoluble || S.solubilityType === 'reacts')) {
+                    b.classList.add('correct');
+                    return;
+                }
+                if ((k === 'hard' || k === 'soft') && S.selectedState !== 'solid') {
+                    b.classList.add('correct');
+                    return;
+                }
+                if (props[k] === true) b.classList.add('correct');
+                else if (S.selectedProps.includes(k) && props[k] !== true) b.classList.add('wrong');
+                if (S.selectedProps.includes(k) && props[k] === true) b.classList.add('correct');
+            });
+
+            // 高亮 solubility
+            D.solOpts.querySelectorAll('.opt-btn').forEach(b => {
+                b.disabled = true;
+                const val = b.dataset.value;
+                let isCorrect = false;
+                if (S.solubilityType === 'slightly' || S.solubilityType === 'mixed') isCorrect = true;
+                else if (S.isH2O || S.solubilityType === 'reacts') isCorrect = true;
+                else isCorrect = (val === 'soluble') === expectedSoluble;
+                if (val === S.selectedSoluble) {
+                    if (isCorrect) b.classList.add('correct');
+                    else b.classList.add('wrong');
+                }
+                if (isCorrect && val !== S.selectedSoluble && S.solubilityType !== 'slightly' && S.solubilityType !== 'mixed') {
+                    b.classList.add('correct');
+                }
+            });
+
+            // 高亮 state
+            D.stateOpts.querySelectorAll('.opt-btn').forEach(b => {
+                b.disabled = true;
+                const val = b.dataset.value;
+                let isCorrect = false;
+                const isKnownCpd = isKnownState(S.ele1, S.ele2, S.extra);
+                const isSimpleMol = S.correctStructure === 'simple_molecular';
+                if (isKnownCpd || !isSimpleMol || !realState) {
+                    const expected = realState || props.state;
+                    isCorrect = val === expected;
+                } else {
+                    if (realState === 'liquid') isCorrect = (val === 'gas' || val === 'liquid');
+                    else if (realState === 'solid') isCorrect = true;
+                    else isCorrect = val === realState;
+                }
+                if (val === S.selectedState) {
+                    if (isCorrect) b.classList.add('correct');
+                    else b.classList.add('wrong');
+                }
+                if (isCorrect && val !== S.selectedState) b.classList.add('correct');
+            });
+
+            // 高亮 mp (Hg 特例)
+            D.mpOpts.querySelectorAll('.opt-btn').forEach(b => {
+                b.disabled = true;
+                const val = b.dataset.value;
+                let isCorrect = false;
+                if (S.isHg) isCorrect = true;
+                else isCorrect = val === props.mp;
+                if (val === S.selectedMp) {
+                    if (isCorrect) b.classList.add('correct');
+                    else b.classList.add('wrong');
+                }
+                if (isCorrect && val !== S.selectedMp) b.classList.add('correct');
+            });
+
+            // 極性提示
+            let polarHint = '';
+            if (!solOk && S.currentPolar !== null && S.correctStructure === 'simple_molecular') {
+                const polarLabel = S.currentPolar ? t('isPolar') : t('isNonPolar');
+                const name = S.ele1.symbol + S.ele2.symbol;
+                polarHint = tWith('polarHint', { name: name, polar: polarLabel });
+            }
+
+            const allCorrect = stateOk && mpOk && solOk && propsOk;
+            S.isAnswered = true;
+
+            if (allCorrect) {
+                let detail = [stateFeedback, polarHint, slightHint].filter(Boolean).join('；');
+                setFeedback('✅', t('fbPropsCorrect'), detail, false);
+                D.check.disabled = true;
+                D.next.style.display = 'inline-block';
+                D.next.disabled = false;
+                D.next.textContent = t('nextBtn');
+                D.next.onclick = drawElements;
+            } else {
+                let detail = '';
+                if (!stateOk) {
+                    detail += (currentLang === 'zh' ? '常溫狀態錯誤' : 'State at RTP wrong');
+                    if (stateFeedback) detail += '；' + stateFeedback;
+                }
+                if (!mpOk && !S.isHg) {
+                    if (detail) detail += '；';
+                    detail += (currentLang === 'zh' ? '熔點錯誤' : 'Melting point wrong');
+                }
+                if (!solOk) {
+                    if (detail) detail += '；';
+                    const expected = expectedSoluble ?
+                        (currentLang === 'zh' ? '可溶' : 'soluble') :
+                        (currentLang === 'zh' ? '不溶' : 'insoluble');
+                    detail += (currentLang === 'zh' ? `溶解度應為 ${expected}` : `Solubility should be ${expected}`);
+                }
+                if (!propsOk) {
+                    let missingList = [],
+                        extraList = [];
+                    filteredKeys.forEach(k => {
+                        if (props[k] === true && !S.selectedProps.includes(k)) missingList.push(t('prop_' + k));
+                        if (props[k] !== true && S.selectedProps.includes(k)) extraList.push(t('prop_' + k));
+                    });
+                    if (S.selectedProps.includes('conduct_aqueous') && (!expectedSoluble || S.solubilityType ===
+                        'reacts')) {
+                        extraList.push(t('prop_conduct_aqueous'));
+                    }
+                    if ((S.selectedProps.includes('hard') || S.selectedProps.includes('soft')) && S.selectedState !== 'solid') {
+                        extraList.push(t('hardnessNotApplicable'));
+                    }
+                    if (missingList.length > 0) {
+                        if (detail) detail += '；';
+                        detail += t('fbPropsMissing') + missingList.join('、');
+                    }
+                    if (extraList.length > 0) {
+                        if (detail) detail += '；';
+                        detail += t('fbPropsExtra') + extraList.join('、');
+                    }
+                }
+                if (polarHint) {
+                    if (detail) detail += '；';
+                    detail += polarHint;
+                }
+                if (slightHint) {
+                    if (detail) detail += '；';
+                    detail += slightHint;
+                }
+                setFeedback('❌', t('fbPropsWrong'), detail, true);
+                D.check.disabled = true;
+                D.next.style.display = 'inline-block';
+                D.next.disabled = false;
+                D.next.textContent = t('nextBtn');
+                D.next.onclick = drawElements;
+            }
+        }
+
+        // ============================================================
+        // 語言切換
+        // ============================================================
+        function setLanguage(lang) {
+            if (lang === currentLang) return;
+            currentLang = lang;
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState({}, '', url);
+            updateButtonLabels();
+            localStorage.setItem('structure_lang', lang);
+        }
+
+        // 🔍 偵測瀏覽器縮放，非 100% 時顯示提示橫幅
+        function detectZoom() {
+            const banner = document.getElementById('zoomBanner');
+            if (!banner) return;
+            const ratio = window.outerWidth / window.innerWidth;
+            if (ratio > 1.03 || ratio < 0.97) {
+                banner.textContent = t('zoomHint');
+                banner.style.display = 'block';
+            } else {
+                banner.style.display = 'none';
+            }
+        }
+
+        // ============================================================
+        // 初始化
+        // ============================================================
+        function init() {
+            const urlLang = getUrlParameter('lang') || localStorage.getItem('structure_lang') || 'zh';
+            currentLang = (urlLang === 'zh' || urlLang === 'en') ? urlLang : 'zh';
+
+            const sel = document.getElementById('practiceSelector');
+            if (sel) {
+                for (let i = 0; i < sel.options.length; i++) {
+                    if (sel.options[i].value === 'structure') {
+                        sel.options[i].selected = true;
+                        break;
+                    }
+                }
+                sel.addEventListener('change', function() {
+                    const target = this.value;
+                    const lang = currentLang || 'zh';
+                    if (target === 'home') window.location.href = 'index.html?lang=' + lang;
+                    else window.location.href = target + '.html?lang=' + lang;
+                });
+            }
+
+            D.langBtns.forEach(b => {
+                b.addEventListener('click', () => setLanguage(b.dataset.lang));
+            });
+
+            D.spin.addEventListener('click', drawElements);
+
+            window.addEventListener('resize', detectZoom);
+            detectZoom();
+
+            updateButtonLabels();
+            drawElements();
+            console.log('🏗️ 結構練習已啟動 (Ch.9)');
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+</body>
+</html>
