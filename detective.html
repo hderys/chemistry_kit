@@ -629,8 +629,9 @@
             padding: 4px 8px;
             background: #f4f6fb;
             border-radius: 10px;
-            flex: 1;
+            flex: 0 1 auto;
             min-height: 0;
+            max-height: 150px;
             overflow-y: auto;
         }
         .clue-line {
@@ -665,6 +666,11 @@
             cursor: pointer;
             outline: none;
             max-width: 260px;
+        }
+        @media (min-height: 900px) {
+            .clues {
+                max-height: 240px;
+            }
         }
 
         .case-instruct {
