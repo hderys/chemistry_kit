@@ -285,23 +285,24 @@
         .book {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             flex: 1;
             min-height: 0;
-            justify-content: center;
-            padding: 6px;
+            padding: 4px;
         }
         .book-page {
+            flex: 1;
+            min-height: 0;
             background: linear-gradient(135deg, #fffdf5 0%, #f7f3e3 100%);
             border: 2px solid #d4a017;
             border-radius: 6px;
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-            padding: 20px 24px;
-            min-height: 280px;
+            padding: 14px 18px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
             position: relative;
+            overflow: hidden;
         }
         .book-page::after {
             content: '';
@@ -328,12 +329,15 @@
             color: #8a94a6;
         }
         .page-body {
-            font-size: 0.95rem;
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            font-size: 0.92rem;
             color: #2a3a32;
-            line-height: 1.7;
+            line-height: 1.6;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
         .page-row {
             display: flex;
@@ -731,6 +735,51 @@
             min-height: 1.2em;
         }
 
+        /* 測試結果彈窗 */
+        .res-head {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #2a3a6a;
+            text-align: center;
+        }
+        .res-vis {
+            text-align: center;
+            padding: 16px 0 8px;
+            font-size: 2.2rem;
+            line-height: 1.2;
+        }
+        .res-vis .flame {
+            width: 42px;
+            height: 60px;
+        }
+        .res-vis .tube {
+            width: 40px;
+            height: 72px;
+        }
+        .res-vis .splint {
+            height: 48px;
+            width: 8px;
+        }
+        .res-vis .splint.glow::after {
+            width: 26px;
+            height: 26px;
+            top: -10px;
+            left: -9px;
+        }
+        .res-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a2332;
+            text-align: center;
+            padding: 4px 0 14px;
+            line-height: 1.4;
+        }
+        .res-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
         /* 測試視覺 */
         .tube {
             display: inline-block;
@@ -866,6 +915,21 @@
             .q-options.cols4 {
                 grid-template-columns: 1fr;
             }
+            .book-page {
+                padding: 10px 12px;
+                gap: 6px;
+            }
+            .page-head {
+                font-size: 0.92rem;
+            }
+            .page-body {
+                font-size: 0.85rem;
+                line-height: 1.5;
+            }
+            .book-btn {
+                width: 34px;
+                height: 34px;
+            }
         }
     </style>
 </head>
@@ -942,6 +1006,16 @@
             <div class="proc-q" id="procQ"></div>
             <div class="proc-opts" id="procOpts"></div>
             <div class="modal-err" id="procErr"></div>
+        </div>
+    </div>
+
+    <!-- 測試結果彈窗 -->
+    <div class="modal-overlay" id="resultModal" style="display:none;">
+        <div class="modal-card">
+            <div class="res-head" id="resHead"></div>
+            <div class="res-vis" id="resVis"></div>
+            <div class="res-text" id="resText"></div>
+            <button class="btn-check res-btn" id="resConfirm"></button>
         </div>
     </div>
 
@@ -1275,6 +1349,7 @@
             casesSolved: 0,
             case: null,
             proc: null,
+            pendingClue: null,
         };
 
         function shuffle(arr) {
@@ -1716,6 +1791,20 @@
             if (btn) btn.disabled = true;
             const res = S.case.mystery.results[t];
             if (!res) return;
+            S.pendingClue = { test: t, res: res };
+            document.getElementById('resHead').textContent = currentLang === 'zh' ? '🔍 發現線索！' : '🔍 Clue found!';
+            document.getElementById('resVis').innerHTML = visHTML(res.v);
+            document.getElementById('resText').textContent = res[currentLang === 'zh' ? 'zh' : 'en'];
+            document.getElementById('resConfirm').textContent = currentLang === 'zh' ? '✓ 記錄線索' : '✓ Record clue';
+            document.getElementById('resultModal').style.display = 'flex';
+        }
+
+        function confirmClue() {
+            document.getElementById('resultModal').style.display = 'none';
+            if (!S.pendingClue) return;
+            const t = S.pendingClue.test;
+            const res = S.pendingClue.res;
+            S.pendingClue = null;
             S.case.clues.push({ test: t, res: res });
             const clues = document.getElementById('clues');
             if (S.case.clues.length === 1) clues.innerHTML = '';
@@ -1791,12 +1880,14 @@
 
             S.case = { cat: cat, mystery: mystery, clues: [], used: {} };
             S.proc = null;
+            S.pendingClue = null;
 
             document.getElementById('caseHead').textContent = '🕵️ ' +
                 (currentLang === 'zh' ? '案件 #' + (S.casesSolved + 1) + '（已破案 ' + S.casesSolved + '）｜未知' + CAT_LABEL[cat].zh + ' 🧪?'
                     : 'Case #' + (S.casesSolved + 1) + ' (solved ' + S.casesSolved + ') | unknown ' + CAT_LABEL[cat].en + ' 🧪?');
             document.getElementById('caseInstruct').textContent = currentLang === 'zh' ? '進行甚麼測試好呢？' : 'What test should you perform?';
             document.getElementById('procModal').style.display = 'none';
+            document.getElementById('resultModal').style.display = 'none';
 
             const tk = document.getElementById('toolkit');
             tk.innerHTML = '';
@@ -1907,6 +1998,7 @@
 
         function render() {
             document.getElementById('procModal').style.display = 'none';
+            document.getElementById('resultModal').style.display = 'none';
             if (S.tab === 'handbook') renderHandbook();
             else if (S.tab === 'train') {
                 renderTrain();
@@ -1981,6 +2073,7 @@
             document.addEventListener('click', function() {
                 document.getElementById('infoPopup').classList.remove('show');
             });
+            document.getElementById('resConfirm').addEventListener('click', confirmClue);
 
             const sel = document.getElementById('practiceSelector');
             if (sel) {
