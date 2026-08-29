@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>🔬 物質的特性、變化與分類 · Ch.2</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            background: linear-gradient(145deg, #f0f4ff 0%, #cdd8ee 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 6px;
+        }
+
+        .card {
+            max-width: 900px;
+            width: 100%;
+            height: 100vh;
+            max-height: 100vh;
+            background: rgba(255, 255, 255, 0.94);
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(40, 60, 120, 0.15);
+            padding: 0.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(120, 150, 210, 0.25);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .header-left select {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            background: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 4px 0;
+            max-width: 210px;
+        }
+        .header-left select option {
+            font-weight: 600;
+        }
+        .lang-toggle {
+            display: flex;
+            gap: 2px;
+            background: white;
+            padding: 2px;
+            border-radius: 30px;
+            flex-shrink: 0;
+        }
+        .lang-btn {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: transparent;
+            color: #5a6a8a;
+        }
+        .lang-btn.active {
+            background: #4a6a9a;
+            color: white;
+        }
+
+        .tab-row {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 4px 0;
+            flex-shrink: 0;
+        }
+        .tab-btn {
+            border: 2px solid #cfe0e8;
+            background: white;
+            padding: 6px 14px;
+            border-radius: 24px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #2a3a6a;
+            transition: 0.15s;
+        }
+        .tab-btn.active {
+            background: #4a6a9a;
+            color: white;
+            border-color: #4a6a9a;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #5a6a8a;
+            font-weight: 600;
+            padding: 2px 0;
+            flex-shrink: 0;
+        }
+
+        .question-area {
+            flex: 1;
+            min-height: 0;
+            padding: 0.3rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: white;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+        }
+        .question-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .question-area::-webkit-scrollbar-thumb {
+            background: #c0c8d8;
+            border-radius: 10px;
+        }
+
+        .hint-row-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 0;
+            flex-shrink: 0;
+        }
+        .hint-text {
+            font-size: 0.9rem;
+            color: #5a6a8a;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .q-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a2332;
+            text-align: center;
+            padding: 10px 6px;
+            flex-shrink: 0;
+        }
+        .q-sub {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #6a7a8a;
+            text-align: center;
+            padding: 0 6px 6px;
+            flex-shrink: 0;
+        }
+
+        /* ===== 粒子圖 ===== */
+        .diagram-box {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f7f9fc;
+            border-radius: 14px;
+            border: 2px dashed #c0c8d8;
+            margin: 4px 0;
+            padding: 10px;
+        }
+        .diagram-inner {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            align-items: center;
+            max-width: 100%;
+        }
+        .atom {
+            display: inline-block;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 0, 0, 0.3);
+        }
+        .mol {
+            display: inline-flex;
+            align-items: center;
+        }
+        .bond {
+            display: inline-block;
+            width: 10px;
+            height: 3px;
+            background: #99a;
+            margin: 0 -2px;
+            z-index: 1;
+        }
+
+        /* ===== 選項 ===== */
+        .q-options {
+            display: grid;
+            gap: 8px;
+            padding: 4px 0;
+            flex-shrink: 0;
+        }
+        .q-options.cols2 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .q-options.cols4 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .q-options.cols5 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .q-options.cols5 .opt-btn {
+            min-height: 40px;
+            padding: 8px 10px;
+            font-size: 0.9rem;
+        }
+        .opt-btn {
+            border: 2px solid #d0d8e8;
+            background: white;
+            padding: 10px 12px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #2a3a6a;
+            min-height: 46px;
+            transition: 0.15s;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.3;
+            text-align: center;
+        }
+        .opt-btn:hover:not(:disabled) {
+            background: #eef4fc;
+        }
+        .opt-btn.selected {
+            border-color: #4a6a9a;
+            background: #4a6a9a;
+            color: white;
+        }
+        .opt-btn.correct {
+            border-color: #22c55e;
+            background: #22c55e;
+            color: white;
+        }
+        .opt-btn.wrong {
+            border-color: #ef4444;
+            background: #ef4444;
+            color: white;
+        }
+        .opt-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-area {
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            background: #e8f5e8;
+            border: 2px solid #6bcb77;
+            color: #0d553a;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-height: 40px;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        .adv-note {
+            color: #7a3e9d;
+            background: #f5effa;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        .feedback-area.error {
+            background: #fce8e8;
+            border-color: #e74c3c;
+            color: #7a2a2a;
+        }
+        .fb-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .fb-text {
+            font-weight: 700;
+        }
+        .fb-detail {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #5a5a7a;
+            padding-left: 28px;
+        }
+
+        .bottom-check-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0 0;
+            flex-shrink: 0;
+        }
+        .btn-check {
+            background: linear-gradient(145deg, #6a8aba, #4a6a9a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 22px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 38px;
+            white-space: nowrap;
+        }
+        .btn-check:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-next-question {
+            background: linear-gradient(145deg, #34a87e, #2a8a6a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 38px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 0.3rem 0.4rem;
+                border-radius: 16px;
+            }
+            .header-left select {
+                font-size: 0.68rem;
+                max-width: 120px;
+            }
+            .tab-btn {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+            .q-text {
+                font-size: 1.05rem;
+            }
+            .q-options.cols2,
+            .q-options.cols4,
+            .q-options.cols5 {
+                grid-template-columns: 1fr;
+            }
+            .atom {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="header">
+            <div class="header-left">
+                <select id="practiceSelector">
+                    <option value="home">🏠 返回目錄</option>
+                    <option value="ch1">⚗️ 儀器與標籤 (Ch.1)</option>
+                    <option value="ch2" selected>🔬 特性變化分類 (Ch.2)</option>
+                    <option value="detective">🕵️ 偵探訓練</option>
+                    <option value="ions">🧪 離子與化合物 (Ch.7)</option>
+                    <option value="structure">🏗️ 結構 (Ch.9)</option>
+                    <option value="rxn">⚙️ 金屬反應 (Ch.11)</option>
+                </select>
+            </div>
+            <div class="header-right">
+                <div class="lang-toggle">
+                    <button class="lang-btn" data-lang="zh" id="langZh">中文</button>
+                    <button class="lang-btn active" data-lang="en" id="langEn">English</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-row">
+            <button class="tab-btn active" data-tab="prop" id="tabProp">🔬 特性</button>
+            <button class="tab-btn" data-tab="change" id="tabChange">🔄 變化</button>
+            <button class="tab-btn" data-tab="diagram" id="tabDiagram">🧬 物質圖</button>
+            <button class="tab-btn" data-tab="gas" id="tabGas">💨 氣體測試</button>
+        </div>
+
+        <div class="score-row">
+            <span id="progressText"></span>
+            <span id="scoreText"></span>
+        </div>
+
+        <div class="question-area">
+            <div class="hint-row-wrap">
+                <span class="hint-text" id="hintText"></span>
+            </div>
+            <div class="q-text" id="qText"></div>
+            <div class="q-sub" id="qSub"></div>
+            <div class="diagram-box" id="diagramBox" style="display:none;">
+                <div class="diagram-inner" id="diagramInner"></div>
+            </div>
+            <div class="q-options" id="optGroup"></div>
+            <div class="adv-note" id="advNote" style="display:none;"></div>
+            <div class="feedback-area" id="feedback0">
+                <div class="fb-row">
+                    <span class="fb-icon">✏️</span>
+                    <span class="fb-text" id="fbText0"></span>
+                </div>
+                <div class="fb-detail" id="fbDetail0"></div>
+            </div>
+            <div class="bottom-check-row">
+                <button class="btn-check" id="checkBtn" disabled>✔ 檢查</button>
+                <button class="btn-next-question" id="nextBtn" style="display:none;">➡️ 下一題</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 語言
+        // ============================================================
+        let currentLang = 'zh';
+
+        const LANG = {
+            zh: {
+                tabProp: '🔬 特性',
+                tabChange: '🔄 變化',
+                tabDiagram: '🧬 物質圖',
+                tabGas: '💨 氣體測試',
+                hint: '選擇分類，再按「檢查」',
+                pick: '請先選擇一個答案',
+                correct: '✅ 正確！',
+                wrong: '❌ 錯誤，正確是：',
+                next: '➡️ 下一題',
+                check: '✔ 檢查',
+                fbStart: '選一個答案再檢查',
+                score: '🏆 已答對 {c} / {t}',
+                progress: '📋 第 {p} / {t} 題',
+                diagramHint: '圓圈＝原子；同色＝同種元素；連在一起＝一個分子。',
+            },
+            en: {
+                tabProp: '🔬 Properties',
+                tabChange: '🔄 Changes',
+                tabDiagram: '🧬 Particle Diagrams',
+                tabGas: '💨 Gas Tests',
+                hint: 'Pick a category, then press "Check".',
+                pick: 'Please select an answer first.',
+                correct: '✅ Correct!',
+                wrong: '❌ Wrong, the answer is: ',
+                next: '➡️ Next',
+                check: '✔ Check',
+                fbStart: 'Pick an answer then check.',
+                score: '🏆 Score {c} / {t}',
+                progress: '📋 Question {p} / {t}',
+                diagramHint: 'Circle = atom; same colour = same element; joined circles = one molecule.',
+            }
+        };
+
+        function t(key) {
+            return LANG[currentLang][key] || key;
+        }
+
+        // ============================================================
+        // 狀態
+        // ============================================================
+        const S = {
+            tab: 'prop',
+            q: null,
+            correctIndex: 0,
+            selected: null,
+            isAnswered: false,
+            decks: { prop: [], change: [], diagram: [], gas: [] },
+            roundPos: { prop: 0, change: 0, diagram: 0, gas: 0 },
+            roundTotal: { prop: 0, change: 0, diagram: 0, gas: 0 },
+            total: 0,
+            correct: 0,
+        };
+
+        function shuffle(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        // 牌組循環：洗牌後依序出題，全數看完才重洗
+        function buildDeck(tab) {
+            if (tab === 'prop') return shuffle(PROP_FACTS.slice());
+            if (tab === 'change') return shuffle(CHANGE_FACTS.slice());
+            if (tab === 'diagram') return shuffle(DIAGRAM_OPTIONS.slice());
+            if (tab === 'gas') {
+                const items = [];
+                GAS_KEYS.forEach(g => {
+                    items.push({ gas: g, fmt: 'obs2gas' });
+                    items.push({ gas: g, fmt: 'gas2obs' });
+                });
+                return shuffle(items);
+            }
+            return [];
+        }
+
+        function nextFromDeck() {
+            if (S.decks[S.tab].length === 0) {
+                S.decks[S.tab] = buildDeck(S.tab);
+                S.roundTotal[S.tab] = S.decks[S.tab].length;
+                S.roundPos[S.tab] = 0;
+            }
+            const item = S.decks[S.tab].pop();
+            S.roundPos[S.tab]++;
+            return item;
+        }
+
+        function setFeedback(icon, text, detail, isError) {
+            const fb = document.getElementById('feedback0');
+            fb.classList.toggle('error', !!isError);
+            fb.querySelector('.fb-icon').textContent = icon;
+            document.getElementById('fbText0').textContent = text;
+            document.getElementById('fbDetail0').textContent = detail || '';
+        }
+
+        function updateScore() {
+            document.getElementById('scoreText').textContent = t('score')
+                .replace('{c}', S.correct).replace('{t}', S.total);
+            document.getElementById('progressText').textContent = t('progress')
+                .replace('{p}', S.roundPos[S.tab]).replace('{t}', S.roundTotal[S.tab] || '—');
+        }
+
+        // ============================================================
+        // 題庫 1：物理 vs 化學 特性
+        // ============================================================
+        // type: 'phy' | 'chem'
+        const PROP_FACTS = [
+            { s: '氧氣是無色無味的氣體', e: 'Oxygen is a colourless and odourless gas.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '銅是紫紅色的固體', e: 'Copper is a reddish-brown solid.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '鐵的密度約為 7.9 g/cm³', e: 'The density of iron is about 7.9 g/cm³.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '石墨可以導電', e: 'Graphite conducts electricity.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '水銀在常溫是液體', e: 'Mercury is a liquid at room temperature.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '金的熔點約為 1064°C', e: 'The melting point of gold is about 1064°C.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '食鹽易溶於水', e: 'Salt is soluble in water.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '鑽石是最硬的天然物質', e: 'Diamond is the hardest natural substance.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '鋁可以被錘成薄片', e: 'Aluminium can be hammered into sheets.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '銅可以拉成細絲', e: 'Copper can be drawn into thin wires.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '水的沸點為 100°C', e: 'The boiling point of water is 100°C.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '糖是白色的固體', e: 'Sugar is a white solid.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '碘在常溫是固體，受熱可升華', e: 'Iodine is a solid at room temperature and can sublime on heating.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '氧氣微溶於水', e: 'Oxygen is slightly soluble in water.', p: '物理特性', ep: 'physical property', type: 'phy' },
+            { s: '石油易燃', e: 'Petrol is flammable.', p: '化學特性', ep: 'chemical property', type: 'chem' },
+            { s: '氫氣可燃', e: 'Hydrogen is flammable.', p: '化學特性', ep: 'chemical property', type: 'chem' },
+            { s: '紙張可燃', e: 'Paper is flammable.', p: '化學特性', ep: 'chemical property', type: 'chem' },
+            { s: '氮氣不可燃也不助燃', e: 'Nitrogen is neither flammable nor does it support burning.', p: '化學特性', ep: 'chemical property', type: 'chem' },
+            { s: '二氧化碳不可燃也不助燃', e: 'Carbon dioxide does not burn or support burning.', p: '化學特性', ep: 'chemical property', type: 'chem' },
+            { s: '鈉會與水劇烈反應', e: 'Sodium reacts vigorously with water.', p: '化學特性', ep: 'chemical property', type: 'chem' },
+            { s: '鐵在潮濕空氣中會生鏽', e: 'Iron rusts in damp air.', p: '化學特性', ep: 'chemical property', type: 'chem' },
+            { s: '碳酸鈣會與酸反應產生氣泡', e: 'Calcium carbonate reacts with acid to give bubbles.', p: '化學特性', ep: 'chemical property', type: 'chem' },
+            { s: '銅加熱時會與氧氣反應生成氧化銅', e: 'Copper reacts with oxygen to form copper oxide when heated.', p: '化學特性', ep: 'chemical property', type: 'chem' },
+            { s: '鎂在空氣中燃燒發出耀眼白光', e: 'Magnesium burns in air with a brilliant white flame.', p: '化學特性', ep: 'chemical property', type: 'chem' },
+            { s: '酸與鹼會中和', e: 'Acid neutralises an alkali.', p: '化學特性', ep: 'chemical property', type: 'chem' },
+            { s: '氫氣與氧氣混合點燃會爆炸', e: 'A mixture of hydrogen and oxygen explodes when ignited.', p: '化學特性', ep: 'chemical property', type: 'chem' },
+        ];
+
+        // ============================================================
+        // 題庫 2：物理 vs 化學 變化
+        // ============================================================
+        const CHANGE_FACTS = [
+            { s: '冰熔化為水', e: 'Ice melts into water.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '水沸騰變成水蒸氣', e: 'Water boils into steam.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '糖溶於水', e: 'Sugar dissolves in water.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '水蒸氣凝結成水珠', e: 'Steam condenses into water droplets.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '蠟燭的蠟熔化', e: 'Candle wax melts.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '紙張被撕碎', e: 'Paper is torn into pieces.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '玻璃杯被打破', e: 'A glass is broken.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '食鹽研磨成粉末', e: 'Salt is ground into powder.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '水結成冰', e: 'Water freezes into ice.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '碘受熱升華成紫色蒸氣', e: 'Iodine sublimes to purple vapour when heated.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '冰塊在杯內熔化', e: 'An ice cube melts in a cup.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '牛油在熱麵包上熔化', e: 'Butter melts on a warm slice of toast.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '雪糕在烈日下溶化', e: 'Ice cream melts in the hot sun.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '濕毛巾晾乾（水分蒸發）', e: 'A wet towel dries as the water evaporates.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '食鹽在湯中溶解', e: 'Salt dissolves in a bowl of soup.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '水蒸氣在窗上凝結成水珠', e: 'Steam condenses into droplets on a window.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '吹氣球時氣球脹大', e: 'A balloon expands when it is blown up.', p: '物理變化', ep: 'physical change', type: 'phy' },
+            { s: '鐵生鏽', e: 'Iron rusts.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '木炭燃燒', e: 'Charcoal burns.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '牛奶變酸', e: 'Milk turns sour.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '食物腐爛', e: 'Food decays.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '銅加熱變黑', e: 'Copper turns black when heated.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '氫氣燃燒生成水', e: 'Hydrogen burns to form water.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '碳酸鈣加熱分解', e: 'Calcium carbonate decomposes when heated.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '酸與鹼中和', e: 'Acid neutralises an alkali.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '蠟燭燃燒', e: 'A candle burns.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '綠色植物進行光合作用', e: 'Green plants carry out photosynthesis.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '煎蛋時，蛋白由透明變成白色', e: 'The egg white turns from transparent to white when an egg is fried.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '切開的蘋果慢慢變啡', e: 'A cut apple slowly turns brown.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '麵包烤至金黃色', e: 'Bread turns golden brown when toasted.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '銀器在空氣中慢慢變黑', e: 'Silver tarnishes slowly in air.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '糖加熱變成焦糖', e: 'Sugar turns into caramel when heated.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+            { s: '煙花在空中燃燒綻放', e: 'Fireworks burn and burst in the sky.', p: '化學變化', ep: 'chemical change', type: 'chem' },
+        ];
+
+        // ============================================================
+        // 題庫 4：氣體測試
+        // ============================================================
+        // GAS 定義（中文/英文 描述）
+        const GAS_FACTS = {
+            O2: {
+                label_zh: '氧氣 O₂', label_en: 'oxygen O₂',
+                test_zh: '用餘燼的木條', test_en: 'a glowing splint',
+                obs_zh: '木條會復燃', obs_en: 'the splint relights.',
+            },
+            CO2: {
+                label_zh: '二氧化碳 CO₂', label_en: 'carbon dioxide CO₂',
+                test_zh: '通入石灰水', test_en: 'bubble into limewater',
+                obs_zh: '石灰水變奶白（混濁）', obs_en: 'limewater turns milky (cloudy).',
+            },
+            H2: {
+                label_zh: '氫氣 H₂', label_en: 'hydrogen H₂',
+                test_zh: '用燃燒的木條', test_en: 'a burning splint',
+                obs_zh: '發出尖銳「噗」聲（爆鳴）', obs_en: 'a squeaky "pop" sound.',
+            },
+            N2: {
+                label_zh: '氮氣 N₂', label_en: 'nitrogen N₂',
+                test_zh: '—', test_en: '—',
+                obs_zh: '沒有簡單的測試（不助燃）', obs_en: 'no simple test (does not support burning).',
+            },
+        };
+        const GAS_KEYS = ['O2', 'CO2', 'H2', 'N2'];
+
+        // ============================================================
+        // 粒子圖生成（題庫 3）
+        // ============================================================
+        const ATOM_COLORS = ['#e74c3c', '#3498db', '#2ecc71', '#f1c40f', '#9b59b6', '#e67e22'];
+
+        function particleHTML(p) {
+            let html = '';
+            if (p.type === 'atom') {
+                html += '<span class="atom" style="background:' + p.atoms[0] + '"></span>';
+            } else {
+                html += '<span class="mol">';
+                p.atoms.forEach((c, i) => {
+                    if (i > 0) html += '<span class="bond"></span>';
+                    html += '<span class="atom" style="background:' + c + '"></span>';
+                });
+                html += '</span>';
+            }
+            return html;
+        }
+
+        function genDiagram(cat) {
+            // cat: 'element' | 'compound' | 'mixEE' | 'mixEC' | 'mixCC'
+            const C = ATOM_COLORS;
+            const pick = (n) => {
+                const pool = shuffle(C).slice(0, n);
+                return pool;
+            };
+            let particles = [];
+
+            if (cat === 'element') {
+                if (Math.random() < 0.5) {
+                    // 自由原子（同色）
+                    const col = C[Math.floor(Math.random() * C.length)];
+                    const n = 3 + Math.floor(Math.random() * 3);
+                    for (let i = 0; i < n; i++) particles.push({ type: 'atom', atoms: [col] });
+                } else {
+                    // 同種元素的分子（如 O₂）
+                    const col = C[Math.floor(Math.random() * C.length)];
+                    const n = 2 + Math.floor(Math.random() * 2);
+                    for (let i = 0; i < n; i++) particles.push({ type: 'mol', atoms: [col, col] });
+                }
+            } else if (cat === 'compound') {
+                const cols = pick(2 + Math.floor(Math.random() * 1)); // 2-3 種原子
+                const n = 3 + Math.floor(Math.random() * 2);
+                for (let i = 0; i < n; i++) particles.push({ type: 'mol', atoms: shuffle(cols) });
+            } else if (cat === 'mixEE') {
+                const cols = pick(2 + Math.floor(Math.random() * 1)); // 2-3 種
+                cols.forEach(col => {
+                    const n = 2 + Math.floor(Math.random() * 2);
+                    for (let i = 0; i < n; i++) particles.push({ type: 'atom', atoms: [col] });
+                });
+            } else if (cat === 'mixEC') {
+                const atomCol = C[Math.floor(Math.random() * C.length)];
+                const compoundCols = shuffle(C.filter(c => c !== atomCol)).slice(0, 2);
+                let n = 2 + Math.floor(Math.random() * 2);
+                for (let i = 0; i < n; i++) particles.push({ type: 'atom', atoms: [atomCol] });
+                n = 2 + Math.floor(Math.random() * 2);
+                for (let i = 0; i < n; i++) particles.push({ type: 'mol', atoms: shuffle(compoundCols) });
+            } else if (cat === 'mixCC') {
+                const cols1 = pick(2);
+                const cols2 = shuffle(C.filter(c => !cols1.includes(c))).slice(0, 2);
+                let n = 2 + Math.floor(Math.random() * 2);
+                for (let i = 0; i < n; i++) particles.push({ type: 'mol', atoms: shuffle(cols1) });
+                n = 2 + Math.floor(Math.random() * 2);
+                for (let i = 0; i < n; i++) particles.push({ type: 'mol', atoms: shuffle(cols2) });
+            }
+            return shuffle(particles);
+        }
+
+        const DIAGRAM_OPTIONS = [
+            { key: 'element', zh: '純元素', en: 'Pure element' },
+            { key: 'compound', zh: '純化合物', en: 'Pure compound' },
+            { key: 'mixEE', zh: '混合物：元素 + 元素', en: 'Mixture: element + element' },
+            { key: 'mixEC', zh: '混合物：元素 + 化合物', en: 'Mixture: element + compound' },
+            { key: 'mixCC', zh: '混合物：化合物 + 化合物', en: 'Mixture: compound + compound' },
+        ];
+
+        // ============================================================
+        // 出題
+        // ============================================================
+        function renderOptions(options, cols) {
+            const g = document.getElementById('optGroup');
+            g.className = 'q-options ' + (cols ? 'cols' + cols : '');
+            g.innerHTML = '';
+            options.forEach((label, i) => {
+                const b = document.createElement('button');
+                b.className = 'opt-btn';
+                b.textContent = label;
+                b.dataset.index = i;
+                b.onclick = function() {
+                    if (S.isAnswered) return;
+                    g.querySelectorAll('.opt-btn').forEach(x => x.classList.remove('selected'));
+                    b.classList.add('selected');
+                    S.selected = i;
+                    document.getElementById('checkBtn').disabled = false;
+                };
+                g.appendChild(b);
+            });
+        }
+
+        function draw() {
+            S.isAnswered = false;
+            S.selected = null;
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('diagramBox').style.display = 'none';
+            document.getElementById('qSub').textContent = '';
+            document.getElementById('advNote').style.display = 'none';
+            setFeedback('✏️', t('fbStart'), '', false);
+            updateScore();
+
+            if (S.tab === 'prop') drawProp();
+            else if (S.tab === 'change') drawChange();
+            else if (S.tab === 'diagram') drawDiagram();
+            else if (S.tab === 'gas') drawGas();
+        }
+
+        function drawProp() {
+            const f = nextFromDeck();
+            S.q = f;
+            S.correctIndex = f.type === 'phy' ? 0 : 1;
+            document.getElementById('qText').textContent = currentLang === 'zh' ? f.s : f.e;
+            renderOptions([
+                (currentLang === 'zh' ? '物理特性' : 'Physical property'),
+                (currentLang === 'zh' ? '化學特性' : 'Chemical property'),
+            ], 2);
+        }
+
+        function drawChange() {
+            const f = nextFromDeck();
+            S.q = f;
+            S.correctIndex = f.type === 'phy' ? 0 : 1;
+            document.getElementById('qText').textContent = currentLang === 'zh' ? f.s : f.e;
+            renderOptions([
+                (currentLang === 'zh' ? '物理變化' : 'Physical change'),
+                (currentLang === 'zh' ? '化學變化' : 'Chemical change'),
+            ], 2);
+        }
+
+        function drawDiagram() {
+            const cat = nextFromDeck();
+            S.correctIndex = DIAGRAM_OPTIONS.findIndex(c => c.key === cat.key);
+            S.q = { cat: cat, particles: genDiagram(cat.key) };
+
+            document.getElementById('qText').textContent = currentLang === 'zh' ?
+                '下圖代表哪一種物質？' : 'What does the diagram below represent?';
+            document.getElementById('qSub').textContent = t('diagramHint');
+            document.getElementById('diagramBox').style.display = 'flex';
+            document.getElementById('diagramInner').innerHTML = S.q.particles.map(particleHTML).join('');
+            renderOptions(DIAGRAM_OPTIONS.map(c => currentLang === 'zh' ? c.zh : c.en), 5);
+        }
+
+        function drawGas() {
+            const item = nextFromDeck();
+            const gas = item.gas;
+            const fmt = item.fmt;
+            const f = GAS_FACTS[gas];
+            const options = shuffle(GAS_KEYS);
+
+            document.getElementById('advNote').style.display = 'block';
+            document.getElementById('advNote').textContent = currentLang === 'zh' ?
+                '💡 進階·Out of Syllabus：SO₂ 其實也使石灰水變奶白（變奶白不一定代表 CO₂）；He、Ne、Ar 等貴氣體也沒有簡單測試（不助燃）' :
+                '💡 Advanced · Out of Syllabus: SO₂ also turns limewater milky (milky does not always mean CO₂); He, Ne and Ar (noble gases) also have no simple test (do not support burning)';
+
+            if (fmt === 'obs2gas') {
+                // 觀察 → 這是哪種氣體？
+                S.correctIndex = options.indexOf(gas);
+                S.q = { kind: 'obs2gas', gas: gas };
+                document.getElementById('qText').textContent = currentLang === 'zh' ?
+                    (f.test_zh === '—' ? '哪種氣體沒有簡單的測試？' : '把氣體' + f.test_zh + '，' + f.obs_zh + '。這是哪種氣體？') :
+                    (f.test_en === '—' ? 'Which gas has no simple test?' : 'Using ' + f.test_en + ', ' + f.obs_en + ' Which gas is it?');
+                renderOptions(options.map(k => currentLang === 'zh' ? GAS_FACTS[k].label_zh : GAS_FACTS[k].label_en), 4);
+            } else {
+                // 氣體 → 正確測試/觀察
+                S.correctIndex = options.indexOf(gas);
+                S.q = { kind: 'gas2obs', gas: gas };
+                document.getElementById('qText').textContent = currentLang === 'zh' ?
+                    '如何測試 ' + f.label_zh + '？' : 'How do you test ' + f.label_en + '?';
+                renderOptions(options.map(k => {
+                    const g = GAS_FACTS[k];
+                    return currentLang === 'zh' ?
+                        (g.test_zh === '—' ? g.obs_zh : '用' + g.test_zh + '，' + g.obs_zh) :
+                        (g.test_en === '—' ? g.obs_en : 'Using ' + g.test_en + ', ' + g.obs_en);
+                }), 4);
+            }
+        }
+
+        // ============================================================
+        // 檢查
+        // ============================================================
+        function check() {
+            if (S.isAnswered || !S.q) return;
+            if (S.selected === null) {
+                setFeedback('⚠️', t('pick'), '', true);
+                return;
+            }
+            S.isAnswered = true;
+            S.total++;
+            const isCorrect = (S.selected === S.correctIndex);
+            if (isCorrect) S.correct++;
+
+            const opts = document.querySelectorAll('#optGroup .opt-btn');
+            opts.forEach(b => {
+                b.disabled = true;
+                const i = parseInt(b.dataset.index, 10);
+                if (i === S.correctIndex) b.classList.add('correct');
+                else if (i === S.selected && !isCorrect) b.classList.add('wrong');
+            });
+
+            const correctLabel = opts[S.correctIndex] ? opts[S.correctIndex].textContent : '';
+            let explain = '';
+            if (S.tab === 'diagram') {
+                explain = currentLang === 'zh' ?
+                    '提示：混合物沒有固定比例，成分可再分離；化合物有一定組成。' :
+                    'Hint: a mixture has no fixed ratio and can be separated; a compound has a fixed composition.';
+            } else if (S.tab === 'gas') {
+                const f = GAS_FACTS[S.q.gas];
+                explain = currentLang === 'zh' ?
+                    (f.test_zh === '—' ? f.obs_zh : '測試方法：' + f.test_zh + ' → ' + f.obs_zh + '。') :
+                    (f.test_en === '—' ? f.obs_en : 'Test: ' + f.test_en + ' → ' + f.obs_en + '.');
+            }
+
+            if (isCorrect) {
+                setFeedback('✅', t('correct'), explain, false);
+            } else {
+                setFeedback('❌', t('wrong') + correctLabel, explain, true);
+            }
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            updateScore();
+        }
+
+        // ============================================================
+        // 分頁 / 語言
+        // ============================================================
+        function setTab(tab) {
+            if (S.tab === tab) return;
+            S.tab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+            draw();
+        }
+
+        function setLanguage(lang) {
+            if (lang === currentLang) return;
+            currentLang = lang;
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState({}, '', url);
+            localStorage.setItem('ch2_lang', lang);
+            updateButtonLabels();
+            draw();
+        }
+
+        function updateButtonLabels() {
+            document.getElementById('hintText').textContent = t('hint');
+            document.getElementById('tabProp').textContent = t('tabProp');
+            document.getElementById('tabChange').textContent = t('tabChange');
+            document.getElementById('tabDiagram').textContent = t('tabDiagram');
+            document.getElementById('tabGas').textContent = t('tabGas');
+            document.getElementById('checkBtn').textContent = t('check');
+            document.getElementById('nextBtn').textContent = t('next');
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+
+            const sel = document.getElementById('practiceSelector');
+            if (sel) {
+                const labels = {
+                    home: currentLang === 'zh' ? '🏠 返回目錄' : '🏠 Home',
+                    ch1: currentLang === 'zh' ? '⚗️ 儀器與標籤 (Ch.1)' : '⚗️ Apparatus & Labels (Ch.1)',
+                    ch2: currentLang === 'zh' ? '🔬 特性變化分類 (Ch.2)' : '🔬 Properties & Changes (Ch.2)',
+                    detective: currentLang === 'zh' ? '🕵️ 偵探訓練' : '🕵️ Detective Training',
+                    ions: currentLang === 'zh' ? '🧪 離子與化合物 (Ch.7)' : '🧪 Ionic Compounds (Ch.7)',
+                    structure: currentLang === 'zh' ? '🏗️ 結構 (Ch.9)' : '🏗️ Structure (Ch.9)',
+                    rxn: currentLang === 'zh' ? '⚙️ 金屬反應 (Ch.11)' : '⚙️ Metal Reactions (Ch.11)',
+                };
+                for (let i = 0; i < sel.options.length; i++) {
+                    const val = sel.options[i].value;
+                    if (labels[val]) sel.options[i].textContent = labels[val];
+                }
+            }
+            updateScore();
+        }
+
+        // ============================================================
+        // 初始化
+        // ============================================================
+        function init() {
+            const urlLang = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('ch2_lang') || 'zh';
+            currentLang = (urlLang === 'zh' || urlLang === 'en') ? urlLang : 'zh';
+
+            document.querySelectorAll('.lang-btn').forEach(b => {
+                b.addEventListener('click', () => setLanguage(b.dataset.lang));
+            });
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.addEventListener('click', () => setTab(b.dataset.tab));
+            });
+            document.getElementById('checkBtn').addEventListener('click', check);
+            document.getElementById('nextBtn').addEventListener('click', draw);
+
+            const sel = document.getElementById('practiceSelector');
+            if (sel) {
+                sel.addEventListener('change', function() {
+                    const target = this.value;
+                    if (target === 'home') window.location.href = 'index.html?lang=' + currentLang;
+                    else window.location.href = target + '.html?lang=' + currentLang;
+                });
+            }
+
+            updateButtonLabels();
+            draw();
+            console.log('🔬 Ch.2 練習已啟動');
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+</body>
+</html>

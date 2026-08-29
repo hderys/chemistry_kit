@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>🕵️ 偵探訓練：分析化學</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            background: linear-gradient(145deg, #16203a 0%, #2a3a6a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 6px;
+        }
+
+        .card {
+            max-width: 900px;
+            width: 100%;
+            height: 100vh;
+            max-height: 100vh;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+            padding: 0.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 3px solid #d4a017;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .header-left select {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            background: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 4px 0;
+            max-width: 220px;
+        }
+        .header-left select option {
+            font-weight: 600;
+        }
+        .title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #1a2332;
+            letter-spacing: -0.3px;
+        }
+        .lang-toggle {
+            display: flex;
+            gap: 2px;
+            background: white;
+            padding: 2px;
+            border-radius: 30px;
+            flex-shrink: 0;
+            border: 1px solid #e2e8f0;
+        }
+        .lang-btn {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: transparent;
+            color: #5a6a8a;
+        }
+        .lang-btn.active {
+            background: #2a3a6a;
+            color: white;
+        }
+
+        /* 已學到 選擇器 */
+        .learn-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            background: #f4f6fb;
+            border-radius: 14px;
+            padding: 6px 12px;
+            flex-shrink: 0;
+            margin-top: 4px;
+            position: relative;
+        }
+        .learn-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #2a3a6a;
+        }
+        .learn-select {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1a2332;
+            border: 2px solid #d4a017;
+            border-radius: 10px;
+            padding: 4px 8px;
+            background: white;
+            cursor: pointer;
+            outline: none;
+        }
+        .info-btn {
+            border: none;
+            background: #2a3a6a;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        .info-popup {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 10px;
+            z-index: 20;
+            background: #fff;
+            border: 2px solid #d4a017;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #2a3a6a;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+            display: none;
+            max-width: 300px;
+            line-height: 1.5;
+        }
+        .info-popup.show {
+            display: block;
+        }
+        .unlock-bar {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            padding: 4px 0 0;
+        }
+        .chip {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 12px;
+            border-radius: 20px;
+            border: 2px solid transparent;
+        }
+        .chip.on {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #22c55e;
+        }
+        .chip.off {
+            background: #f1f3f7;
+            color: #8a94a6;
+            border-color: #cbd2e0;
+        }
+
+        .tab-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            padding: 6px 0 4px;
+            flex-shrink: 0;
+        }
+        .tab-btn {
+            border: 2px solid #d4a017;
+            background: white;
+            padding: 6px 20px;
+            border-radius: 24px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #2a3a6a;
+            transition: 0.15s;
+        }
+        .tab-btn.active {
+            background: #2a3a6a;
+            color: #ffd966;
+            border-color: #2a3a6a;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #5a6a8a;
+            font-weight: 600;
+            padding: 2px 0;
+            flex-shrink: 0;
+        }
+
+        .content-area {
+            flex: 1;
+            min-height: 0;
+            padding: 0.3rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: white;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8ecf4;
+        }
+        .content-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .content-area::-webkit-scrollbar-thumb {
+            background: #c0c8d8;
+            border-radius: 10px;
+        }
+
+        /* 手冊 */
+        .handbook {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 4px;
+        }
+        .hb-group {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .hb-group.locked {
+            opacity: 0.55;
+            background: #f5f6f8;
+        }
+        .hb-head {
+            background: #2a3a6a;
+            color: #ffd966;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+        }
+        .hb-head.locked {
+            background: #8a94a6;
+            color: white;
+        }
+        .hb-body {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            color: #2a3a32;
+            line-height: 1.6;
+        }
+        .hb-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 14px;
+        }
+        .hb-tag {
+            font-weight: 700;
+            color: #1a2332;
+        }
+
+        /* 翻頁書 */
+        .book {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+            min-height: 0;
+            justify-content: center;
+            padding: 6px;
+        }
+        .book-page {
+            background: linear-gradient(135deg, #fffdf5 0%, #f7f3e3 100%);
+            border: 2px solid #d4a017;
+            border-radius: 6px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+            padding: 20px 24px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+        .book-page::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #d4a017 0 50%, #f7f3e3 50% 100%);
+            border-bottom-left-radius: 5px;
+        }
+        .page-head {
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: #2a3a6a;
+        }
+        .page-head .hl-yellow {
+            background: #ffeb3b;
+            padding: 0 4px;
+            border-radius: 4px;
+            font-weight: 800;
+        }
+        .page-head.locked {
+            color: #8a94a6;
+        }
+        .page-body {
+            font-size: 0.95rem;
+            color: #2a3a32;
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .page-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 8px;
+        }
+        .locked-text {
+            color: #8a94a6;
+            font-weight: 600;
+        }
+        .book-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+        }
+        .book-btn {
+            border: 2px solid #d4a017;
+            background: white;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: #2a3a6a;
+            font-weight: 700;
+        }
+        .book-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+        .book-count {
+            font-weight: 700;
+            color: #2a3a6a;
+            font-size: 0.95rem;
+        }
+
+        /* 訓練 */
+        .q-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a2332;
+            text-align: center;
+            padding: 10px 6px;
+            flex-shrink: 0;
+        }
+        .q-options {
+            display: grid;
+            gap: 8px;
+            padding: 4px 0;
+            flex-shrink: 0;
+        }
+        .q-options.cols2 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .q-options.cols4 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .opt-btn {
+            border: 2px solid #d0d8e8;
+            background: white;
+            padding: 10px 12px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #2a3a6a;
+            min-height: 46px;
+            transition: 0.15s;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.3;
+            text-align: center;
+        }
+        .opt-btn:hover:not(:disabled) {
+            background: #eef4fc;
+        }
+        .opt-btn.selected {
+            border-color: #2a3a6a;
+            background: #2a3a6a;
+            color: white;
+        }
+        .opt-btn.correct {
+            border-color: #22c55e;
+            background: #22c55e;
+            color: white;
+        }
+        .opt-btn.wrong {
+            border-color: #ef4444;
+            background: #ef4444;
+            color: white;
+        }
+        .opt-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-area {
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            background: #e8f5e8;
+            border: 2px solid #6bcb77;
+            color: #0d553a;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-height: 42px;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        .feedback-area.error {
+            background: #fce8e8;
+            border-color: #e74c3c;
+            color: #7a2a2a;
+        }
+        .fb-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .fb-text {
+            font-weight: 700;
+        }
+        .fb-detail {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #5a5a7a;
+            padding-left: 28px;
+        }
+
+        .bottom-check-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0 0;
+            flex-shrink: 0;
+        }
+        .btn-check {
+            background: linear-gradient(145deg, #d4a017, #b8860b);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 22px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 38px;
+            white-space: nowrap;
+        }
+        .btn-check:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-next-question {
+            background: linear-gradient(145deg, #4a6a9a, #2a3a6a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 38px;
+            white-space: nowrap;
+        }
+
+        /* 開場彈窗 */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 20, 40, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .modal-card {
+            background: #fff;
+            border: 3px solid #d4a017;
+            border-radius: 18px;
+            padding: 24px 28px;
+            max-width: 340px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #1a2332;
+        }
+        .modal-sub {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #5a6a8a;
+            margin: 8px 0 16px;
+        }
+        .modal-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .modal-ch {
+            border: 2px solid #d4a017;
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #2a3a6a;
+            cursor: pointer;
+        }
+        .modal-ch:hover {
+            background: #fff8e1;
+        }
+        .modal-note {
+            font-size: 0.8rem;
+            color: #8a94a6;
+            margin-top: 12px;
+            font-weight: 600;
+        }
+
+        /* 進階提示（Out of Syllabus） */
+        .page-row.extra {
+            color: #7a3e9d;
+            background: #f5effa;
+            border-radius: 8px;
+            padding: 4px 8px;
+            font-weight: 600;
+        }
+
+        /* ===== 案件偵破 ===== */
+        .case-head {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #1a2332;
+            text-align: center;
+            padding: 2px 0;
+            flex-shrink: 0;
+        }
+        .case-bottle {
+            background: #f7f3e3;
+            border: 2px solid #d4a017;
+            border-radius: 10px;
+            padding: 4px 10px;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #2a3a6a;
+            flex-shrink: 0;
+        }
+        .toolkit {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            padding: 4px 0;
+            flex-shrink: 0;
+        }
+        .tk-btn {
+            border: 2px solid #d4a017;
+            background: white;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .tk-btn:hover:not(:disabled) {
+            background: #fff8e1;
+        }
+        .tk-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        .clues-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            padding: 4px 0 2px;
+            flex-shrink: 0;
+        }
+        .clues {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 4px 8px;
+            background: #f4f6fb;
+            border-radius: 10px;
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+        }
+        .clue-line {
+            font-size: 0.9rem;
+            color: #2a3a32;
+            line-height: 1.5;
+        }
+        .clue-test {
+            font-weight: 700;
+            color: #1a2332;
+        }
+        .clue-res {
+            font-weight: 600;
+            color: #4a5a7a;
+        }
+        .identify-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 4px 0 2px;
+            flex-shrink: 0;
+        }
+        .suspect-select {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a2332;
+            border: 2px solid #d4a017;
+            border-radius: 10px;
+            padding: 6px 8px;
+            background: white;
+            cursor: pointer;
+            outline: none;
+            max-width: 260px;
+        }
+
+        .case-instruct {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #7a3e9d;
+            text-align: center;
+            padding: 2px 0;
+            flex-shrink: 0;
+        }
+        .proc-vis {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            padding: 8px 0 4px;
+        }
+        .proc-q {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a2332;
+            text-align: center;
+            margin: 8px 0;
+        }
+        .proc-opts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            justify-items: stretch;
+        }
+        .proc-opt {
+            border: 2px solid #d4a017;
+            background: white;
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #2a3a6a;
+            cursor: pointer;
+            text-align: center;
+            min-height: 42px;
+            line-height: 1.3;
+        }
+        .proc-opt:hover {
+            background: #fff8e1;
+        }
+        .proc-opt.selected {
+            background: #2a3a6a;
+            color: #ffd966;
+            border-color: #2a3a6a;
+        }
+        .modal-err {
+            color: #e74c3c;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 10px;
+            min-height: 1.2em;
+        }
+
+        /* 測試視覺 */
+        .tube {
+            display: inline-block;
+            width: 26px;
+            height: 46px;
+            border: 2px solid #99a;
+            border-radius: 0 0 10px 10px;
+            background: #eef2f7;
+            vertical-align: middle;
+            position: relative;
+        }
+        .tube.milky {
+            background: #fff;
+        }
+        .tube.clear {
+            background: rgba(200, 220, 240, 0.4);
+        }
+        .tube.ppt::after {
+            content: '';
+            position: absolute;
+            bottom: 6px;
+            left: 4px;
+            right: 4px;
+            height: 10px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+        }
+        .flame {
+            display: inline-block;
+            width: 18px;
+            height: 26px;
+            background: var(--fc);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            vertical-align: middle;
+            box-shadow: 0 0 12px var(--fc);
+        }
+        .splint {
+            display: inline-block;
+            width: 6px;
+            height: 34px;
+            background: #b0743a;
+            border-radius: 3px;
+            vertical-align: middle;
+            position: relative;
+        }
+        .splint.glow::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: -5px;
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle, #ffd54f, #ff8f00);
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff8f00;
+        }
+        .splint.out::after {
+            content: '💨';
+            position: absolute;
+            top: -12px;
+            left: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* 版面壓縮 */
+        @media (min-width: 769px) {
+            .card {
+                padding: 0.3rem 0.6rem;
+            }
+            .title {
+                font-size: 1rem;
+            }
+            .learn-row {
+                padding: 4px 10px;
+                margin-top: 2px;
+            }
+            .chip {
+                font-size: 0.7rem;
+                padding: 2px 10px;
+            }
+            .unlock-bar {
+                padding: 2px 0 0;
+            }
+            .tab-row {
+                padding: 4px 0 2px;
+            }
+            .tab-btn {
+                padding: 5px 16px;
+                font-size: 0.9rem;
+            }
+            .score-row {
+                font-size: 0.78rem;
+                padding: 1px 0;
+            }
+            .book-page {
+                min-height: 200px;
+                padding: 14px 18px;
+                gap: 8px;
+            }
+            .book-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            .book-nav {
+                gap: 10px;
+            }
+            .content-area {
+                padding: 0.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 0.3rem 0.4rem;
+                border-radius: 16px;
+            }
+            .title {
+                font-size: 0.9rem;
+            }
+            .learn-label {
+                font-size: 0.8rem;
+            }
+            .tab-btn {
+                padding: 5px 10px;
+                font-size: 0.82rem;
+            }
+            .q-text {
+                font-size: 1.05rem;
+            }
+            .q-options.cols2,
+            .q-options.cols4 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="header">
+            <div class="header-left">
+                <span class="title">🕵️ 偵探訓練：分析化學</span>
+                <select id="practiceSelector">
+                    <option value="home">🏠 返回目錄</option>
+                    <option value="ch1">⚗️ 儀器與標籤 (Ch.1)</option>
+                    <option value="ch2">🔬 特性變化分類 (Ch.2)</option>
+                    <option value="detective" selected>🕵️ 偵探訓練</option>
+                    <option value="ions">🧪 離子與化合物 (Ch.7)</option>
+                    <option value="structure">🏗️ 結構 (Ch.9)</option>
+                    <option value="rxn">⚙️ 金屬反應 (Ch.11)</option>
+                </select>
+            </div>
+            <div class="header-right">
+                <div class="lang-toggle">
+                    <button class="lang-btn" data-lang="zh" id="langZh">中文</button>
+                    <button class="lang-btn active" data-lang="en" id="langEn">English</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="learn-row">
+            <span class="learn-label" id="learnLabel">我已學到：</span>
+            <select class="learn-select" id="chapterSelect">
+                <option value="2">Ch.2</option>
+                <option value="3">Ch.3</option>
+                <option value="4" selected>Ch.4</option>
+            </select>
+            <button class="info-btn" id="infoBtn" type="button">ⓘ</button>
+            <div class="info-popup" id="infoPopup"></div>
+        </div>
+
+        <div class="tab-row">
+            <button class="tab-btn active" data-tab="handbook" id="tabHandbook">📖 偵探手冊</button>
+            <button class="tab-btn" data-tab="train" id="tabTrain">🔍 線索訓練</button>
+            <button class="tab-btn" data-tab="case" id="tabCase">🕵️ 案件偵破</button>
+        </div>
+
+        <div class="score-row">
+            <span id="progressText"></span>
+            <span id="scoreText"></span>
+        </div>
+
+        <div class="content-area" id="contentArea">
+            <!-- 手冊 / 訓練 由 JS 填寫 -->
+        </div>
+
+    </div>
+
+    <!-- 開場彈窗：你已學到哪個章節？ -->
+    <div class="modal-overlay" id="chapterModal">
+        <div class="modal-card">
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-sub" id="modalSub"></div>
+            <div class="modal-options">
+                <button class="modal-ch" data-ch="2">Ch.2</button>
+                <button class="modal-ch" data-ch="3">Ch.3</button>
+                <button class="modal-ch" data-ch="4">Ch.4</button>
+            </div>
+            <div class="modal-note" id="modalNote"></div>
+        </div>
+    </div>
+
+    <!-- 程序追問彈窗 -->
+    <div class="modal-overlay" id="procModal" style="display:none;">
+        <div class="modal-card">
+            <div class="proc-vis" id="procVis" style="display:none;"></div>
+            <div class="proc-q" id="procQ"></div>
+            <div class="proc-opts" id="procOpts"></div>
+            <div class="modal-err" id="procErr"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 語言
+        // ============================================================
+        let currentLang = 'zh';
+        let currentChapter = 4;
+
+        const LANG = {
+            zh: {
+                title: '🕵️ 偵探訓練：分析化學',
+                learnLabel: '我已學到：',
+                learnNote: '解鎖該章節以前的全部測試',
+                modalTitle: '🕵️ 歡迎來到偵探訓練！',
+                modalSub: '你已學到哪個章節？',
+                modalNote: '選擇後將解鎖該章節以前的全部測試',
+                tabHandbook: '📖 偵探手冊',
+                tabTrain: '🔍 線索訓練',
+                tabCase: '🕵️ 案件偵破',
+                progress: '🔍 線索 {p} / {t}',
+                score: '🕵️ 破案 {c} / {t}',
+                pick: '請先選擇一個線索',
+                correct: '🕵️ 破案！',
+                wrong: '🔍 線索不足，正確是：',
+                next: '➡️ 下一個線索',
+                check: '✔ 檢查',
+                fbStart: '選一個答案再檢查',
+                chapterUnlock: '解鎖：',
+                locked: '尚未開放',
+            },
+            en: {
+                title: '🕵️ Detective Training: Analytical Chemistry',
+                learnLabel: 'I have learned up to:',
+                learnNote: 'unlocks all tests before that chapter',
+                modalTitle: '🕵️ Welcome, Detective!',
+                modalSub: 'Which chapter have you learned?',
+                modalNote: 'This unlocks all tests before that chapter',
+                tabHandbook: '📖 Detective Handbook',
+                tabTrain: '🔍 Clue Training',
+                tabCase: '🕵️ Case Files',
+                progress: '🔍 Clue {p} / {t}',
+                score: '🕵️ Cases solved {c} / {t}',
+                pick: 'Please select an answer first.',
+                correct: '🕵️ Case solved!',
+                wrong: '🔍 Not enough clues, the answer is: ',
+                next: '➡️ Next clue',
+                check: '✔ Check',
+                fbStart: 'Pick an answer then check.',
+                chapterUnlock: 'Unlocked:',
+                locked: 'not yet available',
+            }
+        };
+
+        function t(key) {
+            return LANG[currentLang][key] || key;
+        }
+
+        // ============================================================
+        // 測試事實庫
+        // ============================================================
+        const FLAME = [
+            { sub_zh: '氯化鉀', sub_en: 'potassium chloride', ion: 'K⁺', c_zh: '淡紫色', c_en: 'lilac' },
+            { sub_zh: '氯化鈉', sub_en: 'sodium chloride', ion: 'Na⁺', c_zh: '金黃色', c_en: 'golden yellow' },
+            { sub_zh: '氯化銅(II)', sub_en: 'copper(II) chloride', ion: 'Cu²⁺', c_zh: '藍綠色', c_en: 'bluish green' },
+            { sub_zh: '氯化鈣', sub_en: 'calcium chloride', ion: 'Ca²⁺', c_zh: '磚紅色', c_en: 'brick red' },
+        ];
+
+        const GASES = [
+            { zh: '氧氣 O₂', en: 'oxygen O₂', test_zh: '餘燼的木條', test_en: 'a glowing splint', obs_zh: '木條復燃', obs_en: 'the splint relights.' },
+            { zh: '二氧化碳 CO₂', en: 'carbon dioxide CO₂', test_zh: '通入石灰水', test_en: 'bubble into limewater', obs_zh: '石灰水變奶白', obs_en: 'limewater turns milky.' },
+            { zh: '氫氣 H₂', en: 'hydrogen H₂', test_zh: '燃燒的木條', test_en: 'a burning splint', obs_zh: '發出「噗」聲（若混有氧氣，火焰會變大）', obs_en: 'a "pop" sound (the flame gets bigger if oxygen is present).' },
+            { zh: '氮氣 N₂', en: 'nitrogen N₂', test_zh: null, test_en: null, obs_zh: '沒有簡單測試（不助燃）', obs_en: 'no simple test (does not support burning).' },
+        ];
+
+        // 偵探手冊翻頁資料
+        const HANDBOOK_GROUPS = [
+            {
+                ch: 2, zh: '氣體測試', en: 'Gas tests',
+                rows: () => GASES.map(g => ({
+                    tag_zh: g.zh, tag_en: g.en,
+                    val_zh: g.test_zh ? g.test_zh + ' → ' + g.obs_zh : g.obs_zh,
+                    val_en: g.test_en ? g.test_en + ' → ' + g.obs_en : g.obs_en,
+                })).concat([
+                    {
+                        tag_zh: '進階·Out of Syllabus', tag_en: 'Advanced · Out of Syllabus',
+                        val_zh: 'SO₂ 其實也使石灰水變奶白',
+                        val_en: 'SO₂ also turns limewater milky',
+                        extra: true,
+                    },
+                    {
+                        tag_zh: '進階·Out of Syllabus', tag_en: 'Advanced · Out of Syllabus',
+                        val_zh: 'He、Ne、Ar 等貴氣體也沒有簡單測試（不助燃）',
+                        val_en: 'He, Ne and Ar (noble gases) also have no simple test (do not support burning)',
+                        extra: true,
+                    },
+                ]),
+            },
+            {
+                ch: 3, zh: '焰色測試', en: 'Flame tests',
+                rows: () => [{
+                    tag_zh: '程序', tag_en: 'Procedure',
+                    val_zh: '白金絲蘸濃鹽酸，放入非發光（藍色）火焰',
+                    val_en: 'dip the wire in concentrated hydrochloric acid, use a non-luminous (blue) flame',
+                }].concat(FLAME.map(f => ({
+                    tag_zh: f.c_zh, tag_en: f.c_en,
+                    val_zh: '→ ' + f.ion, val_en: '→ ' + f.ion,
+                }))),
+            },
+            {
+                ch: 3, zh: '氯化物測試', en: 'Chloride test',
+                rows: () => [{
+                    tag_zh: '試劑', tag_en: 'Reagent',
+                    val_zh: '稀硝酸 ＋ 硝酸銀溶液 → 白色沉澱',
+                    val_en: 'dilute nitric acid + silver nitrate solution → white precipitate',
+                }],
+            },
+            {
+                ch: 3, zh: '水測試', en: 'Water test',
+                rows: () => [
+                    { tag_zh: '無水硫酸銅', tag_en: 'anhydrous copper(II) sulfate', val_zh: '白色 → 藍色', val_en: 'white → blue' },
+                    { tag_zh: '乾的氯化鈷(II)試紙', tag_en: 'dry cobalt(II) chloride paper', val_zh: '藍色 → 粉紅色', val_en: 'blue → pink' },
+                ],
+            },
+            {
+                ch: 4, zh: '碳酸鹽測試', hl_zh: '（含碳酸氫鹽）', en: 'Carbonate test', hl_en: ' (incl. hydrogencarbonate)',
+                rows: () => [{
+                    tag_zh: '試劑', tag_en: 'Reagent',
+                    val_zh: '稀酸 → 放出無色氣體 → 通入石灰水變奶白（證實為 CO₂）',
+                    val_en: 'dilute acid → colourless gas → limewater turns milky (confirms CO₂)',
+                }, {
+                    tag_zh: '進階·Out of Syllabus', tag_en: 'Advanced · Out of Syllabus',
+                    val_zh: '亞硫酸鹽同樣放出無色氣體，也使石灰水變奶白——但實際是 SO₂',
+                    val_en: 'Sulphites also give a colourless gas that turns limewater milky — but it is actually SO₂',
+                    extra: true,
+                }],
+            },
+            {
+                ch: 7, zh: '離子顏色', en: 'Colours of ions', locked: true, rows: () => [],
+            },
+            {
+                ch: 14, zh: '氫氧化物顏色', en: 'Colours of metal hydroxides', locked: true, rows: () => [],
+            },
+        ];
+
+        // ============================================================
+        // 題庫生成
+        // ============================================================
+        function buildBank(chapter) {
+            const qs = [];
+            const ionOptionsZh = FLAME.map(f => f.ion);
+            const ionOptionsEn = FLAME.map(f => f.ion);
+            const colorOptionsZh = FLAME.map(f => f.c_zh);
+            const colorOptionsEn = FLAME.map(f => f.c_en);
+            const gasNameZh = GASES.map(g => g.zh);
+            const gasNameEn = GASES.map(g => g.en);
+
+            // ---------- 氣體測試 (Ch.2) ----------
+            if (chapter >= 2) {
+                GASES.forEach((g, gi) => {
+                    // 結果 → 氣體
+                    if (g.test_zh) {
+                        qs.push({
+                            q_zh: '把' + g.test_zh + '放入氣體，' + g.obs_zh + '。這是哪種氣體？',
+                            q_en: 'Using ' + g.test_en + ', ' + g.obs_en + ' Which gas is it?',
+                            o_zh: gasNameZh, o_en: gasNameEn, correct: gi, test: 'gas',
+                            ex_zh: g.zh + '：' + g.test_zh + ' → ' + g.obs_zh + '。',
+                            ex_en: g.en + ': ' + g.test_en + ' → ' + g.obs_en,
+                        });
+                    } else {
+                        qs.push({
+                            q_zh: '哪種氣體沒有簡單的測試（不助燃）？',
+                            q_en: 'Which gas has no simple test (does not support burning)?',
+                            o_zh: gasNameZh, o_en: gasNameEn, correct: gi, test: 'gas',
+                            ex_zh: '氮氣 N₂：沒有簡單測試，也不助燃。',
+                            ex_en: 'Nitrogen N₂: no simple test; it does not support burning.',
+                        });
+                    }
+                    // 氣體 → 測試
+                    if (g.test_zh) {
+                        qs.push({
+                            q_zh: '如何測試' + g.zh + '？',
+                            q_en: 'How do you test ' + g.en + '?',
+                            o_zh: GASES.map(x => x.test_zh ? '用' + x.test_zh + '，' + x.obs_zh : x.obs_zh),
+                            o_en: GASES.map(x => x.test_en ? 'Using ' + x.test_en + ', ' + x.obs_en : x.obs_en),
+                            correct: gi, test: 'gas',
+                            ex_zh: g.zh + '：' + g.test_zh + ' → ' + g.obs_zh + '。',
+                            ex_en: g.en + ': ' + g.test_en + ' → ' + g.obs_en,
+                        });
+                    }
+                });
+            }
+
+            // ---------- 焰色測試 (Ch.3) ----------
+            if (chapter >= 3) {
+                FLAME.forEach((f, fi) => {
+                    qs.push({
+                        q_zh: '焰色測試呈' + f.c_zh + '。這是哪種離子？',
+                        q_en: 'A flame test gives a ' + f.c_en + ' colour. Which ion is it?',
+                        o_zh: ionOptionsZh, o_en: ionOptionsEn, correct: fi, test: 'flame',
+                        ex_zh: f.ion + '：焰色為' + f.c_zh + '。',
+                        ex_en: f.ion + ': the flame is ' + f.c_en + '.',
+                    });
+                    qs.push({
+                        q_zh: '把' + f.sub_zh + '做焰色測試，火焰呈甚麼顏色？',
+                        q_en: 'A flame test is carried out on ' + f.sub_en + '. What colour is the flame?',
+                        o_zh: colorOptionsZh, o_en: colorOptionsEn, correct: fi, test: 'flame',
+                        ex_zh: f.sub_zh + '含 ' + f.ion + '，焰色為' + f.c_zh + '。',
+                        ex_en: f.sub_en + ' contains ' + f.ion + '; the flame is ' + f.c_en + '.',
+                    });
+                });
+                qs.push({
+                    q_zh: '焰色測試前，白金絲應先蘸甚麼？',
+                    q_en: 'Before a flame test, what should the platinum wire be dipped into?',
+                    o_zh: ['濃鹽酸', '蒸餾水', '稀硫酸', '石灰水'],
+                    o_en: ['concentrated hydrochloric acid', 'distilled water', 'dilute sulphuric acid', 'limewater'],
+                    correct: 0, test: 'flame',
+                    ex_zh: '蘸濃鹽酸可清潔白金絲，並令金屬變成易揮發的氯化物。',
+                    ex_en: 'Dipping in concentrated hydrochloric acid cleans the wire and converts the metal into a volatile chloride.',
+                });
+                qs.push({
+                    q_zh: '焰色測試應在甚麼火焰中進行？',
+                    q_en: 'In what kind of flame should the flame test be carried out?',
+                    o_zh: ['非發光（藍色）火焰', '黃色發光火焰', '藍色發光火焰', '白色發光火焰'],
+                    o_en: ['a non-luminous flame (blue flame)', 'a yellow luminous flame', 'a blue luminous flame', 'a white luminous flame'],
+                    correct: 0, test: 'flame',
+                    ex_zh: '非發光（藍色）火焰溫度高且不發出黃色光，以免干擾結果。',
+                    ex_en: 'A non-luminous (blue) flame is hot and gives no yellow light, so it does not interfere.',
+                });
+
+                // ---------- 氯化物 (Ch.3) ----------
+                qs.push({
+                    q_zh: '要測試氯化物，應加入甚麼試劑？',
+                    q_en: 'Which reagent is used to test for chloride?',
+                    o_zh: ['稀硝酸與硝酸銀溶液', '稀硫酸與氯化鋇溶液', '石灰水', '餘燼的木條'],
+                    o_en: ['dilute nitric acid and silver nitrate solution', 'dilute sulphuric acid and barium chloride solution', 'limewater', 'a glowing splint'],
+                    correct: 0, test: 'chloride',
+                    ex_zh: '氯化物加硝酸銀生成白色沉澱；加稀硝酸可排除碳酸鹽干擾。',
+                    ex_en: 'Chloride + silver nitrate solution gives a white precipitate; dilute nitric acid removes carbonate interference.',
+                });
+                qs.push({
+                    q_zh: '氯化物與硝酸銀溶液反應生成甚麼？',
+                    q_en: 'What is formed when chloride reacts with silver nitrate solution?',
+                    o_zh: ['白色沉澱', '藍色沉澱', '無色氣體', '黃色溶液'],
+                    o_en: ['a white precipitate', 'a blue precipitate', 'a colourless gas', 'a yellow solution'],
+                    correct: 0, test: 'chloride',
+                    ex_zh: '生成氯化銀白色沉澱。',
+                    ex_en: 'A white precipitate of silver chloride forms.',
+                });
+
+                // ---------- 水 (Ch.3) ----------
+                qs.push({
+                    q_zh: '白色無水硫酸銅遇水會變成甚麼顏色？',
+                    q_en: 'What happens when white anhydrous copper(II) sulfate meets water?',
+                    o_zh: ['變成藍色', '變成粉紅色', '變成黃色', '沒有變化'],
+                    o_en: ['it turns blue', 'it turns pink', 'it turns yellow', 'no change'],
+                    correct: 0, test: 'water',
+                    ex_zh: '無水硫酸銅是白色，遇水變成藍色的含水硫酸銅。',
+                    ex_en: 'Anhydrous copper(II) sulfate is white; it turns blue in the presence of water.',
+                });
+                qs.push({
+                    q_zh: '乾的氯化鈷(II)試紙遇水會變成甚麼顏色？',
+                    q_en: 'What happens when a dry cobalt(II) chloride paper meets water?',
+                    o_zh: ['變成粉紅色', '變成藍色', '變成綠色', '變成白色'],
+                    o_en: ['it turns pink', 'it turns blue', 'it turns green', 'it turns white'],
+                    correct: 0, test: 'water',
+                    ex_zh: '乾的氯化鈷(II)試紙是藍色，遇水變成粉紅色。',
+                    ex_en: 'Dry cobalt(II) chloride paper is blue and turns pink in the presence of water.',
+                });
+                qs.push({
+                    q_zh: '要測試氣體中有沒有水蒸氣，可把氣體通過？',
+                    q_en: 'To test whether a gas contains water vapour, pass the gas through...',
+                    o_zh: ['白色無水硫酸銅', '石灰水', '藍色石蕊試紙', '餘燼的木條'],
+                    o_en: ['white anhydrous copper(II) sulfate', 'limewater', 'blue litmus paper', 'a glowing splint'],
+                    correct: 0, test: 'water',
+                    ex_zh: '水蒸氣會使白色無水硫酸銅變藍。',
+                    ex_en: 'Water vapour turns white anhydrous copper(II) sulfate blue.',
+                });
+            }
+
+            // ---------- 碳酸鹽 (Ch.4) ----------
+            if (chapter >= 4) {
+                qs.push({
+                    q_zh: '要測試碳酸鹽（或碳酸氫鹽），應加入？',
+                    q_en: 'Which reagent is used to test for a carbonate (or hydrogencarbonate)?',
+                    o_zh: ['稀酸（如稀鹽酸）', '硝酸銀溶液', '石灰水', '蒸餾水'],
+                    o_en: ['a dilute acid (e.g. dilute hydrochloric acid)', 'silver nitrate solution', 'limewater', 'distilled water'],
+                    correct: 0, test: 'carbonate',
+                    ex_zh: '碳酸鹽（碳酸氫鹽）加稀酸會放出二氧化碳。',
+                    ex_en: 'Carbonates (hydrogencarbonates) give carbon dioxide with a dilute acid.',
+                });
+                qs.push({
+                    q_zh: '碳酸鹽加稀酸會放出甚麼氣體？',
+                    q_en: 'What gas is given off when a carbonate reacts with a dilute acid?',
+                    o_zh: ['二氧化碳 CO₂', '氧氣 O₂', '氫氣 H₂', '氮氣 N₂'],
+                    o_en: ['carbon dioxide CO₂', 'oxygen O₂', 'hydrogen H₂', 'nitrogen N₂'],
+                    correct: 0, test: 'carbonate',
+                    ex_zh: '放出二氧化碳，可使石灰水變奶白。',
+                    ex_en: 'Carbon dioxide is given off; it turns limewater milky.',
+                });
+                qs.push({
+                    q_zh: '如何確認放出的氣體是二氧化碳？',
+                    q_en: 'How do you confirm that the gas given off is carbon dioxide?',
+                    o_zh: ['通入石灰水，看是否變奶白', '用餘燼的木條', '用燃燒的木條聽「噗」聲', '用藍色石蕊試紙'],
+                    o_en: ['bubble it into limewater and see if it turns milky', 'use a glowing splint', 'listen for a "pop" with a burning splint', 'use blue litmus paper'],
+                    correct: 0, test: 'carbonate',
+                    ex_zh: '二氧化碳使石灰水變奶白。',
+                    ex_en: 'Carbon dioxide turns limewater milky.',
+                });
+            }
+
+            return qs;
+        }
+
+        // ============================================================
+        // 狀態
+        // ============================================================
+        const S = {
+            tab: 'handbook',
+            hbPage: 0,
+            bank: [],
+            deck: [],
+            q: null,
+            selected: null,
+            isAnswered: false,
+            roundPos: 0,
+            roundTotal: 0,
+            total: 0,
+            correct: 0,
+            casesSolved: 0,
+            case: null,
+            proc: null,
+        };
+
+        function shuffle(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function setFeedback(icon, text, detail, isError) {
+            const area = document.getElementById('contentArea');
+            let fb = document.getElementById('feedback0');
+            if (!fb) {
+                const wrap = document.createElement('div');
+                wrap.id = 'feedback0';
+                wrap.className = 'feedback-area';
+                wrap.innerHTML = '<div class="fb-row"><span class="fb-icon"></span><span class="fb-text"></span></div><div class="fb-detail"></div>';
+                area.appendChild(wrap);
+                fb = wrap;
+            }
+            fb.classList.toggle('error', !!isError);
+            fb.querySelector('.fb-icon').textContent = icon;
+            fb.querySelector('.fb-text').textContent = text;
+            fb.querySelector('.fb-detail').textContent = detail || '';
+        }
+
+        function updateScore() {
+            document.getElementById('scoreText').textContent = t('score')
+                .replace('{c}', S.correct).replace('{t}', S.total);
+            document.getElementById('progressText').textContent = t('progress')
+                .replace('{p}', S.roundPos).replace('{t}', S.roundTotal || '—');
+        }
+
+        // ============================================================
+        // 章節解鎖
+        // ============================================================
+        const CHAPTER_TESTS = [
+            { ch: 2, key: 'gas', zh: '氣體測試', en: 'Gas tests' },
+            { ch: 3, key: 'flame', zh: '焰色測試', en: 'Flame tests' },
+            { ch: 3, key: 'chloride', zh: '氯化物測試', en: 'Chloride test' },
+            { ch: 3, key: 'water', zh: '水測試', en: 'Water test' },
+            { ch: 4, key: 'carbonate', zh: '碳酸鹽測試', en: 'Carbonate test' },
+            { ch: 7, key: 'ion_color', zh: '離子顏色', en: 'Colours of ions' },
+            { ch: 14, key: 'hydroxide', zh: '氫氧化物顏色', en: 'Colours of metal hydroxides' },
+        ];
+        const UNLOCK_ORDER = [
+            { ch: 2, zh: 'Ch.2', en: 'Ch.2' },
+            { ch: 3, zh: 'Ch.3', en: 'Ch.3' },
+            { ch: 4, zh: 'Ch.4', en: 'Ch.4' },
+            { ch: 7, zh: 'Ch.7', en: 'Ch.7' },
+            { ch: 14, zh: 'Ch.14', en: 'Ch.14' },
+        ];
+
+        function renderUnlockBar() {
+            const bar = document.querySelector('.learn-row');
+            bar.querySelectorAll('.chip').forEach(c => c.remove());
+            UNLOCK_ORDER.forEach(u => {
+                const span = document.createElement('span');
+                const on = currentChapter >= u.ch;
+                span.className = 'chip ' + (on ? 'on' : 'off');
+                span.textContent = u.zh + (on ? ' ✓' : ' 🔒');
+                bar.appendChild(span);
+            });
+        }
+
+        // ============================================================
+        // 偵探手冊
+        // ============================================================
+        function renderHandbook() {
+            const area = document.getElementById('contentArea');
+            document.querySelector('.score-row').style.display = 'none';
+            area.innerHTML = '';
+            if (S.hbPage >= HANDBOOK_GROUPS.length) S.hbPage = HANDBOOK_GROUPS.length - 1;
+            const book = document.createElement('div');
+            book.className = 'book';
+            const page = document.createElement('div');
+            page.className = 'book-page';
+            page.id = 'bookPage';
+            const nav = document.createElement('div');
+            nav.className = 'book-nav';
+            nav.innerHTML = '<button class="book-btn" id="bookPrev">◀</button><span class="book-count" id="bookCount"></span><button class="book-btn" id="bookNext">▶</button>';
+            book.appendChild(page);
+            book.appendChild(nav);
+            area.appendChild(book);
+            renderBookPage();
+            document.getElementById('bookPrev').addEventListener('click', function() {
+                if (S.hbPage > 0) { S.hbPage--; renderBookPage(); }
+            });
+            document.getElementById('bookNext').addEventListener('click', function() {
+                if (S.hbPage < HANDBOOK_GROUPS.length - 1) { S.hbPage++; renderBookPage(); }
+            });
+        }
+
+        function renderBookPage() {
+            const page = document.getElementById('bookPage');
+            const g = HANDBOOK_GROUPS[S.hbPage];
+            const on = currentChapter >= g.ch;
+            let html = '';
+            html += '<div class="page-head' + (on ? '' : ' locked') + '">' + (on ? '🟢 ' : '🔒 ') +
+                (currentLang === 'zh' ? g.zh : g.en) +
+                (g.hl_zh ? '<span class="hl-yellow">' + (currentLang === 'zh' ? g.hl_zh : g.hl_en) + '</span>' : '') +
+                '（Ch.' + g.ch + '）</div>';
+            if (on) {
+                html += '<div class="page-body">';
+                g.rows().forEach(r => {
+                    html += '<div class="page-row' + (r.extra ? ' extra' : '') + '"><span class="hb-tag">' + (currentLang === 'zh' ? r.tag_zh : r.tag_en) +
+                        '：</span><span>' + (currentLang === 'zh' ? r.val_zh : r.val_en) + '</span></div>';
+                });
+                html += '</div>';
+            } else {
+                html += '<div class="page-body"><div class="locked-text">' +
+                    (currentLang === 'zh' ? '🔒 尚未開放（學到該章節後自動解鎖）' : '🔒 Locked (unlocks when you reach this chapter)') +
+                    '</div></div>';
+            }
+            page.innerHTML = html;
+            document.getElementById('bookCount').textContent = (S.hbPage + 1) + ' / ' + HANDBOOK_GROUPS.length;
+            document.getElementById('bookPrev').disabled = (S.hbPage === 0);
+            document.getElementById('bookNext').disabled = (S.hbPage === HANDBOOK_GROUPS.length - 1);
+        }
+
+        // ============================================================
+        // 線索訓練
+        // ============================================================
+        function renderTrain() {
+            const area = document.getElementById('contentArea');
+            document.querySelector('.score-row').style.display = 'flex';
+            area.innerHTML = '';
+
+            const qText = document.createElement('div');
+            qText.className = 'q-text';
+            qText.id = 'qText';
+            area.appendChild(qText);
+
+            const optGroup = document.createElement('div');
+            optGroup.className = 'q-options cols4';
+            optGroup.id = 'optGroup';
+            area.appendChild(optGroup);
+
+            setFeedback('✏️', t('fbStart'), '', false);
+
+            const bottom = document.createElement('div');
+            bottom.className = 'bottom-check-row';
+            bottom.innerHTML =
+                '<button class="btn-check" id="checkBtn" disabled>' + t('check') + '</button>' +
+                '<button class="btn-next-question" id="nextBtn" style="display:none;">' + t('next') + '</button>';
+            area.appendChild(bottom);
+
+            document.getElementById('checkBtn').addEventListener('click', check);
+            document.getElementById('nextBtn').addEventListener('click', draw);
+        }
+
+        function draw() {
+            if (S.tab !== 'train') return;
+            if (S.deck.length === 0) {
+                S.deck = shuffle(S.bank);
+                S.roundPos = 0;
+                S.roundTotal = S.bank.length;
+            }
+            const q = S.deck.pop();
+            S.roundPos++;
+            S.q = q;
+            S.isAnswered = false;
+            S.selected = null;
+
+            document.getElementById('qText').textContent = currentLang === 'zh' ? q.q_zh : q.q_en;
+            const g = document.getElementById('optGroup');
+            g.className = 'q-options ' + (q.o_zh.length <= 2 ? 'cols2' : 'cols4');
+            g.innerHTML = '';
+            (currentLang === 'zh' ? q.o_zh : q.o_en).forEach((label, i) => {
+                const b = document.createElement('button');
+                b.className = 'opt-btn';
+                b.textContent = label;
+                b.dataset.index = i;
+                b.onclick = function() {
+                    if (S.isAnswered) return;
+                    g.querySelectorAll('.opt-btn').forEach(x => x.classList.remove('selected'));
+                    b.classList.add('selected');
+                    S.selected = i;
+                    document.getElementById('checkBtn').disabled = false;
+                };
+                g.appendChild(b);
+            });
+
+            setFeedback('✏️', t('fbStart'), '', false);
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'none';
+            updateScore();
+        }
+
+        function check() {
+            if (S.isAnswered || !S.q) return;
+            if (S.selected === null) {
+                setFeedback('⚠️', t('pick'), '', true);
+                return;
+            }
+            S.isAnswered = true;
+            S.total++;
+            const isCorrect = (S.selected === S.q.correct);
+            if (isCorrect) S.correct++;
+
+            const opts = document.querySelectorAll('#optGroup .opt-btn');
+            opts.forEach(b => {
+                b.disabled = true;
+                const i = parseInt(b.dataset.index, 10);
+                if (i === S.q.correct) b.classList.add('correct');
+                else if (i === S.selected && !isCorrect) b.classList.add('wrong');
+            });
+
+            const correctLabel = opts[S.q.correct] ? opts[S.q.correct].textContent : '';
+            const explain = currentLang === 'zh' ? S.q.ex_zh : S.q.ex_en;
+            if (isCorrect) {
+                setFeedback('🕵️', t('correct'), explain, false);
+            } else {
+                setFeedback('🔍', t('wrong') + correctLabel, explain, true);
+            }
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            updateScore();
+        }
+
+        // ============================================================
+        // 案件偵破（動手做）
+        // ============================================================
+        const CASE_TESTS = {
+            splint: { zh: '餘燼的木條', en: 'glowing splint' },
+            limewater: { zh: '通入石灰水', en: 'limewater' },
+            ignite: { zh: '燃燒的木條', en: 'burning splint' },
+            balloon: { zh: '放入氣球', en: 'put in a balloon' },
+            flame: { zh: '焰色測試', en: 'flame test' },
+            chloride: { zh: '氯化物測試', en: 'chloride test' },
+            carbonate: { zh: '碳酸鹽測試', en: 'carbonate test' },
+        };
+        const CAT_TOOLKIT = {
+            gas: ['splint', 'limewater', 'ignite', 'balloon'],
+            solution: ['flame', 'chloride'],
+            solid: ['carbonate', 'flame'],
+        };
+        const CAT_LABEL = {
+            gas: { zh: '氣體', en: 'a gas' },
+            solution: { zh: '溶液', en: 'a solution' },
+            solid: { zh: '固體', en: 'a solid' },
+        };
+        const MYSTERIES = {
+            gas: [
+                { id: 'O2', zh: '氧氣 O₂', en: 'oxygen O₂', results: {
+                    splint: { v: 'relight', zh: '木條復燃', en: 'the splint relights' },
+                    limewater: { v: 'clear', zh: '石灰水不變', en: 'limewater unchanged' },
+                    ignite: { v: 'none', zh: '沒有「噗」聲', en: 'no "pop" sound' },
+                    balloon: { v: 'balloon_down', zh: '氣球下沉（不上升）', en: 'the balloon sinks (does not rise)' } } },
+                { id: 'CO2', zh: '二氧化碳 CO₂', en: 'carbon dioxide CO₂', results: {
+                    splint: { v: 'out', zh: '木條熄滅', en: 'the splint goes out' },
+                    limewater: { v: 'milky', zh: '石灰水變奶白', en: 'limewater turns milky' },
+                    ignite: { v: 'none', zh: '沒有「噗」聲', en: 'no "pop" sound' },
+                    balloon: { v: 'balloon_down', zh: '氣球下沉（不上升）', en: 'the balloon sinks (does not rise)' } } },
+                { id: 'H2', zh: '氫氣 H₂', en: 'hydrogen H₂', results: {
+                    splint: { v: 'out', zh: '木條熄滅', en: 'the splint goes out' },
+                    limewater: { v: 'clear', zh: '石灰水不變', en: 'limewater unchanged' },
+                    ignite: { v: 'pop', zh: '發出「噗」聲', en: 'a "pop" sound' },
+                    balloon: { v: 'balloon_up', zh: '氣球上升（比空氣輕）', en: 'the balloon rises (lighter than air)' } } },
+                { id: 'N2', zh: '氮氣 N₂', en: 'nitrogen N₂', results: {
+                    splint: { v: 'out', zh: '木條熄滅', en: 'the splint goes out' },
+                    limewater: { v: 'clear', zh: '石灰水不變', en: 'limewater unchanged' },
+                    ignite: { v: 'none', zh: '沒有「噗」聲', en: 'no "pop" sound' },
+                    balloon: { v: 'balloon_down', zh: '氣球下沉（不上升）', en: 'the balloon sinks (does not rise)' } } },
+                { id: 'He', zh: '氦氣 He', en: 'helium He', results: {
+                    splint: { v: 'out', zh: '木條熄滅', en: 'the splint goes out' },
+                    limewater: { v: 'clear', zh: '石灰水不變', en: 'limewater unchanged' },
+                    ignite: { v: 'none', zh: '沒有「噗」聲', en: 'no "pop" sound' },
+                    balloon: { v: 'balloon_up', zh: '氣球上升（比空氣輕）', en: 'the balloon rises (lighter than air)' } } },
+            ],
+            solution: [
+                { id: 'NaCl', zh: '氯化鈉溶液', en: 'sodium chloride solution', results: {
+                    flame: { v: 'flame_golden', zh: '金黃色', en: 'golden yellow' },
+                    chloride: { v: 'ppt_white', zh: '白色沉澱', en: 'white precipitate' } } },
+                { id: 'KCl', zh: '氯化鉀溶液', en: 'potassium chloride solution', results: {
+                    flame: { v: 'flame_lilac', zh: '淡紫色', en: 'lilac' },
+                    chloride: { v: 'ppt_white', zh: '白色沉澱', en: 'white precipitate' } } },
+                { id: 'CaCl2', zh: '氯化鈣溶液', en: 'calcium chloride solution', results: {
+                    flame: { v: 'flame_brick', zh: '磚紅色', en: 'brick red' },
+                    chloride: { v: 'ppt_white', zh: '白色沉澱', en: 'white precipitate' } } },
+                { id: 'CuCl2', zh: '氯化銅(II)溶液', en: 'copper(II) chloride solution', results: {
+                    flame: { v: 'flame_green', zh: '藍綠色', en: 'bluish green' },
+                    chloride: { v: 'ppt_white', zh: '白色沉澱', en: 'white precipitate' } } },
+            ],
+            solid: [
+                { id: 'CaCO3', zh: '碳酸鈣', en: 'calcium carbonate', results: {
+                    carbonate: { v: 'bubbles', zh: '放出無色氣體，石灰水變奶白', en: 'colourless gas given off; limewater turns milky' },
+                    flame: { v: 'flame_brick', zh: '磚紅色', en: 'brick red' } } },
+                { id: 'K2CO3', zh: '碳酸鉀', en: 'potassium carbonate', results: {
+                    carbonate: { v: 'bubbles', zh: '放出無色氣體，石灰水變奶白', en: 'colourless gas given off; limewater turns milky' },
+                    flame: { v: 'flame_lilac', zh: '淡紫色', en: 'lilac' } } },
+                { id: 'Na2CO3', zh: '碳酸鈉', en: 'sodium carbonate', results: {
+                    carbonate: { v: 'bubbles', zh: '放出無色氣體，石灰水變奶白', en: 'colourless gas given off; limewater turns milky' },
+                    flame: { v: 'flame_golden', zh: '金黃色', en: 'golden yellow' } } },
+                { id: 'CuCO3', zh: '碳酸銅(II)', en: 'copper(II) carbonate', results: {
+                    carbonate: { v: 'bubbles', zh: '放出無色氣體，石灰水變奶白', en: 'colourless gas given off; limewater turns milky' },
+                    flame: { v: 'flame_green', zh: '藍綠色', en: 'bluish green' } } },
+            ],
+        };
+        const FLAME_VIS = { flame_lilac: '#b388ff', flame_golden: '#ffd54f', flame_green: '#69f0ae', flame_brick: '#ff7043' };
+
+        const ACID_OPTIONS_ZH = ['濃鹽酸', '稀鹽酸', '濃硫酸', '稀硫酸', '濃硝酸', '稀硝酸'];
+        const ACID_OPTIONS_EN = ['concentrated hydrochloric acid', 'dilute hydrochloric acid', 'concentrated sulphuric acid', 'dilute sulphuric acid', 'concentrated nitric acid', 'dilute nitric acid'];
+        const CASE_PROCEDURES = {
+            flame: [
+                { q_zh: '焰色測試前，白金絲應蘸哪種酸？', q_en: 'Before the flame test, which acid should the wire be dipped into?', correct: 0, opts_zh: ACID_OPTIONS_ZH, opts_en: ACID_OPTIONS_EN },
+                { q_zh: '應使用哪種火焰？', q_en: 'Which flame should be used?', correct: 0, opts_zh: ['非發光（藍色）火焰', '發光（黃色）火焰'], opts_en: ['a non-luminous (blue) flame', 'a luminous (yellow) flame'] },
+            ],
+            chloride: [
+                { q_zh: '氯化物測試中，應先加哪種酸？', q_en: 'In the chloride test, which acid should be added first?', correct: 5, opts_zh: ACID_OPTIONS_ZH, opts_en: ACID_OPTIONS_EN },
+            ],
+            carbonate: [
+                { pre_zh: '加入稀酸後：', pre_en: 'After adding dilute acid:', pre_vis: 'bubble',
+                  q_zh: '如何測試放出的氣體？', q_en: 'How do you test the gas given off?', correct: 0,
+                  opts_zh: ['通入石灰水，看是否變奶白', '用餘燼的木條', '用燃燒的木條聽「噗」聲', '用藍色石蕊試紙'],
+                  opts_en: ['bubble it into limewater and see if it turns milky', 'use a glowing splint', 'listen for a "pop" with a burning splint', 'use blue litmus paper'] },
+            ],
+        };
+
+        function visHTML(v) {
+            if (v === 'relight') return '<span class="splint glow"></span>';
+            if (v === 'out') return '<span class="splint out"></span>';
+            if (v === 'milky') return '<span class="tube milky"></span>';
+            if (v === 'clear') return '<span class="tube clear"></span>';
+            if (v === 'pop') return '💥';
+            if (v === 'none') return '—';
+            if (v && v.indexOf('flame_') === 0) return '<span class="flame" style="--fc:' + FLAME_VIS[v] + '"></span>';
+            if (v === 'ppt_white') return '<span class="tube ppt"></span>';
+            if (v === 'bubbles') return '<span class="tube milky"></span> 🫧';
+            if (v === 'bubble') return '🫧';
+            if (v === 'balloon_up') return '🎈⬆️';
+            if (v === 'balloon_down') return '🎈⬇️';
+            return '';
+        }
+
+        function runTest(t, btn) {
+            if (!S.case) return;
+            if (S.case.used[t]) return;
+            const proc = CASE_PROCEDURES[t];
+            if (!proc) {
+                revealTest(t, btn);
+                return;
+            }
+            S.proc = { test: t, btn: btn, step: 0, steps: proc };
+            renderProcStep();
+        }
+
+        function renderProcStep() {
+            const p = S.proc;
+            const st = p.steps[p.step];
+            document.getElementById('procModal').style.display = 'flex';
+            document.getElementById('procErr').textContent = '';
+            const vis = document.getElementById('procVis');
+            if (st.pre_vis) {
+                vis.style.display = 'block';
+                vis.innerHTML = (currentLang === 'zh' ? st.pre_zh : st.pre_en) + ' ' + visHTML(st.pre_vis);
+            } else {
+                vis.style.display = 'none';
+            }
+            document.getElementById('procQ').textContent = currentLang === 'zh' ? st.q_zh : st.q_en;
+
+            // 洗牌選項，記錄正解位置
+            const n = st.opts_zh.length;
+            const idx = [];
+            for (let i = 0; i < n; i++) idx.push(i);
+            for (let i = n - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [idx[i], idx[j]] = [idx[j], idx[i]];
+            }
+            p.curCorrect = idx.indexOf(st.correct);
+
+            const opts = document.getElementById('procOpts');
+            opts.innerHTML = '';
+            idx.forEach(orig => {
+                const b = document.createElement('button');
+                b.className = 'proc-opt';
+                b.textContent = currentLang === 'zh' ? st.opts_zh[orig] : st.opts_en[orig];
+                b.onclick = function() {
+                    opts.querySelectorAll('.proc-opt').forEach(x => x.classList.remove('selected'));
+                    b.classList.add('selected');
+                    procAnswer();
+                };
+                opts.appendChild(b);
+            });
+        }
+
+        function procAnswer() {
+            const p = S.proc;
+            if (!p) return;
+            const opts = document.getElementById('procOpts').children;
+            let chosen = -1;
+            for (let i = 0; i < opts.length; i++) {
+                if (opts[i].classList.contains('selected')) { chosen = i; break; }
+            }
+            if (chosen === -1) {
+                document.getElementById('procErr').textContent = currentLang === 'zh' ? '⚠️ 請選擇一個答案' : '⚠️ Please select an answer';
+                return;
+            }
+            if (chosen === p.curCorrect) {
+                document.getElementById('procErr').textContent = '';
+                if (p.step < p.steps.length - 1) {
+                    p.step++;
+                    renderProcStep();
+                } else {
+                    document.getElementById('procModal').style.display = 'none';
+                    revealTest(p.test, p.btn);
+                    S.proc = null;
+                }
+            } else {
+                document.getElementById('procErr').textContent = currentLang === 'zh' ? '⚠️ 程序錯誤，再試一次' : '⚠️ Wrong procedure, try again';
+            }
+        }
+
+        function revealTest(t, btn) {
+            if (S.case.used[t]) return;
+            S.case.used[t] = true;
+            if (btn) btn.disabled = true;
+            const res = S.case.mystery.results[t];
+            if (!res) return;
+            S.case.clues.push({ test: t, res: res });
+            const clues = document.getElementById('clues');
+            if (S.case.clues.length === 1) clues.innerHTML = '';
+            const line = document.createElement('div');
+            line.className = 'clue-line';
+            const testLabel = CASE_TESTS[t][currentLang === 'zh' ? 'zh' : 'en'];
+            const resText = res[currentLang === 'zh' ? 'zh' : 'en'];
+            line.innerHTML = '<span class="clue-test">' + testLabel + '</span> → ' + visHTML(res.v) +
+                ' <span class="clue-res">' + resText + '</span>';
+            clues.appendChild(line);
+            setFeedback('🔍', currentLang === 'zh' ? '線索已記錄' : 'Clue recorded', '', false);
+        }
+
+        function renderCase() {
+            const area = document.getElementById('contentArea');
+            document.querySelector('.score-row').style.display = 'none';
+            area.innerHTML = '';
+
+            const head = document.createElement('div');
+            head.className = 'case-head';
+            head.id = 'caseHead';
+            area.appendChild(head);
+
+            const instruct = document.createElement('div');
+            instruct.className = 'case-instruct';
+            instruct.id = 'caseInstruct';
+            area.appendChild(instruct);
+
+            const tk = document.createElement('div');
+            tk.className = 'toolkit';
+            tk.id = 'toolkit';
+            area.appendChild(tk);
+
+            const cluesTitle = document.createElement('div');
+            cluesTitle.className = 'clues-title';
+            cluesTitle.id = 'cluesTitle';
+            area.appendChild(cluesTitle);
+
+            const clues = document.createElement('div');
+            clues.className = 'clues';
+            clues.id = 'clues';
+            area.appendChild(clues);
+
+            const idRow = document.createElement('div');
+            idRow.className = 'identify-row';
+            idRow.innerHTML = '<select class="suspect-select" id="suspectSelect"></select>' +
+                '<button class="btn-check" id="arrestBtn"></button>';
+            area.appendChild(idRow);
+
+            setFeedback('✏️', currentLang === 'zh' ? '對未知物做測試，收集線索後指認物質！' : 'Run tests to gather clues, then identify the substance!', '', false);
+
+            const bottom = document.createElement('div');
+            bottom.className = 'bottom-check-row';
+            bottom.innerHTML = '<button class="btn-next-question" id="nextCaseBtn" style="display:none;"></button>';
+            area.appendChild(bottom);
+
+            document.getElementById('arrestBtn').textContent = currentLang === 'zh' ? '🕵️ 指認物質' : '🕵️ Identify';
+            document.getElementById('nextCaseBtn').textContent = currentLang === 'zh' ? '➡️ 下一案件' : '➡️ Next case';
+            document.getElementById('arrestBtn').addEventListener('click', arrest);
+            document.getElementById('nextCaseBtn').addEventListener('click', newCase);
+
+            newCase();
+        }
+
+        function newCase() {
+            const unlockedCats = [];
+            if (currentChapter >= 2) unlockedCats.push('gas');
+            if (currentChapter >= 3) unlockedCats.push('solution');
+            if (currentChapter >= 4) unlockedCats.push('solid');
+            const cat = unlockedCats[Math.floor(Math.random() * unlockedCats.length)];
+            const list = MYSTERIES[cat];
+            const mystery = list[Math.floor(Math.random() * list.length)];
+
+            S.case = { cat: cat, mystery: mystery, clues: [], used: {} };
+            S.proc = null;
+
+            document.getElementById('caseHead').textContent = '🕵️ ' +
+                (currentLang === 'zh' ? '案件 #' + (S.casesSolved + 1) + '（已破案 ' + S.casesSolved + '）｜未知' + CAT_LABEL[cat].zh + ' 🧪?'
+                    : 'Case #' + (S.casesSolved + 1) + ' (solved ' + S.casesSolved + ') | unknown ' + CAT_LABEL[cat].en + ' 🧪?');
+            document.getElementById('caseInstruct').textContent = currentLang === 'zh' ? '進行甚麼測試好呢？' : 'What test should you perform?';
+            document.getElementById('procModal').style.display = 'none';
+
+            const tk = document.getElementById('toolkit');
+            tk.innerHTML = '';
+            CAT_TOOLKIT[cat].forEach(t => {
+                const b = document.createElement('button');
+                b.className = 'tk-btn';
+                b.dataset.test = t;
+                b.textContent = CASE_TESTS[t][currentLang === 'zh' ? 'zh' : 'en'];
+                b.onclick = function() { runTest(t, b); };
+                tk.appendChild(b);
+            });
+
+            const sel = document.getElementById('suspectSelect');
+            sel.innerHTML = '';
+            list.forEach(m => {
+                const o = document.createElement('option');
+                o.value = m.id;
+                o.textContent = currentLang === 'zh' ? m.zh : m.en;
+                sel.appendChild(o);
+            });
+
+            document.getElementById('cluesTitle').textContent = currentLang === 'zh' ? '🔎 已收集線索：' : '🔎 Clues collected:';
+            document.getElementById('clues').innerHTML = currentLang === 'zh' ? '（尚未做任何測試）' : '(no tests yet)';
+            document.getElementById('arrestBtn').disabled = false;
+            document.getElementById('nextCaseBtn').style.display = 'none';
+            setFeedback('🔍', currentLang === 'zh' ? '選擇一個測試開始調查' : 'Pick a test to start investigating', '', false);
+            updateScore();
+        }
+
+        function arrest() {
+            if (!S.case || !S.case.mystery) return;
+            const sel = document.getElementById('suspectSelect');
+            const chosen = sel.value;
+            if (chosen === S.case.mystery.id) {
+                S.casesSolved++;
+                document.getElementById('arrestBtn').disabled = true;
+                let detail = currentLang === 'zh' ? '你透過測試線索找出了它！' : 'You identified it through the tests!';
+                if (S.case.mystery.id === 'N2') {
+                    detail += ' ' + (currentLang === 'zh'
+                        ? '💡 進階：Ar、Ne 等貴氣體也沒有簡單測試，結果相同'
+                        : '💡 Advanced: Ar and Ne (noble gases) have no simple test and give the same result');
+                }
+                setFeedback('🕵️',
+                    currentLang === 'zh' ? '破案！正確是 ' + S.case.mystery.zh : 'Case solved! It is ' + S.case.mystery.en,
+                    detail,
+                    false);
+                document.getElementById('nextCaseBtn').style.display = 'inline-block';
+                updateScore();
+            } else {
+                const chosenM = MYSTERIES[S.case.cat].find(m => m.id === chosen);
+                const label = chosenM ? (currentLang === 'zh' ? chosenM.zh : chosenM.en) : chosen;
+                setFeedback('🔍',
+                    currentLang === 'zh' ? '不是' + label + '！再測試多一點線索吧' : 'Not ' + label + '! Gather more clues',
+                    '', true);
+            }
+        }
+
+        // ============================================================
+        // 分頁 / 章節 / 語言
+        // ============================================================
+        function switchTab(tab) {
+            if (S.tab === tab) return;
+            S.tab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+            render();
+        }
+
+        function setChapter(ch) {
+            currentChapter = parseInt(ch, 10);
+            localStorage.setItem('detective_chapter', String(currentChapter));
+            S.bank = buildBank(currentChapter);
+            S.deck = [];
+            renderUnlockBar();
+            document.getElementById('infoPopup').textContent = t('learnNote');
+            if (S.tab === 'train') {
+                renderTrain();
+                draw();
+            } else if (S.tab === 'case') {
+                renderCase();
+            } else {
+                renderHandbook();
+            }
+        }
+
+        function showChapterModal() {
+            document.getElementById('modalTitle').textContent = t('modalTitle');
+            document.getElementById('modalSub').textContent = t('modalSub');
+            document.getElementById('modalNote').textContent = t('modalNote');
+            document.getElementById('chapterModal').style.display = 'flex';
+            document.querySelectorAll('.modal-ch').forEach(b => {
+                b.onclick = function() {
+                    setChapter(parseInt(this.dataset.ch, 10));
+                    document.getElementById('chapterSelect').value = this.dataset.ch;
+                    document.getElementById('chapterModal').style.display = 'none';
+                };
+            });
+        }
+
+        function render() {
+            document.getElementById('procModal').style.display = 'none';
+            if (S.tab === 'handbook') renderHandbook();
+            else if (S.tab === 'train') {
+                renderTrain();
+                draw();
+            } else if (S.tab === 'case') {
+                renderCase();
+            }
+        }
+
+        function setLanguage(lang) {
+            if (lang === currentLang) return;
+            currentLang = lang;
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState({}, '', url);
+            localStorage.setItem('detective_lang', lang);
+            updateButtonLabels();
+            render();
+        }
+
+        function updateButtonLabels() {
+            document.getElementById('learnLabel').textContent = t('learnLabel');
+            document.getElementById('infoPopup').textContent = t('learnNote');
+            document.getElementById('tabHandbook').textContent = t('tabHandbook');
+            document.getElementById('tabTrain').textContent = t('tabTrain');
+            document.getElementById('tabCase').textContent = t('tabCase');
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+
+            const sel = document.getElementById('practiceSelector');
+            if (sel) {
+                const labels = {
+                    home: currentLang === 'zh' ? '🏠 返回目錄' : '🏠 Home',
+                    ch1: currentLang === 'zh' ? '⚗️ 儀器與標籤 (Ch.1)' : '⚗️ Apparatus & Labels (Ch.1)',
+                    ch2: currentLang === 'zh' ? '🔬 特性變化分類 (Ch.2)' : '🔬 Properties & Changes (Ch.2)',
+                    detective: currentLang === 'zh' ? '🕵️ 偵探訓練' : '🕵️ Detective Training',
+                    ions: currentLang === 'zh' ? '🧪 離子與化合物 (Ch.7)' : '🧪 Ionic Compounds (Ch.7)',
+                    structure: currentLang === 'zh' ? '🏗️ 結構 (Ch.9)' : '🏗️ Structure (Ch.9)',
+                    rxn: currentLang === 'zh' ? '⚙️ 金屬反應 (Ch.11)' : '⚙️ Metal Reactions (Ch.11)',
+                };
+                for (let i = 0; i < sel.options.length; i++) {
+                    const val = sel.options[i].value;
+                    if (labels[val]) sel.options[i].textContent = labels[val];
+                }
+            }
+            updateScore();
+        }
+
+        // ============================================================
+        // 初始化
+        // ============================================================
+        function init() {
+            const urlLang = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('detective_lang') || 'zh';
+            currentLang = (urlLang === 'zh' || urlLang === 'en') ? urlLang : 'zh';
+
+            const savedCh = localStorage.getItem('detective_chapter');
+            if (savedCh && ['2', '3', '4'].includes(savedCh)) currentChapter = parseInt(savedCh, 10);
+
+            document.querySelectorAll('.lang-btn').forEach(b => {
+                b.addEventListener('click', () => setLanguage(b.dataset.lang));
+            });
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.addEventListener('click', () => switchTab(b.dataset.tab));
+            });
+            document.getElementById('chapterSelect').addEventListener('change', function() {
+                setChapter(this.value);
+            });
+
+            document.getElementById('infoBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.getElementById('infoPopup').classList.toggle('show');
+            });
+            document.addEventListener('click', function() {
+                document.getElementById('infoPopup').classList.remove('show');
+            });
+
+            const sel = document.getElementById('practiceSelector');
+            if (sel) {
+                sel.addEventListener('change', function() {
+                    const target = this.value;
+                    if (target === 'home') window.location.href = 'index.html?lang=' + currentLang;
+                    else window.location.href = target + '.html?lang=' + currentLang;
+                });
+            }
+
+            updateButtonLabels();
+            document.getElementById('chapterSelect').value = String(currentChapter);
+            setChapter(currentChapter);
+            render();
+            showChapterModal();
+            console.log('🕵️ 偵探訓練已啟動');
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+</body>
+</html>

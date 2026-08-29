@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>⚗️ 化學儀器與危險警告標籤 · Ch.1</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            background: linear-gradient(145deg, #f0fbf6 0%, #cfe8dd 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 6px;
+        }
+
+        .card {
+            max-width: 900px;
+            width: 100%;
+            height: 100vh;
+            max-height: 100vh;
+            background: rgba(255, 255, 255, 0.94);
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(30, 90, 70, 0.15);
+            padding: 0.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(120, 190, 160, 0.25);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .header-left select {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #2a5a4a;
+            background: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 4px 0;
+            max-width: 200px;
+        }
+        .header-left select option {
+            font-weight: 600;
+        }
+        .lang-toggle {
+            display: flex;
+            gap: 2px;
+            background: white;
+            padding: 2px;
+            border-radius: 30px;
+            flex-shrink: 0;
+        }
+        .lang-btn {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: transparent;
+            color: #5a7a6a;
+        }
+        .lang-btn.active {
+            background: #2a8a6a;
+            color: white;
+        }
+
+        .tab-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            padding: 4px 0;
+            flex-shrink: 0;
+        }
+        .tab-btn {
+            border: 2px solid #cfe0d8;
+            background: white;
+            padding: 6px 18px;
+            border-radius: 24px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #2a5a4a;
+            transition: 0.15s;
+        }
+        .tab-btn.active {
+            background: #2a8a6a;
+            color: white;
+            border-color: #2a8a6a;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #5a7a6a;
+            font-weight: 600;
+            padding: 2px 0;
+            flex-shrink: 0;
+        }
+
+        .question-area {
+            flex: 1;
+            min-height: 0;
+            padding: 0.3rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: white;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+        }
+        .question-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .question-area::-webkit-scrollbar-thumb {
+            background: #c0d8cc;
+            border-radius: 10px;
+        }
+
+        .hint-row-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 0;
+            flex-shrink: 0;
+        }
+        .hint-text {
+            font-size: 0.95rem;
+            color: #5a7a6a;
+            font-weight: 500;
+        }
+
+        .image-box {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f7fbfa;
+            border-radius: 14px;
+            border: 2px dashed #cfe0d8;
+            margin: 4px 0;
+            overflow: hidden;
+        }
+        .image-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .image-fallback {
+            color: #8a9a92;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 20px;
+            word-break: break-all;
+        }
+
+        .q-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            padding: 4px 0;
+            flex-shrink: 0;
+        }
+        .opt-btn {
+            border: 2px solid #d0e0d8;
+            background: white;
+            padding: 10px 12px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #2a3a32;
+            min-height: 48px;
+            transition: 0.15s;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.3;
+        }
+        .opt-btn:hover:not(:disabled) {
+            background: #eefaf5;
+        }
+        .opt-btn.selected {
+            border-color: #2a8a6a;
+            background: #2a8a6a;
+            color: white;
+        }
+        .opt-btn.correct {
+            border-color: #22c55e;
+            background: #22c55e;
+            color: white;
+        }
+        .opt-btn.wrong {
+            border-color: #ef4444;
+            background: #ef4444;
+            color: white;
+        }
+        .opt-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-area {
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            background: #e8f5e8;
+            border: 2px solid #6bcb77;
+            color: #0d553a;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-height: 40px;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        .feedback-area.error {
+            background: #fce8e8;
+            border-color: #e74c3c;
+            color: #7a2a2a;
+        }
+        .fb-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .fb-text {
+            font-weight: 700;
+        }
+        .fb-detail {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #5a5a7a;
+            padding-left: 28px;
+        }
+
+        .bottom-check-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0 0;
+            flex-shrink: 0;
+        }
+        .btn-check {
+            background: linear-gradient(145deg, #34a87e, #2a8a6a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 22px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 38px;
+            white-space: nowrap;
+        }
+        .btn-check:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-next-question {
+            background: linear-gradient(145deg, #6a9aba, #4a7a9a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 38px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 0.3rem 0.4rem;
+                border-radius: 16px;
+            }
+            .header-left select {
+                font-size: 0.7rem;
+                max-width: 110px;
+            }
+            .tab-btn {
+                padding: 5px 12px;
+                font-size: 0.85rem;
+            }
+            .q-options {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+            .opt-btn {
+                min-height: 42px;
+                font-size: 0.9rem;
+            }
+            .hint-text {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="header">
+            <div class="header-left">
+                <select id="practiceSelector">
+                    <option value="home">🏠 返回目錄</option>
+                    <option value="ch1" selected>⚗️ 儀器與標籤 (Ch.1)</option>
+                    <option value="ch2">🔬 特性變化分類 (Ch.2)</option>
+                    <option value="detective">🕵️ 偵探訓練</option>
+                    <option value="ions">🧪 離子與化合物 (Ch.7)</option>
+                    <option value="structure">🏗️ 結構 (Ch.9)</option>
+                    <option value="rxn">⚙️ 金屬反應 (Ch.11)</option>
+                </select>
+            </div>
+            <div class="header-right">
+                <div class="lang-toggle">
+                    <button class="lang-btn" data-lang="zh" id="langZh">中文</button>
+                    <button class="lang-btn active" data-lang="en" id="langEn">English</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-row">
+            <button class="tab-btn active" data-tab="hazard" id="tabHazard">⚠️ 危險警告標籤</button>
+            <button class="tab-btn" data-tab="apparatus" id="tabApparatus">🧪 化學儀器</button>
+        </div>
+
+        <div class="score-row">
+            <span id="progressText"></span>
+            <span id="scoreText"></span>
+        </div>
+
+        <div class="question-area">
+            <div class="hint-row-wrap">
+                <span class="hint-text" id="hintText"></span>
+            </div>
+            <div class="image-box">
+                <img id="questionImg" alt="" style="display:none;">
+                <div id="imgFallback" class="image-fallback" style="display:none;"></div>
+            </div>
+            <div class="q-options" id="optGroup">
+                <button class="opt-btn" data-key="0"></button>
+                <button class="opt-btn" data-key="1"></button>
+                <button class="opt-btn" data-key="2"></button>
+                <button class="opt-btn" data-key="3"></button>
+            </div>
+            <div class="feedback-area" id="feedback0">
+                <div class="fb-row">
+                    <span class="fb-icon">✏️</span>
+                    <span class="fb-text" id="fbText0"></span>
+                </div>
+                <div class="fb-detail" id="fbDetail0"></div>
+            </div>
+            <div class="bottom-check-row">
+                <button class="btn-check" id="checkBtn" disabled>✔ 檢查</button>
+                <button class="btn-next-question" id="nextBtn" style="display:none;">➡️ 下一題</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 圖片路徑（直接指向 mastering-science-images 已上傳的圖片）
+        // ============================================================
+        const IMG_BASE = 'https://raw.githubusercontent.com/hderys/mastering-science-images/main/webp_image/';
+
+        // ============================================================
+        // 語言
+        // ============================================================
+        let currentLang = 'zh';
+
+        const LANG = {
+            zh: {
+                hint: '看圖 → 選出正確名稱，再按「檢查」',
+                tabHazard: '⚠️ 危險警告標籤',
+                tabApparatus: '🧪 化學儀器',
+                score: '🏆 已答對 {c} / {t}',
+                progress: '📋 第 {p} / {t} 題',
+                pick: '請先選擇一個答案',
+                correct: '✅ 正確！',
+                wrong: '❌ 錯誤，正確是：',
+                next: '➡️ 下一題',
+                check: '✔ 檢查',
+                imgError: '⚠️ 圖片載入失敗',
+                fbStart: '按「抽題」開始練習',
+            },
+            en: {
+                hint: 'Look at the image, pick the correct answer, then press "Check"',
+                tabHazard: '⚠️ Hazard Warning Labels',
+                tabApparatus: '🧪 Chemical Apparatus',
+                score: '🏆 Score {c} / {t}',
+                progress: '📋 Question {p} / {t}',
+                pick: 'Please select an answer first',
+                correct: '✅ Correct!',
+                wrong: '❌ Wrong, the answer is: ',
+                next: '➡️ Next',
+                check: '✔ Check',
+                imgError: '⚠️ Failed to load image',
+                fbStart: 'Press "Check" to start',
+            }
+        };
+
+        function t(key) {
+            return LANG[currentLang][key] || key;
+        }
+
+        // ============================================================
+        // 題庫（來自 chem_question.xlsx，Chapter 1，src=G，seq=41-68）
+        // ============================================================
+        const QUESTION_BANK = [
+        { tab:"hazard", seq:41, img:"C01G041.webp", text:'What is the following hazard warning label?', opt:['flammable', 'oxidizing', 'explosive', 'corrosive'], correct:1, explain:'', text_zh:'下列危險警告標籤是甚麼？', opt_zh:['易燃', '助燃', '爆炸性', '腐蝕性'], explain_zh:'' },
+        { tab:"hazard", seq:42, img:"C01G042.webp", text:'What is the following hazard warning label?', opt:['oxidizing', 'flammable', 'explosive', 'corrosive'], correct:1, explain:'Notice there is a big circle in the flame.', text_zh:'下列危險警告標籤是甚麼？', opt_zh:['助燃', '易燃', '爆炸性', '腐蝕性'], explain_zh:'注意火焰中有一個大圓圈。' },
+        { tab:"hazard", seq:43, img:"C01G043.webp", text:'What is the following hazard warning label?', opt:['explosive', 'flammable', 'oxidizing', 'corrosive'], correct:1, explain:'', text_zh:'下列危險警告標籤是甚麼？', opt_zh:['爆炸性', '易燃', '助燃', '腐蝕性'], explain_zh:'' },
+        { tab:"hazard", seq:44, img:"C01G044.webp", text:'What is the following hazard warning label?', opt:['toxic', 'corrosive', 'harmful', 'irritant'], correct:1, explain:'', text_zh:'下列危險警告標籤是甚麼？', opt_zh:['有毒', '腐蝕性', '有害', '刺激性'], explain_zh:'' },
+        { tab:"hazard", seq:45, img:"C01G045.webp", text:'What is the following hazard warning label?', opt:['corrosive', 'toxic', 'harmful', 'irritant'], correct:1, explain:'', text_zh:'下列危險警告標籤是甚麼？', opt_zh:['腐蝕性', '有毒', '有害', '刺激性'], explain_zh:'' },
+        { tab:"hazard", seq:46, img:"C01G046.webp", text:'What is the following hazard warning label?', opt:['carcinogenic', 'corrosive', 'toxic', 'irritant'], correct:1, explain:'Notice the difference to the label of corrosive. Carcinogenic means causing cancer.', text_zh:'下列危險警告標籤是甚麼？', opt_zh:['致癌性', '腐蝕性', '有毒', '刺激性'], explain_zh:'注意它與腐蝕性標籤的差別。致癌性指會引致癌症。' },
+        { tab:"hazard", seq:47, img:"C01G047.webp", text:'What is the following hazard warning label?', opt:['harmful', 'irritant', 'corrosive', 'toxic'], correct:1, explain:'', text_zh:'下列危險警告標籤是甚麼？', opt_zh:['有害', '刺激性', '腐蝕性', '有毒'], explain_zh:'' },
+        { tab:"hazard", seq:48, img:"C01G048.webp", text:'What is the following hazard warning label?', opt:['irritant', 'harmful', 'corrosive', 'toxic'], correct:1, explain:'', text_zh:'下列危險警告標籤是甚麼？', opt_zh:['刺激性', '有害', '腐蝕性', '有毒'], explain_zh:'' },
+        { tab:"apparatus", seq:49, img:"C01G049.webp", text:'What is the name of the apparatus?', opt:['dropper', 'spatula', 'glass rod', 'syringe'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['滴管', '刮勺', '玻璃棒', '注射器'], explain_zh:'' },
+        { tab:"apparatus", seq:50, img:"C01G050.webp", text:'What is the name of the apparatus?', opt:['heat proof mat', 'paper', 'funnel', 'stand'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['耐熱墊', '紙', '漏斗', '支架'], explain_zh:'' },
+        { tab:"apparatus", seq:51, img:"C01G051.webp", text:'What is the name of the apparatus?', opt:['test tube', 'conical flask', 'beaker', 'measuring cylinder'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['試管', '錐形瓶', '燒杯', '量筒'], explain_zh:'' },
+        { tab:"apparatus", seq:52, img:"C01G052.webp", text:'What is the name of the apparatus?', opt:['beaker', 'gas jar', 'conical flask', 'measuring cylinder'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['燒杯', '氣體缸', '錐形瓶', '量筒'], explain_zh:'' },
+        { tab:"apparatus", seq:53, img:"C01G053.webp", text:'What is the name of the apparatus?', opt:['conical flask', 'beaker', 'gas jar', 'round-bottomed flask'], correct:1, explain:'The flask is not round-bottomed.', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['錐形瓶', '燒杯', '氣體缸', '圓底燒瓶'], explain_zh:'這個瓶不是圓底的。' },
+        { tab:"apparatus", seq:54, img:"C01G054.webp", text:'What is the name of the apparatus?', opt:['glass rod', 'spatula', 'thermometer', 'test tube brush'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['玻璃棒', '刮勺', '溫度計', '試管刷'], explain_zh:'' },
+        { tab:"apparatus", seq:55, img:"C01G055.webp", text:'What is the name of the apparatus?', opt:['spatula', 'glass rod', 'dropper', 'tongs'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['刮勺', '玻璃棒', '滴管', '夾鉗'], explain_zh:'' },
+        { tab:"apparatus", seq:56, img:"C01G056.webp", text:'What is the name of the apparatus?', opt:['reagent bottle', 'dropping bottle', 'gas jar', 'wash bottle'], correct:1, explain:'A dropping bottle with have a dropper inside.', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['試劑瓶', '滴瓶', '氣體缸', '洗瓶'], explain_zh:'滴瓶內會有一支滴管。' },
+        { tab:"apparatus", seq:57, img:"C01G057.webp", text:'What is the name of the apparatus?', opt:['measuring cylinder', 'conical flask', 'beaker', 'test tube'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['量筒', '錐形瓶', '燒杯', '試管'], explain_zh:'' },
+        { tab:"apparatus", seq:58, img:"C01G058.webp", text:'What is the name of the apparatus?', opt:['funnel', 'measuring cylinder', 'dropper', 'stopper'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['漏斗', '量筒', '滴管', '瓶塞'], explain_zh:'' },
+        { tab:"apparatus", seq:59, img:"C01G059.webp", text:'What is the name of the apparatus?', opt:['evaporating dish', 'watch glass', 'beaker', 'test tube brush'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['蒸發皿', '錶面皿', '燒杯', '試管刷'], explain_zh:'' },
+        { tab:"apparatus", seq:60, img:"C01G060.webp", text:'What is the name of the apparatus?', opt:['test tube holder', 'test tube brush', 'test tube rack', 'tongs'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['試管夾', '試管刷', '試管架', '夾鉗'], explain_zh:'' },
+        { tab:"apparatus", seq:61, img:"C01G061.webp", text:'What is the name of the apparatus?', opt:['tongs', 'test tube holder', 'scissors', 'clamp'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['夾鉗', '試管夾', '剪刀', '彈簧夾'], explain_zh:'' },
+        { tab:"apparatus", seq:62, img:"C01G062.webp", text:'What is the name of the apparatus?', opt:['test tube rack', 'test tube holder', 'test tube brush', 'stand'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['試管架', '試管夾', '試管刷', '支架'], explain_zh:'' },
+        { tab:"apparatus", seq:63, img:"C01G063.webp", text:'What is the name of the apparatus?', opt:['test tube brush', 'test tube rack', 'test tube holder', 'syringe'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['試管刷', '試管架', '試管夾', '注射器'], explain_zh:'' },
+        { tab:"apparatus", seq:64, img:"C01G064.webp", text:'What is the name of the apparatus?', opt:['stand', 'test tube rack', 'thermometer', 'clamp'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['支架', '試管架', '溫度計', '彈簧夾'], explain_zh:'' },
+        { tab:"apparatus", seq:65, img:"C01G065.webp", text:'What is the name of the apparatus?', opt:['clamp', 'tongs', 'stand', 'test tube holder'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['彈簧夾', '夾鉗', '支架', '試管夾'], explain_zh:'' },
+        { tab:"apparatus", seq:66, img:"C01G066.webp", text:'What is the name of the apparatus?', opt:['thermometer', 'glass rod', 'test tube', 'spatula'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['溫度計', '玻璃棒', '試管', '刮勺'], explain_zh:'' },
+        { tab:"apparatus", seq:67, img:"C01G067.webp", text:'What is the name of the apparatus?', opt:['wire gauze', 'heat proof mat', 'tripod', 'paper'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['鐵絲網', '耐熱墊', '三腳架', '紙'], explain_zh:'' },
+        { tab:"apparatus", seq:68, img:"C01G068.webp", text:'What is the name of the apparatus?', opt:['tripod', 'wire gauze', 'stand', 'test tube rack'], correct:1, explain:'', text_zh:'這個儀器的名稱是甚麼？', opt_zh:['三腳架', '鐵絲網', '支架', '試管架'], explain_zh:'' }
+        ];
+
+        // ============================================================
+        // 狀態
+        // ============================================================
+        const S = {
+            tab: 'hazard',
+            q: null,
+            order: [],
+            selected: null,
+            isAnswered: false,
+            decks: { hazard: [], apparatus: [] },
+            roundPos: { hazard: 0, apparatus: 0 },
+            roundTotal: { hazard: 0, apparatus: 0 },
+            total: 0,
+            correct: 0,
+        };
+
+        function shuffle(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        // 牌組循環：洗牌後依序出題，全數看完才重洗
+        function nextFromDeck() {
+            if (S.decks[S.tab].length === 0) {
+                S.decks[S.tab] = shuffle(QUESTION_BANK.filter(q => q.tab === S.tab));
+                S.roundTotal[S.tab] = S.decks[S.tab].length;
+                S.roundPos[S.tab] = 0;
+            }
+            const q = S.decks[S.tab].pop();
+            S.roundPos[S.tab]++;
+            return q;
+        }
+
+        function setFeedback(icon, text, detail, isError) {
+            const fb = document.getElementById('feedback0');
+            fb.classList.toggle('error', !!isError);
+            fb.querySelector('.fb-icon').textContent = icon;
+            document.getElementById('fbText0').textContent = text;
+            document.getElementById('fbDetail0').textContent = detail || '';
+        }
+
+        function updateScore() {
+            document.getElementById('scoreText').textContent = t('score')
+                .replace('{c}', S.correct).replace('{t}', S.total);
+            document.getElementById('progressText').textContent = t('progress')
+                .replace('{p}', S.roundPos[S.tab]).replace('{t}', S.roundTotal[S.tab] || '—');
+        }
+
+        function renderOptions() {
+            const opts = document.querySelectorAll('#optGroup .opt-btn');
+            opts.forEach((btn, pos) => {
+                const orig = S.order[pos];
+                btn.textContent = (currentLang === 'zh' ? S.q.opt_zh[orig] : S.q.opt[orig]);
+                btn.dataset.key = orig;
+            });
+        }
+
+        function draw() {
+            const q = nextFromDeck();
+
+            S.q = q;
+            S.isAnswered = false;
+            S.selected = null;
+            S.order = shuffle([0, 1, 2, 3]);
+
+            const img = document.getElementById('questionImg');
+            const fb = document.getElementById('imgFallback');
+            img.onerror = function() {
+                img.style.display = 'none';
+                fb.textContent = t('imgError') + ' (' + IMG_BASE + q.img + ')';
+                fb.style.display = 'block';
+            };
+            img.onload = function() {
+                img.style.display = 'block';
+                fb.style.display = 'none';
+            };
+            img.src = IMG_BASE + q.img;
+
+            const opts = document.querySelectorAll('#optGroup .opt-btn');
+            opts.forEach((btn, pos) => {
+                btn.classList.remove('selected', 'correct', 'wrong');
+                btn.disabled = false;
+                btn.onclick = function() {
+                    if (S.isAnswered) return;
+                    opts.forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    S.selected = parseInt(btn.dataset.key, 10);
+                    document.getElementById('checkBtn').disabled = false;
+                };
+            });
+            renderOptions();
+
+            setFeedback('✏️', t('fbStart'), '', false);
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'none';
+            updateScore();
+        }
+
+        function check() {
+            if (S.isAnswered || !S.q) return;
+            if (S.selected === null) {
+                setFeedback('⚠️', t('pick'), '', true);
+                return;
+            }
+            S.isAnswered = true;
+            S.total++;
+            const correctOrig = S.q.correct - 1;
+            const isCorrect = (S.selected === correctOrig);
+            if (isCorrect) S.correct++;
+
+            const opts = document.querySelectorAll('#optGroup .opt-btn');
+            opts.forEach(btn => {
+                btn.disabled = true;
+                const orig = parseInt(btn.dataset.key, 10);
+                if (orig === correctOrig) btn.classList.add('correct');
+                else if (orig === S.selected && !isCorrect) btn.classList.add('wrong');
+            });
+
+            const correctLabel = currentLang === 'zh' ? S.q.opt_zh[correctOrig] : S.q.opt[correctOrig];
+            const explain = currentLang === 'zh' ? S.q.explain_zh : S.q.explain;
+            if (isCorrect) {
+                setFeedback('✅', t('correct'), explain, false);
+            } else {
+                setFeedback('❌', t('wrong') + correctLabel, explain, true);
+            }
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            updateScore();
+        }
+
+        // ============================================================
+        // 分頁
+        // ============================================================
+        function setTab(tab) {
+            if (S.tab === tab) return;
+            S.tab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+            draw();
+        }
+
+        // ============================================================
+        // 語言切換
+        // ============================================================
+        function setLanguage(lang) {
+            if (lang === currentLang) return;
+            currentLang = lang;
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState({}, '', url);
+            localStorage.setItem('ch1_lang', lang);
+            updateButtonLabels();
+            if (S.q) renderOptions();
+        }
+
+        function updateButtonLabels() {
+            document.getElementById('hintText').textContent = t('hint');
+            document.getElementById('tabHazard').textContent = t('tabHazard');
+            document.getElementById('tabApparatus').textContent = t('tabApparatus');
+            document.getElementById('checkBtn').textContent = t('check');
+            document.getElementById('nextBtn').textContent = t('next');
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+
+            const sel = document.getElementById('practiceSelector');
+            if (sel) {
+                const labels = {
+                    home: currentLang === 'zh' ? '🏠 返回目錄' : '🏠 Home',
+                    ch1: currentLang === 'zh' ? '⚗️ 儀器與標籤 (Ch.1)' : '⚗️ Apparatus & Labels (Ch.1)',
+                    ch2: currentLang === 'zh' ? '🔬 特性變化分類 (Ch.2)' : '🔬 Properties & Changes (Ch.2)',
+                    detective: currentLang === 'zh' ? '🕵️ 偵探訓練' : '🕵️ Detective Training',
+                    ions: currentLang === 'zh' ? '🧪 離子與化合物 (Ch.7)' : '🧪 Ionic Compounds (Ch.7)',
+                    structure: currentLang === 'zh' ? '🏗️ 結構 (Ch.9)' : '🏗️ Structure (Ch.9)',
+                    rxn: currentLang === 'zh' ? '⚙️ 金屬反應 (Ch.11)' : '⚙️ Metal Reactions (Ch.11)',
+                };
+                for (let i = 0; i < sel.options.length; i++) {
+                    const val = sel.options[i].value;
+                    if (labels[val]) sel.options[i].textContent = labels[val];
+                }
+            }
+            updateScore();
+        }
+
+        // ============================================================
+        // 初始化
+        // ============================================================
+        function init() {
+            const urlLang = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('ch1_lang') || 'zh';
+            currentLang = (urlLang === 'zh' || urlLang === 'en') ? urlLang : 'zh';
+
+            document.querySelectorAll('.lang-btn').forEach(b => {
+                b.addEventListener('click', () => setLanguage(b.dataset.lang));
+            });
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.addEventListener('click', () => setTab(b.dataset.tab));
+            });
+            document.getElementById('checkBtn').addEventListener('click', check);
+            document.getElementById('nextBtn').addEventListener('click', draw);
+
+            const sel = document.getElementById('practiceSelector');
+            if (sel) {
+                sel.addEventListener('change', function() {
+                    const target = this.value;
+                    if (target === 'home') window.location.href = 'index.html?lang=' + currentLang;
+                    else window.location.href = target + '.html?lang=' + currentLang;
+                });
+            }
+
+            updateButtonLabels();
+            draw();
+            console.log('⚗️ 儀器與標籤練習已啟動 (Ch.1)');
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+</body>
+</html>

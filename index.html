@@ -29,8 +29,8 @@
             width: 100%;
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
-            border-radius: 32px;
-            padding: 2rem 1.8rem 2.2rem;
+            border-radius: 28px;
+            padding: 1rem 1.2rem 1.1rem;
             box-shadow: 0 20px 50px rgba(40, 60, 120, 0.12);
             border: 1px solid rgba(180, 200, 220, 0.25);
             text-align: center;
@@ -41,18 +41,18 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 6px;
+            gap: 8px;
+            margin-bottom: 4px;
         }
 
         .header h1 {
-            font-size: 1.6rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: #1a2332;
             letter-spacing: -0.5px;
         }
         .header h1 span {
-            font-size: 1rem;
+            font-size: 0.85rem;
             font-weight: 400;
             color: #6b7a8e;
         }
@@ -87,10 +87,10 @@
         }
 
         .subtitle {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: #6b7a8e;
-            margin-bottom: 22px;
-            padding-bottom: 16px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
             border-bottom: 2px dashed #e2e8f0;
             font-weight: 500;
         }
@@ -98,8 +98,8 @@
         .topic-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
         .topic-btn {
@@ -107,16 +107,16 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 18px 12px;
+            padding: 12px 10px;
             background: white;
             border: 2px solid #e2e8f0;
-            border-radius: 18px;
+            border-radius: 14px;
             text-decoration: none;
             color: #1a2332;
             transition: all 0.25s ease;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-            gap: 4px;
-            min-height: 90px;
+            gap: 3px;
+            min-height: 64px;
         }
 
         .topic-btn:hover {
@@ -126,32 +126,70 @@
         }
 
         .topic-btn .topic-icon {
-            font-size: 2rem;
-            line-height: 1.2;
+            font-size: 1.5rem;
+            line-height: 1.1;
         }
 
         .topic-btn .topic-name {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: #1a2332;
         }
 
         .topic-btn .topic-sub {
-            font-size: 0.75rem;
+            font-size: 0.68rem;
             font-weight: 500;
             color: #8a9aaa;
         }
 
         .footer {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: #8a9aaa;
-            margin-top: 8px;
-            padding-top: 12px;
+            margin-top: 4px;
+            padding-top: 8px;
             border-top: 1px solid #eef2f7;
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 4px;
+        }
+
+        /* 短視窗：進一步壓縮，確保一頁顯示 */
+        @media (max-height: 780px) {
+            .container {
+                padding: 0.6rem 1rem 0.7rem;
+                border-radius: 20px;
+            }
+            .header h1 {
+                font-size: 1.05rem;
+            }
+            .subtitle {
+                font-size: 0.75rem;
+                margin-bottom: 6px;
+                padding-bottom: 5px;
+            }
+            .topic-grid {
+                gap: 6px;
+                margin-bottom: 4px;
+            }
+            .topic-btn {
+                min-height: 52px;
+                padding: 8px 8px;
+            }
+            .topic-btn .topic-icon {
+                font-size: 1.2rem;
+            }
+            .topic-btn .topic-name {
+                font-size: 0.8rem;
+            }
+            .topic-btn .topic-sub {
+                font-size: 0.6rem;
+            }
+            .footer {
+                font-size: 0.62rem;
+                padding-top: 4px;
+                margin-top: 2px;
+            }
         }
 
         /* ===== 手機版 ===== */
@@ -231,6 +269,27 @@
         <div class="subtitle" id="subtitle">選擇課題開始練習</div>
 
         <div class="topic-grid">
+            <!-- Ch.1 儀器與標籤 -->
+            <a class="topic-btn" id="topicCh1" href="ch1.html?lang=zh">
+                <span class="topic-icon">⚗️</span>
+                <span class="topic-name" id="ch1Name">儀器與標籤</span>
+                <span class="topic-sub" id="ch1Sub">Apparatus & Labels · Ch.1</span>
+            </a>
+
+            <!-- Ch.2 特性、變化與分類 -->
+            <a class="topic-btn" id="topicCh2" href="ch2.html?lang=zh">
+                <span class="topic-icon">🔬</span>
+                <span class="topic-name" id="ch2Name">特性、變化與分類</span>
+                <span class="topic-sub" id="ch2Sub">Properties & Changes · Ch.2</span>
+            </a>
+
+            <!-- 偵探訓練：分析化學 -->
+            <a class="topic-btn" id="topicDetective" href="detective.html?lang=zh">
+                <span class="topic-icon">🕵️</span>
+                <span class="topic-name" id="detectiveName">偵探訓練：分析化學</span>
+                <span class="topic-sub" id="detectiveSub">Analytical Chemistry</span>
+            </a>
+
             <!-- Ch.7 離子與化合物 -->
             <a class="topic-btn" id="topicIons" href="ions.html?lang=zh">
                 <span class="topic-icon">🧪</span>
@@ -246,7 +305,7 @@
             </a>
 
             <!-- Ch.11 金屬反應 -->
-            <a class="topic-btn" id="topicRxn" href="rxn.html?lang=zh" style="grid-column: 1 / -1; max-width: 50%; justify-self: center; min-width: 200px;">
+            <a class="topic-btn" id="topicRxn" href="rxn.html?lang=zh">
                 <span class="topic-icon">⚙️</span>
                 <span class="topic-name" id="rxnName">金屬反應</span>
                 <span class="topic-sub" id="rxnSub">Metal Reactions · Ch.11</span>
@@ -268,6 +327,12 @@
         const LANG = {
             zh: {
                 subtitle: '選擇課題開始練習',
+                ch1Name: '儀器與標籤',
+                ch1Sub: 'Apparatus & Labels · Ch.1',
+                ch2Name: '特性、變化與分類',
+                ch2Sub: 'Properties & Changes · Ch.2',
+                detectiveName: '偵探訓練：分析化學',
+                detectiveSub: 'Analytical Chemistry',
                 ionsName: '離子與化合物',
                 ionsSub: 'Ionic Compounds · Ch.7',
                 structureName: '結構',
@@ -280,6 +345,12 @@
             },
             en: {
                 subtitle: 'Select a topic to start',
+                ch1Name: 'Apparatus & Labels',
+                ch1Sub: 'Apparatus & Labels · Ch.1',
+                ch2Name: 'Properties & Changes',
+                ch2Sub: 'Properties & Changes · Ch.2',
+                detectiveName: 'Detective Training',
+                detectiveSub: 'Analytical Chemistry',
                 ionsName: 'Ionic Compounds',
                 ionsSub: 'Ionic Compounds · Ch.7',
                 structureName: 'Structure',
@@ -298,6 +369,12 @@
 
         function updateLanguage() {
             document.getElementById('subtitle').textContent = t('subtitle');
+            document.getElementById('ch1Name').textContent = t('ch1Name');
+            document.getElementById('ch1Sub').textContent = t('ch1Sub');
+            document.getElementById('ch2Name').textContent = t('ch2Name');
+            document.getElementById('ch2Sub').textContent = t('ch2Sub');
+            document.getElementById('detectiveName').textContent = t('detectiveName');
+            document.getElementById('detectiveSub').textContent = t('detectiveSub');
             document.getElementById('ionsName').textContent = t('ionsName');
             document.getElementById('ionsSub').textContent = t('ionsSub');
             document.getElementById('structureName').textContent = t('structureName');
