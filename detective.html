@@ -1615,9 +1615,9 @@
             solid: ['carbonate', 'flame', 'chloride'],
         };
         const CAT_LABEL = {
-            gas: { zh: '氣體', en: 'a gas' },
-            solution: { zh: '溶液', en: 'a solution' },
-            solid: { zh: '固體', en: 'a solid' },
+            gas: { zh: '氣體', en: 'gas' },
+            solution: { zh: '溶液', en: 'solution' },
+            solid: { zh: '固體', en: 'solid' },
         };
         const MYSTERIES = {
             gas: [
@@ -1909,7 +1909,7 @@
 
             document.getElementById('caseHead').textContent = '🕵️ ' +
                 (currentLang === 'zh' ? '案件 #' + (S.casesSolved + 1) + '（已破案 ' + S.casesSolved + '）｜未知' + CAT_LABEL[cat].zh + ' 🧪?'
-                    : 'Case #' + (S.casesSolved + 1) + ' (solved ' + S.casesSolved + ') | unknown ' + CAT_LABEL[cat].en + ' 🧪?');
+                    : 'Case #' + (S.casesSolved + 1) + ' (solved ' + S.casesSolved + ') | an unknown ' + CAT_LABEL[cat].en + ' 🧪?');
             document.getElementById('caseInstruct').textContent = currentLang === 'zh' ? '進行甚麼測試好呢？' : 'What test should you perform?';
             document.getElementById('procModal').style.display = 'none';
             document.getElementById('resultModal').style.display = 'none';
