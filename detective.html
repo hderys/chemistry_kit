@@ -1034,7 +1034,7 @@
                         extra: true,
                     },
                     {
-                        tag_zh: '進階·Out of Syllabus', tag_en: 'Advanced · Out of Syllabus',
+                        tag_zh: '進階', tag_en: 'Advanced',
                         val_zh: 'He、Ne、Ar 等貴氣體也沒有簡單測試（不助燃）',
                         val_en: 'He, Ne and Ar (noble gases) also have no simple test (do not support burning)',
                         extra: true,
@@ -1512,7 +1512,7 @@
         const CAT_TOOLKIT = {
             gas: ['splint', 'limewater', 'ignite', 'balloon'],
             solution: ['flame', 'chloride'],
-            solid: ['carbonate', 'flame'],
+            solid: ['carbonate', 'flame', 'chloride'],
         };
         const CAT_LABEL = {
             gas: { zh: '氣體', en: 'a gas' },
@@ -1564,16 +1564,36 @@
             solid: [
                 { id: 'CaCO3', zh: '碳酸鈣', en: 'calcium carbonate', results: {
                     carbonate: { v: 'bubbles', zh: '放出無色氣體，石灰水變奶白', en: 'colourless gas given off; limewater turns milky' },
-                    flame: { v: 'flame_brick', zh: '磚紅色', en: 'brick red' } } },
+                    flame: { v: 'flame_brick', zh: '磚紅色', en: 'brick red' },
+                    chloride: { v: 'bubble', zh: '放出無色氣體，沒有白色沉澱', en: 'colourless gas evolved, no white precipitate formed' } } },
                 { id: 'K2CO3', zh: '碳酸鉀', en: 'potassium carbonate', results: {
                     carbonate: { v: 'bubbles', zh: '放出無色氣體，石灰水變奶白', en: 'colourless gas given off; limewater turns milky' },
-                    flame: { v: 'flame_lilac', zh: '淡紫色', en: 'lilac' } } },
+                    flame: { v: 'flame_lilac', zh: '淡紫色', en: 'lilac' },
+                    chloride: { v: 'bubble', zh: '放出無色氣體，沒有白色沉澱', en: 'colourless gas evolved, no white precipitate formed' } } },
                 { id: 'Na2CO3', zh: '碳酸鈉', en: 'sodium carbonate', results: {
                     carbonate: { v: 'bubbles', zh: '放出無色氣體，石灰水變奶白', en: 'colourless gas given off; limewater turns milky' },
-                    flame: { v: 'flame_golden', zh: '金黃色', en: 'golden yellow' } } },
+                    flame: { v: 'flame_golden', zh: '金黃色', en: 'golden yellow' },
+                    chloride: { v: 'bubble', zh: '放出無色氣體，沒有白色沉澱', en: 'colourless gas evolved, no white precipitate formed' } } },
                 { id: 'CuCO3', zh: '碳酸銅(II)', en: 'copper(II) carbonate', results: {
                     carbonate: { v: 'bubbles', zh: '放出無色氣體，石灰水變奶白', en: 'colourless gas given off; limewater turns milky' },
-                    flame: { v: 'flame_green', zh: '藍綠色', en: 'bluish green' } } },
+                    flame: { v: 'flame_green', zh: '藍綠色', en: 'bluish green' },
+                    chloride: { v: 'bubble', zh: '放出無色氣體，沒有白色沉澱', en: 'colourless gas evolved, no white precipitate formed' } } },
+                { id: 'NaCl_s', zh: '氯化鈉', en: 'sodium chloride', results: {
+                    carbonate: { v: 'none', zh: '沒有氣體放出', en: 'no gas given off' },
+                    flame: { v: 'flame_golden', zh: '金黃色', en: 'golden yellow' },
+                    chloride: { v: 'ppt_white', zh: '白色沉澱', en: 'white precipitate' } } },
+                { id: 'KCl_s', zh: '氯化鉀', en: 'potassium chloride', results: {
+                    carbonate: { v: 'none', zh: '沒有氣體放出', en: 'no gas given off' },
+                    flame: { v: 'flame_lilac', zh: '淡紫色', en: 'lilac' },
+                    chloride: { v: 'ppt_white', zh: '白色沉澱', en: 'white precipitate' } } },
+                { id: 'CaCl2_s', zh: '氯化鈣', en: 'calcium chloride', results: {
+                    carbonate: { v: 'none', zh: '沒有氣體放出', en: 'no gas given off' },
+                    flame: { v: 'flame_brick', zh: '磚紅色', en: 'brick red' },
+                    chloride: { v: 'ppt_white', zh: '白色沉澱', en: 'white precipitate' } } },
+                { id: 'CuCl2_s', zh: '氯化銅(II)', en: 'copper(II) chloride', results: {
+                    carbonate: { v: 'none', zh: '沒有氣體放出', en: 'no gas given off' },
+                    flame: { v: 'flame_green', zh: '藍綠色', en: 'bluish green' },
+                    chloride: { v: 'ppt_white', zh: '白色沉澱', en: 'white precipitate' } } },
             ],
         };
         const FLAME_VIS = { flame_lilac: '#b388ff', flame_golden: '#ffd54f', flame_green: '#69f0ae', flame_brick: '#ff7043' };
@@ -1818,6 +1838,16 @@
                     detail += ' ' + (currentLang === 'zh'
                         ? '💡 進階：Ar、Ne 等貴氣體也沒有簡單測試，結果相同'
                         : '💡 Advanced: Ar and Ne (noble gases) have no simple test and give the same result');
+                }
+                if (S.case.mystery.id === 'CO2') {
+                    detail += ' ' + (currentLang === 'zh'
+                        ? '💡 也有可能是 SO₂（SO₂ 也使石灰水變奶白）'
+                        : '💡 It could also be SO₂ (SO₂ also turns limewater milky)');
+                }
+                if (S.case.mystery.id.indexOf('CO3') !== -1) {
+                    detail += ' ' + (currentLang === 'zh'
+                        ? '💡 也有可能是碳酸氫鹽（hydrogencarbonate）'
+                        : '💡 It could also be a hydrogencarbonate');
                 }
                 setFeedback('🕵️',
                     currentLang === 'zh' ? '破案！正確是 ' + S.case.mystery.zh : 'Case solved! It is ' + S.case.mystery.en,
