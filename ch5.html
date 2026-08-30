@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>⚛️ 原子與周期表 · Ch.5/6</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            background: linear-gradient(145deg, #f4f0ff 0%, #ddd2ee 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 6px;
+        }
+
+        .card {
+            max-width: 900px;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            max-height: 100vh;
+            max-height: 100dvh;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(80, 40, 120, 0.15);
+            padding: 0.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(150, 110, 200, 0.25);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .header-left select {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #4a2a6a;
+            background: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 4px 0;
+            max-width: 210px;
+        }
+        .header-left select option {
+            font-weight: 600;
+        }
+        .lang-toggle {
+            display: flex;
+            gap: 2px;
+            background: white;
+            padding: 2px;
+            border-radius: 30px;
+            flex-shrink: 0;
+        }
+        .lang-btn {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: transparent;
+            color: #5a6a8a;
+        }
+        .lang-btn.active {
+            background: #7a4a9a;
+            color: white;
+        }
+
+        .tab-row {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 4px 0;
+            flex-shrink: 0;
+        }
+        .tab-btn {
+            border: 2px solid #dcd0ec;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 22px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #4a2a6a;
+            transition: 0.15s;
+        }
+        .tab-btn.active {
+            background: #7a4a9a;
+            color: white;
+            border-color: #7a4a9a;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #6a5a8a;
+            font-weight: 600;
+            padding: 2px 0;
+            flex-shrink: 0;
+        }
+
+        .content-area {
+            flex: 1;
+            min-height: 0;
+            padding: 0.3rem;
+            overflow: hidden;
+            background: white;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+        }
+        .content-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .content-area::-webkit-scrollbar-thumb {
+            background: #d0c0e0;
+            border-radius: 10px;
+        }
+
+        .rule-card {
+            background: #f5effa;
+            border: 2px solid #d0b8e8;
+            border-radius: 12px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #4a2a6a;
+            text-align: center;
+            flex-shrink: 0;
+            line-height: 1.5;
+        }
+
+        .q-text {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1a2332;
+            text-align: center;
+            padding: 10px 6px;
+            flex-shrink: 0;
+        }
+        .q-options {
+            display: grid;
+            gap: 8px;
+            padding: 4px 0;
+            flex-shrink: 0;
+        }
+        .q-options.cols2 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .q-options.cols4 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .opt-btn {
+            border: 2px solid #d8cce8;
+            background: white;
+            padding: 10px 12px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #3a2a5a;
+            min-height: 46px;
+            transition: 0.15s;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.3;
+            text-align: center;
+        }
+        .opt-btn:hover:not(:disabled) {
+            background: #f4eefc;
+        }
+        .opt-btn.selected {
+            border-color: #7a4a9a;
+            background: #7a4a9a;
+            color: white;
+        }
+        .opt-btn.correct {
+            border-color: #22c55e;
+            background: #22c55e;
+            color: white;
+        }
+        .opt-btn.wrong {
+            border-color: #ef4444;
+            background: #ef4444;
+            color: white;
+        }
+        .opt-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-area {
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            background: #e8f5e8;
+            border: 2px solid #6bcb77;
+            color: #0d553a;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-height: 40px;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        .feedback-area.error {
+            background: #fce8e8;
+            border-color: #e74c3c;
+            color: #7a2a2a;
+        }
+        .fb-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .fb-text {
+            font-weight: 700;
+        }
+        .fb-detail {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #5a5a7a;
+            padding-left: 28px;
+        }
+
+        .bottom-check-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0 0;
+            flex-shrink: 0;
+        }
+        .btn-check {
+            background: linear-gradient(145deg, #8a5aba, #7a4a9a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 22px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 38px;
+            white-space: nowrap;
+        }
+        .btn-check:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-next-question {
+            background: linear-gradient(145deg, #34a87e, #2a8a6a);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 38px;
+            white-space: nowrap;
+        }
+
+        /* 資料表 */
+        .data-table-wrap {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            display: none;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .data-table th,
+        .data-table td {
+            border: 1px solid #e0d6ec;
+            padding: 5px 6px;
+            text-align: center;
+        }
+        .data-table th {
+            background: #7a4a9a;
+            color: white;
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+        }
+        .data-note {
+            font-size: 0.8rem;
+            color: #8a7aa0;
+            font-weight: 600;
+            text-align: center;
+            padding: 4px 0 8px;
+        }
+        .data-table tr:nth-child(even) {
+            background: #f7f2fc;
+        }
+
+        /* 質子與中子表格 */
+        .pn-wrap {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .pn-table {
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin: 0 auto;
+        }
+        .pn-table th,
+        .pn-table td {
+            border: 1px solid #e0d6ec;
+            padding: 6px 8px;
+            text-align: center;
+        }
+        .pn-table th {
+            background: #7a4a9a;
+            color: white;
+            font-weight: 700;
+        }
+        .pn-table .pn-given {
+            font-weight: 800;
+            color: #2a1a3a;
+            background: #f0e8f8;
+        }
+        .pn-input {
+            width: 70px;
+            padding: 4px 6px;
+            border: 2px solid #d8cce8;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-align: center;
+            outline: none;
+            color: #2a1a3a;
+        }
+        .pn-input:focus {
+            border-color: #7a4a9a;
+        }
+        .pn-input.correct {
+            border-color: #22c55e;
+            background: #ecfdf5;
+        }
+        .pn-input.wrong {
+            border-color: #ef4444;
+            background: #fce4e7;
+        }
+        .pn-input:disabled {
+            opacity: 0.7;
+        }
+        .pt-wrap {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .pt-note {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #7a5a00;
+            background: #fff3cd;
+            border: 2px solid #f5a623;
+            border-radius: 8px;
+            text-align: center;
+            padding: 3px 8px;
+            margin-bottom: 3px;
+        }
+
+        /* 卡片問答（原子序分頁） */
+        .card-quiz {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .aq-card {
+            position: relative;
+            width: 250px;
+            height: 170px;
+            background: linear-gradient(145deg, #fff 0%, #f2e8fa 100%);
+            border: 3px solid #7a4a9a;
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(80, 40, 120, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .aq-card.correct {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+        }
+        .aq-card.wrong {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+        }
+        .aq-top {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #4a2a6a;
+        }
+        .aq-center {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #2a1a3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .aq-center input {
+            font-size: 1.6rem;
+            width: 110px;
+            padding: 6px;
+            border: 2px solid #d8cce8;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 700;
+            outline: none;
+            color: #2a1a3a;
+        }
+        .aq-center input:focus {
+            border-color: #7a4a9a;
+        }
+        .aq-center input:disabled {
+            opacity: 0.6;
+        }
+        .aq-corner {
+            position: absolute;
+            left: 10px;
+            bottom: 10px;
+        }
+        .aq-corner span {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #c0392b;
+        }
+        .aq-corner input {
+            width: 72px;
+            padding: 3px 6px;
+            border: 2px solid #d8cce8;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: center;
+            outline: none;
+            color: #2a1a3a;
+        }
+        .aq-corner input:focus {
+            border-color: #7a4a9a;
+        }
+        .aq-corner input:disabled {
+            opacity: 0.6;
+        }
+        .pt-table {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin: 2px 0;
+        }
+        .pt-row {
+            display: grid;
+            grid-template-columns: 2rem repeat(8, 1fr);
+            gap: 2px;
+        }
+        .pt-cell {
+            min-height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border-radius: 5px;
+            font-size: 0.75rem;
+        }
+        .pt-cell.pt-label {
+            font-weight: 800;
+            color: #4a2a6a;
+            background: #f0e8f8;
+            font-size: 0.75rem;
+        }
+        .pt-cell.pt-empty {
+            background: transparent;
+        }
+        .pt-cell.pt-btn {
+            background: white;
+            border: 2px solid #d8cce8;
+            cursor: pointer;
+            color: #3a2a5a;
+        }
+        .pt-cell.pt-btn:hover:not(:disabled) {
+            background: #f4eefc;
+        }
+        .pt-cell.pt-btn.selected {
+            background: #7a4a9a;
+            color: white;
+            border-color: #7a4a9a;
+        }
+        .pt-cell.pt-btn.correct {
+            background: #22c55e;
+            color: white;
+            border-color: #22c55e;
+        }
+        .pt-cell.pt-btn.wrong {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+        .pt-cell.pt-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .pt-cell.pt-btn.blank {
+            border: 2px dashed #c0392b;
+            color: #c0392b;
+            background: #fdf2f2;
+        }
+        .pt-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 3px 0;
+        }
+        .pt-opt-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #4a2a6a;
+            white-space: nowrap;
+        }
+        .pt-opts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .pt-opt {
+            border: 2px solid #d8cce8;
+            background: white;
+            border-radius: 14px;
+            padding: 2px 9px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #3a2a5a;
+        }
+        .pt-opt:hover:not(:disabled) {
+            background: #f4eefc;
+        }
+        .pt-opt.selected {
+            background: #7a4a9a;
+            color: white;
+            border-color: #7a4a9a;
+        }
+        .pt-opt.correct {
+            background: #22c55e;
+            color: white;
+            border-color: #22c55e;
+        }
+        .pt-opt.wrong {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+        .pt-opt:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 0.3rem 0.4rem;
+                border-radius: 16px;
+            }
+            .header-left select {
+                font-size: 0.68rem;
+                max-width: 120px;
+            }
+            .tab-btn {
+                padding: 5px 9px;
+                font-size: 0.78rem;
+            }
+            .q-text {
+                font-size: 1.02rem;
+            }
+            .q-options.cols2,
+            .q-options.cols4 {
+                grid-template-columns: 1fr;
+            }
+            .pn-wrap {
+                overflow-x: auto;
+            }
+            .pn-input {
+                width: 52px;
+                padding: 3px 4px;
+                font-size: 0.8rem;
+            }
+            .pn-table th,
+            .pn-table td {
+                padding: 5px 5px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="header">
+            <div class="header-left">
+                <select id="practiceSelector">
+                    <option value="home">🏠 返回目錄</option>
+                    <option value="ch1">⚗️ 儀器與標籤 (Ch.1)</option>
+                    <option value="ch2">🔬 特性變化分類 (Ch.2)</option>
+                    <option value="detective">🕵️ 偵探訓練</option>
+                    <option value="ch5" selected>⚛️ 原子與周期表 (Ch.5/6)</option>
+                    <option value="ions">🧪 離子與化合物 (Ch.7)</option>
+                    <option value="structure">🏗️ 結構 (Ch.9)</option>
+                    <option value="rxn">⚙️ 金屬反應 (Ch.11)</option>
+                </select>
+            </div>
+            <div class="header-right">
+                <div class="lang-toggle">
+                    <button class="lang-btn" data-lang="zh" id="langZh">中文</button>
+                    <button class="lang-btn active" data-lang="en" id="langEn">English</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-row">
+            <button class="tab-btn active" data-tab="atomic" id="tabAtomic">🔢 原子序</button>
+            <button class="tab-btn" data-tab="pn" id="tabPn">⚖️ 質子與中子</button>
+            <button class="tab-btn" data-tab="ptable" id="tabPtable">🗺️ 周期表位置</button>
+            <button class="tab-btn" data-tab="table" id="tabTable">📊 元素資料表</button>
+        </div>
+
+        <div class="score-row">
+            <span id="progressText"></span>
+            <span id="scoreText"></span>
+        </div>
+
+        <div class="content-area">
+            <div class="rule-card" id="ruleCard"></div>
+            <div class="q-text" id="qText"></div>
+            <div class="card-quiz" id="cardQuizWrap" style="display:none;">
+                <div class="aq-card" id="aqCard">
+                    <div class="aq-top" id="aqTop" style="display:none;"></div>
+                    <div class="aq-center" id="aqCenterWrap">
+                        <span id="aqCenterText" style="display:none;"></span>
+                        <input type="text" id="aqCenterInput" style="display:none;" autocomplete="off" spellcheck="false">
+                    </div>
+                    <div class="aq-corner" id="aqCornerWrap">
+                        <span id="aqCornerText" style="display:none;"></span>
+                        <input type="text" id="aqCornerInput" style="display:none;" autocomplete="off" spellcheck="false">
+                    </div>
+                </div>
+                <div class="aq-follow" id="aqFollow">
+                    <div class="pt-line">
+                        <span class="pt-opt-title" id="aqTypeTitle"></span>
+                        <div class="pt-opts" id="aqTypeRow"></div>
+                    </div>
+                    <div class="pt-line">
+                        <span class="pt-opt-title" id="aqStateTitle"></span>
+                        <div class="pt-opts" id="aqStateRow"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-wrap" id="ptGridWrap" style="display:none;">
+                <div id="ptGrid"></div>
+                <div class="pt-line">
+                    <span class="pt-opt-title" id="ptGroupTitle"></span>
+                    <div class="pt-opts" id="ptGroupRow"></div>
+                </div>
+                <div class="pt-line">
+                    <span class="pt-opt-title" id="ptPeriodTitle"></span>
+                    <div class="pt-opts" id="ptPeriodRow"></div>
+                </div>
+                <div class="pt-line" id="ptNameLine" style="display:none;">
+                    <span class="pt-opt-title" id="ptGroupNameTitle"></span>
+                    <div class="pt-opts" id="ptGroupNameRow"></div>
+                </div>
+            </div>
+            <div class="pn-wrap" id="pnWrap" style="display:none;">
+                <div id="pnTable"></div>
+            </div>
+            <div class="q-options" id="optGroup"></div>
+            <div class="feedback-area" id="feedback0">
+                <div class="fb-row">
+                    <span class="fb-icon">✏️</span>
+                    <span class="fb-text" id="fbText0"></span>
+                </div>
+                <div class="fb-detail" id="fbDetail0"></div>
+            </div>
+            <div class="bottom-check-row">
+                <button class="btn-check" id="checkBtn" disabled>✔ 檢查</button>
+                <button class="btn-next-question" id="nextBtn" style="display:none;">➡️ 下一題</button>
+            </div>
+            <div class="data-table-wrap" id="dataTableWrap"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 語言
+        // ============================================================
+        let currentLang = 'zh';
+
+        const LANG = {
+            zh: {
+                tabAtomic: '🔢 原子序',
+                tabPn: '⚖️ 質子與中子',
+                tabPtable: '🗺️ 周期表位置',
+                tabTable: '📊 元素資料表',
+                progress: '📋 第 {p} / {t} 題',
+                score: '🏆 已答對 {c} / {t}',
+                pick: '請先選擇一個答案',
+                correct: '✅ 正確！',
+                wrong: '❌ 錯誤，正確是：',
+                next: '➡️ 下一題',
+                check: '✔ 檢查',
+                fbStart: '選一個答案再檢查',
+                atomicHint: '填上答案後按「檢查」',
+                aqTypeTitle: '它是金屬／半金屬／非金屬？',
+                aqStateTitle: '常溫下它是固態／液態／氣態？',
+                pnHint: '填寫所有空格後按「檢查」',
+                ptableHint: '點選位置並選擇族／周期後按「檢查」',
+                ruleAtomic: '每個元素都有獨特的<b>原子序</b>（atomic number）。',
+                rulePn: '<b>原子序 = 質子數</b>　<b>質量數 = 質子數 + 中子數</b>',
+                rulePtable: '<b>周期</b> = 電子層數　<b>族（I–VII／0）</b> = 最外層電子數<br>過渡金屬的族不考',
+                ptGroupTitle: '選擇它的族：',
+                ptPeriodTitle: '選擇它的周期：',
+                ptGroupNameTitle: '這個族的族名是甚麼？',
+            },
+            en: {
+                tabAtomic: '🔢 Atomic Number',
+                tabPn: '⚖️ Protons & Neutrons',
+                tabPtable: '🗺️ Periodic Table',
+                tabTable: '📊 Element Data',
+                progress: '📋 Q {p} / {t}',
+                score: '🏆 Correct {c} / {t}',
+                pick: 'Please select an answer first.',
+                correct: '✅ Correct!',
+                wrong: '❌ Wrong, the answer is: ',
+                next: '➡️ Next',
+                check: '✔ Check',
+                fbStart: 'Pick an answer then check.',
+                atomicHint: 'Fill in the answer, then press "Check".',
+                aqTypeTitle: 'Is it a metal, semi-metal or non-metal?',
+                aqStateTitle: 'Is it solid, liquid or gas at room condition?',
+                pnHint: 'Fill in all the blanks, then press "Check".',
+                ptableHint: 'Click the position and choose the group / period, then press "Check".',
+                ruleAtomic: 'Every element has a unique <b>atomic number</b>.',
+                rulePn: '<b>Atomic number = number of protons</b>　<b>Mass number = protons + neutrons</b>',
+                rulePtable: '<b>Period</b> = number of shells　<b>Group (I–VII / 0)</b> = number of outermost electrons<br>The group of transition metals is not tested',
+                ptGroupTitle: 'Choose its group:',
+                ptPeriodTitle: 'Choose its period:',
+                ptGroupNameTitle: 'What is the name of this group?',
+            }
+        };
+
+        function t(key) {
+            return LANG[currentLang][key] || key;
+        }
+
+        // ============================================================
+        // 元素資料（group: I-VII / 0；過渡金屬 TM）
+        // ============================================================
+        const ELEMENTS = [
+            { sym: 'H', zh: '氫', en: 'hydrogen', Z: 1, N: 0, A: 1, period: 1, group: '—' },
+            { sym: 'He', zh: '氦', en: 'helium', Z: 2, N: 2, A: 4, period: 1, group: '0' },
+            { sym: 'Li', zh: '鋰', en: 'lithium', Z: 3, N: 4, A: 7, period: 2, group: 'I' },
+            { sym: 'Be', zh: '鈹', en: 'beryllium', Z: 4, N: 5, A: 9, period: 2, group: 'II' },
+            { sym: 'B', zh: '硼', en: 'boron', Z: 5, N: 6, A: 11, period: 2, group: 'III' },
+            { sym: 'C', zh: '碳', en: 'carbon', Z: 6, N: 6, A: 12, period: 2, group: 'IV' },
+            { sym: 'N', zh: '氮', en: 'nitrogen', Z: 7, N: 7, A: 14, period: 2, group: 'V' },
+            { sym: 'O', zh: '氧', en: 'oxygen', Z: 8, N: 8, A: 16, period: 2, group: 'VI' },
+            { sym: 'F', zh: '氟', en: 'fluorine', Z: 9, N: 10, A: 19, period: 2, group: 'VII' },
+            { sym: 'Ne', zh: '氖', en: 'neon', Z: 10, N: 10, A: 20, period: 2, group: '0' },
+            { sym: 'Na', zh: '鈉', en: 'sodium', Z: 11, N: 12, A: 23, period: 3, group: 'I' },
+            { sym: 'Mg', zh: '鎂', en: 'magnesium', Z: 12, N: 12, A: 24, period: 3, group: 'II' },
+            { sym: 'Al', zh: '鋁', en: 'aluminium', Z: 13, N: 14, A: 27, period: 3, group: 'III' },
+            { sym: 'Si', zh: '矽', en: 'silicon', Z: 14, N: 14, A: 28, period: 3, group: 'IV' },
+            { sym: 'P', zh: '磷', en: 'phosphorus', Z: 15, N: 16, A: 31, period: 3, group: 'V' },
+            { sym: 'S', zh: '硫', en: 'sulphur', Z: 16, N: 16, A: 32, period: 3, group: 'VI' },
+            { sym: 'Cl', zh: '氯', en: 'chlorine', Z: 17, N: 18, A: 35, period: 3, group: 'VII' },
+            { sym: 'Ar', zh: '氬', en: 'argon', Z: 18, N: 22, A: 40, period: 3, group: '0' },
+            { sym: 'K', zh: '鉀', en: 'potassium', Z: 19, N: 20, A: 39, period: 4, group: 'I' },
+            { sym: 'Ca', zh: '鈣', en: 'calcium', Z: 20, N: 20, A: 40, period: 4, group: 'II' },
+        ];
+        const MAIN = ELEMENTS.filter(e => e.group !== 'TM');
+        // 電子排佈（電子層）
+        const ECONF = {
+            H: '1', He: '2', Li: '2,1', Be: '2,2', B: '2,3', C: '2,4', N: '2,5', O: '2,6', F: '2,7', Ne: '2,8',
+            Na: '2,8,1', Mg: '2,8,2', Al: '2,8,3', Si: '2,8,4', P: '2,8,5', S: '2,8,6', Cl: '2,8,7', Ar: '2,8,8',
+            K: '2,8,8,1', Ca: '2,8,8,2',
+        };
+        // 每元素：金屬分類 / 常溫狀態
+        const ELEMENT_CLASS = {
+            H: ['nonmetal', 'gas'], He: ['nonmetal', 'gas'], Li: ['metal', 'solid'], Be: ['metal', 'solid'],
+            B: ['semimetal', 'solid'], C: ['nonmetal', 'solid'], N: ['nonmetal', 'gas'], O: ['nonmetal', 'gas'],
+            F: ['nonmetal', 'gas'], Ne: ['nonmetal', 'gas'], Na: ['metal', 'solid'], Mg: ['metal', 'solid'],
+            Al: ['metal', 'solid'], Si: ['semimetal', 'solid'], P: ['nonmetal', 'solid'], S: ['nonmetal', 'solid'],
+            Cl: ['nonmetal', 'gas'], Ar: ['nonmetal', 'gas'], K: ['metal', 'solid'], Ca: ['metal', 'solid'],
+            Fe: ['metal', 'solid'], Au: ['metal', 'solid'], Ag: ['metal', 'solid'], Zn: ['metal', 'solid'],
+            Hg: ['metal', 'liquid'], Sn: ['metal', 'solid'], Cu: ['metal', 'solid'], Mn: ['metal', 'solid'],
+            Co: ['metal', 'solid'], Ni: ['metal', 'solid'], Cr: ['metal', 'solid'], Br: ['nonmetal', 'liquid'],
+            I: ['nonmetal', 'solid'], Ba: ['metal', 'solid'],
+        };
+        const TYPE_LABEL = {
+            metal: { zh: '金屬', en: 'a metal' },
+            semimetal: { zh: '半金屬', en: 'a semi-metal' },
+            nonmetal: { zh: '非金屬', en: 'a non-metal' },
+        };
+        const STATE_LABEL = {
+            solid: { zh: '固態', en: 'solid' },
+            liquid: { zh: '液態', en: 'liquid' },
+            gas: { zh: '氣態', en: 'gas' },
+        };
+        // 特別元素：全名 → 符號（原子序已給）
+        const SPECIALS = [
+            { name_zh: '鐵', name_en: 'iron', sym: 'Fe', Z: 26 },
+            { name_zh: '金', name_en: 'gold', sym: 'Au', Z: 79 },
+            { name_zh: '銀', name_en: 'silver', sym: 'Ag', Z: 47 },
+            { name_zh: '鋅', name_en: 'zinc', sym: 'Zn', Z: 30 },
+            { name_zh: '汞', name_en: 'mercury', sym: 'Hg', Z: 80 },
+            { name_zh: '錫', name_en: 'tin', sym: 'Sn', Z: 50 },
+            { name_zh: '銅', name_en: 'copper', sym: 'Cu', Z: 29 },
+            { name_zh: '錳', name_en: 'manganese', sym: 'Mn', Z: 25 },
+            { name_zh: '鈷', name_en: 'cobalt', sym: 'Co', Z: 27 },
+            { name_zh: '鎳', name_en: 'nickel', sym: 'Ni', Z: 28 },
+            { name_zh: '鉻', name_en: 'chromium', sym: 'Cr', Z: 24 },
+            { name_zh: '溴', name_en: 'bromine', sym: 'Br', Z: 35 },
+            { name_zh: '碘', name_en: 'iodine', sym: 'I', Z: 53 },
+            { name_zh: '鋇', name_en: 'barium', sym: 'Ba', Z: 56 },
+        ];
+        const GROUPS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', '0'];
+        const PERIODS = [1, 2, 3, 4];
+        const NAMED_GROUPS = { 'I': 1, 'II': 1, 'VII': 1, '0': 1 };
+        const GROUP_NAMES = [
+            { key: 'I', zh: '鹼金屬', en: 'alkali metals' },
+            { key: 'II', zh: '鹼土金屬', en: 'alkaline earth metals' },
+            { key: 'VII', zh: '鹵素', en: 'halogens' },
+            { key: '0', zh: '貴氣體', en: 'noble gases' },
+        ];
+
+        function name_zh(e) { return e.zh + '（' + e.sym + '）'; }
+        function name_en(e) { return e.en + ' (' + e.sym + ')'; }
+        function grp_zh(g) { return '第 ' + g + ' 族'; }
+        function grp_en(g) { return 'Group ' + g; }
+        function per_zh(p) { return '第 ' + p + ' 周期'; }
+        function per_en(p) { return 'Period ' + p; }
+
+        function shuffle(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function optNums(correct, pool, n) {
+            const dist = shuffle(pool.filter(x => x !== correct)).slice(0, n - 1);
+            const opts = shuffle([correct].concat(dist));
+            return { opts: opts, idx: opts.indexOf(correct) };
+        }
+        function optNames(correctObj, pool, n) {
+            const dist = shuffle(pool.filter(x => x.sym !== correctObj.sym)).slice(0, n - 1);
+            const opts = shuffle([correctObj].concat(dist));
+            return {
+                opts_zh: opts.map(x => name_zh(x)),
+                opts_en: opts.map(x => name_en(x)),
+                idx: opts.indexOf(correctObj),
+            };
+        }
+        function optGroups(correct, n) {
+            const dist = shuffle(GROUPS.filter(x => x !== correct)).slice(0, n - 1);
+            const opts = shuffle([correct].concat(dist));
+            return { opts: opts, idx: opts.indexOf(correct) };
+        }
+        function optPeriods(correct, n) {
+            const dist = shuffle(PERIODS.filter(x => x !== correct)).slice(0, n - 1);
+            const opts = shuffle([correct].concat(dist));
+            return { opts: opts, idx: opts.indexOf(correct) };
+        }
+
+        // ============================================================
+        // 題庫
+        // ============================================================
+        function buildBank(tab) {
+            const qs = [];
+            const ZPool = ELEMENTS.map(e => e.Z);
+            const NPool = ELEMENTS.map(e => e.N);
+            const APool = ELEMENTS.map(e => e.A);
+
+            if (tab === 'atomic') {
+                // 卡片形式：首20元素（符號↔原子序）＋ 特別元素（全名→符號，原子序已給）
+                ELEMENTS.forEach(function(e) {
+                    qs.push({
+                        type: 'zinput',
+                        sym: e.sym, Z: e.Z, cls: ELEMENT_CLASS[e.sym],
+                        ex_zh: e.sym + ' 的原子序是 ' + e.Z + '。',
+                        ex_en: 'The atomic number of ' + e.sym + ' is ' + e.Z + '.',
+                    });
+                    qs.push({
+                        type: 'syminput',
+                        sym: e.sym, Z: e.Z, cls: ELEMENT_CLASS[e.sym],
+                        ex_zh: '原子序 ' + e.Z + ' 的元素是 ' + e.sym + '。',
+                        ex_en: 'Atomic number ' + e.Z + ' is ' + e.sym + '.',
+                    });
+                });
+                SPECIALS.forEach(function(sp) {
+                    qs.push({
+                        type: 'special',
+                        name_zh: sp.name_zh, name_en: sp.name_en, sym: sp.sym, Z: sp.Z, cls: ELEMENT_CLASS[sp.sym],
+                        ex_zh: sp.name_zh + ' 的符號是 ' + sp.sym + '。',
+                        ex_en: 'The symbol of ' + sp.name_en + ' is ' + sp.sym + '.',
+                    });
+                });
+            } else if (tab === 'pn') {
+                // 表格填空：每題給 質量數/中子數 之一 ＋ 符號/原子序/質子/電子/電子排佈 之一
+                const aGroup = ['mass', 'neutron'];
+                const bGroup = ['symbol', 'Z', 'proton', 'electron', 'econf'];
+                ELEMENTS.forEach(function(e) {
+                    for (let v = 0; v < 3; v++) {
+                        const aGiven = aGroup[Math.floor(Math.random() * aGroup.length)];
+                        const bGiven = bGroup[Math.floor(Math.random() * bGroup.length)];
+                        qs.push({ e: e, given: [aGiven, bGiven] });
+                    }
+                });
+            } else if (tab === 'ptable') {
+                // 視覺互動：每題一個元素（H 不屬任何族，排除），用戶點選位置 + 填族/周期/族名
+                return ELEMENTS.filter(function(e) { return e.sym !== 'H'; }).slice();
+            }
+            return qs;
+        }
+
+        // ============================================================
+        // 狀態
+        // ============================================================
+        const S = {
+            tab: 'atomic',
+            bank: [],
+            deck: [],
+            q: null,
+            selected: null,
+            selectedPos: null,
+            selectedGroup: null,
+            selectedPeriod: null,
+            selectedGroupName: null,
+            selectedType: null,
+            selectedState: null,
+            isAnswered: false,
+            roundPos: 0,
+            roundTotal: 0,
+            total: 0,
+            correct: 0,
+        };
+
+        function setFeedback(icon, text, detail, isError) {
+            const fb = document.getElementById('feedback0');
+            fb.classList.toggle('error', !!isError);
+            fb.querySelector('.fb-icon').textContent = icon;
+            document.getElementById('fbText0').textContent = text;
+            document.getElementById('fbDetail0').textContent = detail || '';
+        }
+
+        function updateScore() {
+            document.getElementById('scoreText').textContent = t('score')
+                .replace('{c}', S.correct).replace('{t}', S.total);
+            document.getElementById('progressText').textContent = t('progress')
+                .replace('{p}', S.roundPos).replace('{t}', S.roundTotal || '—');
+        }
+
+        function getRule() {
+            if (S.tab === 'atomic') return t('ruleAtomic');
+            if (S.tab === 'pn') return t('rulePn');
+            if (S.tab === 'ptable') return t('rulePtable');
+            return '';
+        }
+
+function renderQuizVisibility(show) {
+            document.getElementById('ruleCard').style.display = show ? 'block' : 'none';
+            document.getElementById('qText').style.display = show ? 'block' : 'none';
+            document.getElementById('optGroup').style.display = show ? 'grid' : 'none';
+            document.getElementById('ptGridWrap').style.display = 'none';
+            document.getElementById('cardQuizWrap').style.display = 'none';
+            document.getElementById('pnWrap').style.display = 'none';
+            document.getElementById('feedback0').style.display = show ? 'flex' : 'none';
+            document.querySelector('.bottom-check-row').style.display = show ? 'flex' : 'none';
+            document.getElementById('dataTableWrap').style.display = 'none';
+            document.querySelector('.score-row').style.display = show ? 'flex' : 'none';
+        }
+
+        function renderPtableVisibility(show) {
+            document.getElementById('ruleCard').style.display = 'none';
+            document.getElementById('qText').style.display = show ? 'block' : 'none';
+            document.getElementById('optGroup').style.display = 'none';
+            document.getElementById('ptGridWrap').style.display = show ? 'flex' : 'none';
+            document.getElementById('cardQuizWrap').style.display = 'none';
+            document.getElementById('pnWrap').style.display = 'none';
+            document.getElementById('feedback0').style.display = show ? 'flex' : 'none';
+            document.querySelector('.bottom-check-row').style.display = show ? 'flex' : 'none';
+            document.getElementById('dataTableWrap').style.display = 'none';
+            document.querySelector('.score-row').style.display = show ? 'flex' : 'none';
+        }
+
+        function renderAtomicVisibility(show) {
+            document.getElementById('ruleCard').style.display = 'none';
+            document.getElementById('qText').style.display = 'none';
+            document.getElementById('optGroup').style.display = 'none';
+            document.getElementById('ptGridWrap').style.display = 'none';
+            document.getElementById('pnWrap').style.display = 'none';
+            document.getElementById('cardQuizWrap').style.display = show ? 'flex' : 'none';
+            document.getElementById('feedback0').style.display = show ? 'flex' : 'none';
+            document.querySelector('.bottom-check-row').style.display = show ? 'flex' : 'none';
+            document.getElementById('dataTableWrap').style.display = 'none';
+            document.querySelector('.score-row').style.display = show ? 'flex' : 'none';
+        }
+
+        function drawAtomic() {
+            if (S.deck.length === 0) {
+                S.deck = shuffle(S.bank);
+                S.roundPos = 0;
+                S.roundTotal = S.bank.length;
+            }
+            const q = S.deck.pop();
+            S.roundPos++;
+            S.q = q;
+            S.isAnswered = false;
+            S.selectedType = null;
+            S.selectedState = null;
+            renderAqFollow();
+
+            const card = document.getElementById('aqCard');
+            card.classList.remove('correct', 'wrong');
+            document.getElementById('aqTop').style.display = 'none';
+            document.getElementById('aqCenterText').style.display = 'none';
+            document.getElementById('aqCenterInput').style.display = 'none';
+            document.getElementById('aqCornerText').style.display = 'none';
+            document.getElementById('aqCornerInput').style.display = 'none';
+
+            if (q.type === 'zinput') {
+                // 符號在中央，右下填原子序
+                document.getElementById('aqCenterText').textContent = q.sym;
+                document.getElementById('aqCenterText').style.display = 'block';
+                const ci = document.getElementById('aqCornerInput');
+                ci.style.display = 'block';
+                ci.value = '';
+                ci.placeholder = currentLang === 'zh' ? '原子序?' : 'At. no.?';
+                ci.disabled = false;
+            } else if (q.type === 'syminput') {
+                // 右下顯示原子序，中央填符號
+                document.getElementById('aqCornerText').textContent = String(q.Z);
+                document.getElementById('aqCornerText').style.display = 'block';
+                const ci = document.getElementById('aqCenterInput');
+                ci.style.display = 'block';
+                ci.value = '';
+                ci.placeholder = currentLang === 'zh' ? '符號?' : 'Symbol?';
+                ci.disabled = false;
+            } else if (q.type === 'special') {
+                // 全名在上方，右下顯示原子序，中央填符號
+                document.getElementById('aqTop').textContent = currentLang === 'zh' ? q.name_zh : q.name_en;
+                document.getElementById('aqTop').style.display = 'block';
+                document.getElementById('aqCornerText').textContent = String(q.Z);
+                document.getElementById('aqCornerText').style.display = 'block';
+                const ci = document.getElementById('aqCenterInput');
+                ci.style.display = 'block';
+                ci.value = '';
+                ci.placeholder = currentLang === 'zh' ? '符號?' : 'Symbol?';
+                ci.disabled = false;
+            }
+
+            setFeedback('✏️', t('atomicHint'), '', false);
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'none';
+            updateScore();
+        }
+
+        function renderAqFollow() {
+            document.getElementById('aqTypeTitle').textContent = t('aqTypeTitle');
+            document.getElementById('aqStateTitle').textContent = t('aqStateTitle');
+            const tr = document.getElementById('aqTypeRow');
+            tr.innerHTML = '';
+            ['metal', 'semimetal', 'nonmetal'].forEach(function(k) {
+                const b = document.createElement('button');
+                b.className = 'pt-opt';
+                b.dataset.val = k;
+                b.textContent = currentLang === 'zh' ? TYPE_LABEL[k].zh : TYPE_LABEL[k].en;
+                b.onclick = function() {
+                    if (S.isAnswered) return;
+                    tr.querySelectorAll('.pt-opt').forEach(function(x) { x.classList.remove('selected'); });
+                    b.classList.add('selected');
+                    S.selectedType = k;
+                    updateAtomicCheck();
+                };
+                tr.appendChild(b);
+            });
+            const sr = document.getElementById('aqStateRow');
+            sr.innerHTML = '';
+            ['solid', 'liquid', 'gas'].forEach(function(k) {
+                const b = document.createElement('button');
+                b.className = 'pt-opt';
+                b.dataset.val = k;
+                b.textContent = currentLang === 'zh' ? STATE_LABEL[k].zh : STATE_LABEL[k].en;
+                b.onclick = function() {
+                    if (S.isAnswered) return;
+                    sr.querySelectorAll('.pt-opt').forEach(function(x) { x.classList.remove('selected'); });
+                    b.classList.add('selected');
+                    S.selectedState = k;
+                    updateAtomicCheck();
+                };
+                sr.appendChild(b);
+            });
+        }
+
+        function aqInputFilled() {
+            if (S.q.type === 'zinput') return document.getElementById('aqCornerInput').value.trim() !== '';
+            return document.getElementById('aqCenterInput').value.trim() !== '';
+        }
+
+        function updateAtomicCheck() {
+            const ready = aqInputFilled() && S.selectedType !== null && S.selectedState !== null;
+            document.getElementById('checkBtn').disabled = !ready;
+        }
+
+        function atomicAnswerValue() {
+            if (S.q.type === 'zinput') return document.getElementById('aqCornerInput').value.trim();
+            return document.getElementById('aqCenterInput').value.trim();
+        }
+
+        function checkAtomic() {
+            if (S.isAnswered || !S.q) return;
+            const raw = atomicAnswerValue();
+            if (raw === '' || S.selectedType === null || S.selectedState === null) {
+                setFeedback('⚠️', t('pick'), '', true);
+                return;
+            }
+            S.isAnswered = true;
+            S.total++;
+            let cardOk;
+            if (S.q.type === 'zinput') {
+                cardOk = raw === String(S.q.Z);
+                document.getElementById('aqCornerInput').disabled = true;
+            } else {
+                cardOk = raw === S.q.sym;
+                document.getElementById('aqCenterInput').disabled = true;
+            }
+            const typeOk = S.selectedType === S.q.cls[0];
+            const stateOk = S.selectedState === S.q.cls[1];
+            const allOk = cardOk && typeOk && stateOk;
+            if (allOk) S.correct++;
+            document.getElementById('aqCard').classList.add(cardOk ? 'correct' : 'wrong');
+            ['aqTypeRow', 'aqStateRow'].forEach(function(sel) {
+                document.querySelectorAll('#' + sel + ' .pt-opt').forEach(function(b) { b.disabled = true; });
+            });
+            const tr = document.getElementById('aqTypeRow');
+            tr.querySelectorAll('.pt-opt').forEach(function(b) {
+                if (b.dataset.val === S.q.cls[0]) b.classList.add('correct');
+                else if (b.dataset.val === S.selectedType) b.classList.add('wrong');
+            });
+            const sr = document.getElementById('aqStateRow');
+            sr.querySelectorAll('.pt-opt').forEach(function(b) {
+                if (b.dataset.val === S.q.cls[1]) b.classList.add('correct');
+                else if (b.dataset.val === S.selectedState) b.classList.add('wrong');
+            });
+            const typeL = TYPE_LABEL[S.q.cls[0]][currentLang === 'zh' ? 'zh' : 'en'];
+            const stateL = STATE_LABEL[S.q.cls[1]][currentLang === 'zh' ? 'zh' : 'en'];
+            const explain = (currentLang === 'zh' ? S.q.ex_zh : S.q.ex_en) + ' ' +
+                (currentLang === 'zh' ? '它是' + typeL + '、' + stateL + '。' : 'It is ' + typeL + ', ' + stateL + '.');
+            if (allOk) setFeedback('✅', t('correct'), explain, false);
+            else setFeedback('❌', t('wrong'), explain, true);
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            updateScore();
+        }
+
+        function renderPTGrid() {
+            const grid = document.getElementById('ptGrid');
+            let html = '<div class="pt-note">' +
+                (currentLang === 'zh' ? 'H（氫）不顯示在下列周期表中' : 'H (hydrogen) is not shown in the following Periodic table') +
+                '</div>';
+            html += '<div class="pt-table">';
+            html += '<div class="pt-row pt-head"><div class="pt-cell pt-label"></div>';
+            GROUPS.forEach(function(g) { html += '<div class="pt-cell pt-label">' + g + '</div>'; });
+            html += '</div>';
+            for (let p = 1; p <= 4; p++) {
+                html += '<div class="pt-row"><div class="pt-cell pt-label">' + p + '</div>';
+                GROUPS.forEach(function(g) {
+                    const el = ELEMENTS.find(function(e) { return e.period === p && e.group === g; });
+                    if (el) {
+                        html += '<button class="pt-cell pt-btn" data-sym="' + el.sym + '" data-period="' + p +
+                            '" data-group="' + g + '"></button>';
+                    } else {
+                        html += '<div class="pt-cell pt-empty"></div>';
+                    }
+                });
+                html += '</div>';
+            }
+            html += '</div>';
+            grid.innerHTML = html;
+            grid.querySelectorAll('.pt-btn').forEach(function(b) {
+                b.onclick = function() {
+                    if (S.isAnswered) return;
+                    grid.querySelectorAll('.pt-btn').forEach(function(x) { x.classList.remove('selected'); });
+                    b.classList.add('selected');
+                    S.selectedPos = { period: parseInt(b.dataset.period, 10), group: b.dataset.group };
+                    updatePtableCheck();
+                };
+            });
+        }
+
+        function renderPtableOptions() {
+            document.getElementById('ptGroupTitle').textContent = t('ptGroupTitle');
+            document.getElementById('ptPeriodTitle').textContent = t('ptPeriodTitle');
+            document.getElementById('ptGroupNameTitle').textContent = t('ptGroupNameTitle');
+            const gr = document.getElementById('ptGroupRow');
+            gr.innerHTML = '';
+            GROUPS.forEach(function(g) {
+                const b = document.createElement('button');
+                b.className = 'pt-opt';
+                b.dataset.val = g;
+                b.textContent = g;
+                b.onclick = function() {
+                    if (S.isAnswered) return;
+                    gr.querySelectorAll('.pt-opt').forEach(function(x) { x.classList.remove('selected'); });
+                    b.classList.add('selected');
+                    S.selectedGroup = g;
+                    updateGroupNameVisibility();
+                    updatePtableCheck();
+                };
+                gr.appendChild(b);
+            });
+            const pr = document.getElementById('ptPeriodRow');
+            pr.innerHTML = '';
+            PERIODS.forEach(function(p) {
+                const b = document.createElement('button');
+                b.className = 'pt-opt';
+                b.dataset.val = String(p);
+                b.textContent = String(p);
+                b.onclick = function() {
+                    if (S.isAnswered) return;
+                    pr.querySelectorAll('.pt-opt').forEach(function(x) { x.classList.remove('selected'); });
+                    b.classList.add('selected');
+                    S.selectedPeriod = p;
+                    updatePtableCheck();
+                };
+                pr.appendChild(b);
+            });
+            const gnr = document.getElementById('ptGroupNameRow');
+            gnr.innerHTML = '';
+            GROUP_NAMES.forEach(function(n) {
+                const b = document.createElement('button');
+                b.className = 'pt-opt';
+                b.dataset.val = n.key;
+                b.textContent = currentLang === 'zh' ? n.zh : n.en;
+                b.onclick = function() {
+                    if (S.isAnswered) return;
+                    gnr.querySelectorAll('.pt-opt').forEach(function(x) { x.classList.remove('selected'); });
+                    b.classList.add('selected');
+                    S.selectedGroupName = n.key;
+                    updatePtableCheck();
+                };
+                gnr.appendChild(b);
+            });
+            updateGroupNameVisibility();
+        }
+
+        function updateGroupNameVisibility() {
+            const applicable = S.selectedGroup && NAMED_GROUPS[S.selectedGroup];
+            document.getElementById('ptNameLine').style.display = applicable ? 'flex' : 'none';
+            if (!applicable) {
+                S.selectedGroupName = null;
+                document.querySelectorAll('#ptGroupNameRow .pt-opt').forEach(function(x) { x.classList.remove('selected'); });
+            }
+        }
+
+        function updatePtableCheck() {
+            const needName = S.selectedGroup && NAMED_GROUPS[S.selectedGroup];
+            const ready = S.selectedPos && S.selectedGroup !== null && S.selectedPeriod !== null &&
+                (!needName || S.selectedGroupName !== null);
+            document.getElementById('checkBtn').disabled = !ready;
+        }
+
+        function drawPtable() {
+            if (S.deck.length === 0) {
+                S.deck = shuffle(S.bank);
+                S.roundPos = 0;
+                S.roundTotal = S.bank.length;
+            }
+            const e = S.deck.pop();
+            S.roundPos++;
+            S.q = { e: e };
+            S.isAnswered = false;
+            S.selectedPos = null;
+            S.selectedGroup = null;
+            S.selectedPeriod = null;
+            S.selectedGroupName = null;
+
+            document.getElementById('qText').textContent = currentLang === 'zh' ?
+                '在表中點出 ' + name_zh(e) + ' 的位置，然後選擇它的族與周期。' :
+                'Click the position of ' + name_en(e) + ' in the table, then choose its group and period.';
+            renderPTGrid();
+            renderPtableOptions();
+            setFeedback('✏️', t('ptableHint'), '', false);
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'none';
+            updateScore();
+        }
+
+        function highlightPtableOptions(sel, correctVal, selectedVal) {
+            document.querySelectorAll(sel + ' .pt-opt').forEach(function(b) {
+                b.disabled = true;
+                if (b.dataset.val === String(correctVal)) b.classList.add('correct');
+                else if (b.dataset.val === String(selectedVal)) b.classList.add('wrong');
+            });
+        }
+
+        function checkPtable() {
+            if (S.isAnswered || !S.q || !S.q.e) return;
+            if (!S.selectedPos || S.selectedGroup === null || S.selectedPeriod === null) {
+                setFeedback('⚠️', t('pick'), '', true);
+                return;
+            }
+            S.isAnswered = true;
+            S.total++;
+            const e = S.q.e;
+            const posOk = S.selectedPos.period === e.period && S.selectedPos.group === e.group;
+            const grpOk = S.selectedGroup === e.group;
+            const perOk = S.selectedPeriod === e.period;
+            const needName = !!NAMED_GROUPS[e.group];
+            let nameOk = true;
+            if (needName) nameOk = S.selectedGroupName === e.group;
+            const isCorrect = posOk && grpOk && perOk && nameOk;
+            if (isCorrect) S.correct++;
+
+            document.querySelectorAll('#ptGrid .pt-btn').forEach(function(b) {
+                b.disabled = true;
+                if (b.dataset.sym === e.sym) {
+                    b.classList.add('correct');
+                    b.textContent = e.sym;
+                } else if (S.selectedPos && b.dataset.period === String(S.selectedPos.period) &&
+                    b.dataset.group === S.selectedPos.group) b.classList.add('wrong');
+            });
+            highlightPtableOptions('#ptGroupRow', e.group, S.selectedGroup);
+            highlightPtableOptions('#ptPeriodRow', e.period, S.selectedPeriod);
+            if (needName) highlightPtableOptions('#ptGroupNameRow', e.group, S.selectedGroupName);
+
+            let detail = '';
+            if (!isCorrect) {
+                const parts = [];
+                if (!posOk) parts.push(currentLang === 'zh' ? '位置' : 'position');
+                if (!grpOk) parts.push(currentLang === 'zh' ? '族' : 'group');
+                if (!perOk) parts.push(currentLang === 'zh' ? '周期' : 'period');
+                if (needName && !nameOk) parts.push(currentLang === 'zh' ? '族名' : 'group name');
+                detail = (currentLang === 'zh' ? '錯誤部分：' : 'Wrong: ') + parts.join('、');
+            } else {
+                detail = currentLang === 'zh' ? '完全正確！' : 'All correct!';
+            }
+            const namePart = needName ? '（' + groupNameLabel(e.group) + '）' : '';
+            const head = (isCorrect ?
+                (currentLang === 'zh' ? '正確！' : 'Correct!') :
+                (currentLang === 'zh' ? '錯誤，正確是：' : 'Wrong, the answer is: ')) +
+                name_zh(e) + ' = ' + grp_zh(e.group) + namePart + '、' + per_zh(e.period);
+            setFeedback(isCorrect ? '✅' : '❌', head, detail, !isCorrect);
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            updateScore();
+        }
+
+        function groupNameLabel(g) {
+            const n = GROUP_NAMES.find(function(x) { return x.key === g; });
+            return n ? (currentLang === 'zh' ? n.zh : n.en) : g;
+        }
+
+        function renderTableTab() {
+            document.getElementById('ruleCard').style.display = 'none';
+            document.getElementById('qText').style.display = 'none';
+            document.getElementById('optGroup').style.display = 'none';
+            document.getElementById('ptGridWrap').style.display = 'none';
+            document.getElementById('cardQuizWrap').style.display = 'none';
+            document.getElementById('pnWrap').style.display = 'none';
+            document.getElementById('feedback0').style.display = 'none';
+            document.querySelector('.bottom-check-row').style.display = 'none';
+            document.querySelector('.score-row').style.display = 'none';
+            const wrap = document.getElementById('dataTableWrap');
+            wrap.style.display = 'block';
+            let html = '<table class="data-table"><thead><tr>';
+            const heads = currentLang === 'zh' ?
+                ['元素', '符號', '原子序', '質子', '中子', '質量數', '周期', '族'] :
+                ['Element', 'Symbol', 'At. No.', 'Protons', 'Neutrons', 'Mass no.', 'Period', 'Group'];
+            heads.forEach(h => html += '<th>' + h + '</th>');
+            html += '</tr></thead><tbody>';
+            ELEMENTS.forEach(function(e) {
+                const groupCell = e.group === '—' ? '—' : (currentLang === 'zh' ? grp_zh(e.group) : grp_en(e.group));
+                html += '<tr><td>' + (currentLang === 'zh' ? e.zh : e.en) + '</td><td>' + e.sym + '</td><td>' + e.Z +
+                    '</td><td>' + e.Z + '</td><td>' + e.N + '</td><td>' + e.A + '</td><td>' + e.period +
+                    '</td><td>' + groupCell + '</td></tr>';
+            });
+            html += '</tbody></table>';
+            wrap.innerHTML = '<div class="data-note">' +
+                (currentLang === 'zh' ? '註：質量數為該元素最常見（豐度最高）同位素之值' : 'Note: mass numbers are for the most abundant isotope') +
+                '</div>' + html;
+        }
+
+        function draw() {
+            if (S.tab === 'table') return;
+            if (S.tab === 'ptable') {
+                drawPtable();
+                return;
+            }
+            if (S.tab === 'atomic') {
+                drawAtomic();
+                return;
+            }
+            if (S.tab === 'pn') {
+                drawPn();
+                return;
+            }
+            if (S.deck.length === 0) {
+                S.deck = shuffle(S.bank);
+                S.roundPos = 0;
+                S.roundTotal = S.bank.length;
+            }
+            const q = S.deck.pop();
+            S.roundPos++;
+            S.q = q;
+            S.isAnswered = false;
+            S.selected = null;
+
+            document.getElementById('ruleCard').innerHTML = getRule();
+            document.getElementById('qText').textContent = currentLang === 'zh' ? q.q_zh : q.q_en;
+            const g = document.getElementById('optGroup');
+            g.className = 'q-options ' + (q.o_zh.length <= 2 ? 'cols2' : 'cols4');
+            g.innerHTML = '';
+            (currentLang === 'zh' ? q.o_zh : q.o_en).forEach(function(label, i) {
+                const b = document.createElement('button');
+                b.className = 'opt-btn';
+                b.textContent = label;
+                b.dataset.index = i;
+                b.onclick = function() {
+                    if (S.isAnswered) return;
+                    g.querySelectorAll('.opt-btn').forEach(function(x) { x.classList.remove('selected'); });
+                    b.classList.add('selected');
+                    S.selected = i;
+                    document.getElementById('checkBtn').disabled = false;
+                };
+                g.appendChild(b);
+            });
+            setFeedback('✏️', t('fbStart'), '', false);
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'none';
+            updateScore();
+        }
+
+        function check() {
+            if (S.tab === 'ptable') {
+                checkPtable();
+                return;
+            }
+            if (S.tab === 'atomic') {
+                checkAtomic();
+                return;
+            }
+            if (S.tab === 'pn') {
+                checkPn();
+                return;
+            }
+            if (S.isAnswered || !S.q) return;
+            if (S.selected === null) {
+                setFeedback('⚠️', t('pick'), '', true);
+                return;
+            }
+            S.isAnswered = true;
+            S.total++;
+            const isCorrect = (S.selected === S.q.correct);
+            if (isCorrect) S.correct++;
+
+            const opts = document.querySelectorAll('#optGroup .opt-btn');
+            opts.forEach(function(b) {
+                b.disabled = true;
+                const i = parseInt(b.dataset.index, 10);
+                if (i === S.q.correct) b.classList.add('correct');
+                else if (i === S.selected && !isCorrect) b.classList.add('wrong');
+            });
+
+            const correctLabel = opts[S.q.correct] ? opts[S.q.correct].textContent : '';
+            const explain = currentLang === 'zh' ? S.q.ex_zh : S.q.ex_en;
+            if (isCorrect) {
+                setFeedback('✅', t('correct'), explain, false);
+            } else {
+                setFeedback('❌', t('wrong') + correctLabel, explain, true);
+            }
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            updateScore();
+        }
+
+        // ============================================================
+        // 質子與中子：表格填空
+        // ============================================================
+        const PN_COLS = [
+            { key: 'symbol', label_zh: '符號', label_en: 'Symbol' },
+            { key: 'Z', label_zh: '原子序', label_en: 'At. no.' },
+            { key: 'proton', label_zh: '質子', label_en: 'Protons' },
+            { key: 'neutron', label_zh: '中子', label_en: 'Neutrons' },
+            { key: 'mass', label_zh: '質量數', label_en: 'Mass no.' },
+            { key: 'electron', label_zh: '電子', label_en: 'Electrons' },
+            { key: 'econf', label_zh: '電子排佈', label_en: 'E-arr.' },
+        ];
+
+        function colValue(e, key) {
+            if (key === 'symbol') return e.sym;
+            if (key === 'Z') return String(e.Z);
+            if (key === 'proton') return String(e.Z);
+            if (key === 'neutron') return String(e.N);
+            if (key === 'mass') return String(e.A);
+            if (key === 'electron') return String(e.Z);
+            if (key === 'econf') return ECONF[e.sym];
+            return '';
+        }
+
+        function normalizeAnswer(v) {
+            return String(v).replace(/[^0-9]/g, '');
+        }
+
+        function renderPnVisibility(show) {
+            document.getElementById('ruleCard').style.display = 'none';
+            document.getElementById('qText').style.display = 'none';
+            document.getElementById('optGroup').style.display = 'none';
+            document.getElementById('ptGridWrap').style.display = 'none';
+            document.getElementById('cardQuizWrap').style.display = 'none';
+            document.getElementById('pnWrap').style.display = show ? 'block' : 'none';
+            document.getElementById('feedback0').style.display = show ? 'flex' : 'none';
+            document.querySelector('.bottom-check-row').style.display = show ? 'flex' : 'none';
+            document.getElementById('dataTableWrap').style.display = 'none';
+            document.querySelector('.score-row').style.display = show ? 'flex' : 'none';
+        }
+
+        function drawPn() {
+            if (S.deck.length === 0) {
+                S.deck = shuffle(S.bank);
+                S.roundPos = 0;
+                S.roundTotal = S.bank.length;
+            }
+            const q = S.deck.pop();
+            S.roundPos++;
+            S.q = q;
+            S.isAnswered = false;
+
+            let html = '<table class="pn-table"><thead><tr>';
+            PN_COLS.forEach(function(c) { html += '<th>' + (currentLang === 'zh' ? c.label_zh : c.label_en) + '</th>'; });
+            html += '</tr></thead><tbody><tr>';
+            PN_COLS.forEach(function(c) {
+                if (q.given.indexOf(c.key) !== -1) {
+                    html += '<td class="pn-given">' + colValue(q.e, c.key) + '</td>';
+                } else {
+                    html += '<td><input class="pn-input" data-col="' + c.key + '" autocomplete="off" spellcheck="false"></td>';
+                }
+            });
+            html += '</tr></tbody></table>';
+            document.getElementById('pnTable').innerHTML = html;
+
+            document.querySelectorAll('#pnTable .pn-input').forEach(function(inp) {
+                inp.addEventListener('input', function() { updatePnCheck(); });
+                inp.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !S.isAnswered && this.value.trim() !== '') {
+                        e.preventDefault();
+                        document.getElementById('checkBtn').click();
+                    }
+                });
+            });
+
+            setFeedback('✏️', t('pnHint'), '', false);
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'none';
+            updateScore();
+        }
+
+        function updatePnCheck() {
+            const inputs = document.querySelectorAll('#pnTable .pn-input');
+            let all = inputs.length > 0;
+            inputs.forEach(function(inp) { if (inp.value.trim() === '') all = false; });
+            document.getElementById('checkBtn').disabled = !all;
+        }
+
+        function checkPn() {
+            if (S.isAnswered || !S.q) return;
+            const inputs = document.querySelectorAll('#pnTable .pn-input');
+            let empty = false;
+            inputs.forEach(function(inp) { if (inp.value.trim() === '') empty = true; });
+            if (empty) {
+                setFeedback('⚠️', t('pick'), '', true);
+                return;
+            }
+            S.isAnswered = true;
+            S.total++;
+            const e = S.q.e;
+            let allOk = true;
+            inputs.forEach(function(inp) {
+                inp.disabled = true;
+                const key = inp.dataset.col;
+                const correct = colValue(e, key);
+                let ok;
+                if (key === 'symbol') ok = inp.value.trim() === correct;
+                else ok = normalizeAnswer(inp.value) === normalizeAnswer(correct);
+                inp.classList.add(ok ? 'correct' : 'wrong');
+                if (!ok) { allOk = false; inp.value = correct; }
+            });
+            if (allOk) S.correct++;
+            if (allOk) {
+                setFeedback('✅', t('correct'), currentLang === 'zh' ? '全部填對！' : 'All correct!', false);
+            } else {
+                setFeedback('❌', t('wrong') + '——已顯示正確答案', currentLang === 'zh' ? '請記住各數值的關係。' : 'Remember the relationships.', true);
+            }
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            updateScore();
+        }
+
+        // ============================================================
+        // 分頁 / 語言
+        // ============================================================
+        function switchTab(tab) {
+            if (S.tab === tab) return;
+            S.tab = tab;
+            document.querySelectorAll('.tab-btn').forEach(function(b) {
+                b.classList.toggle('active', b.dataset.tab === tab);
+            });
+            if (tab === 'table') {
+                renderTableTab();
+            } else if (tab === 'ptable') {
+                S.bank = buildBank('ptable');
+                S.deck = [];
+                S.roundPos = 0;
+                renderPtableVisibility(true);
+                drawPtable();
+            } else if (tab === 'atomic') {
+                S.bank = buildBank('atomic');
+                S.deck = [];
+                S.roundPos = 0;
+                renderAtomicVisibility(true);
+                drawAtomic();
+            } else if (tab === 'pn') {
+                S.bank = buildBank('pn');
+                S.deck = [];
+                S.roundPos = 0;
+                renderPnVisibility(true);
+                drawPn();
+            } else {
+                S.bank = buildBank(tab);
+                S.deck = [];
+                S.roundPos = 0;
+                renderQuizVisibility(true);
+                draw();
+            }
+        }
+
+        function setLanguage(lang) {
+            if (lang === currentLang) return;
+            currentLang = lang;
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.history.replaceState({}, '', url);
+            localStorage.setItem('ch5_lang', lang);
+            updateButtonLabels();
+            render();
+        }
+
+        function updateButtonLabels() {
+            document.getElementById('tabAtomic').textContent = t('tabAtomic');
+            document.getElementById('tabPn').textContent = t('tabPn');
+            document.getElementById('tabPtable').textContent = t('tabPtable');
+            document.getElementById('tabTable').textContent = t('tabTable');
+            document.getElementById('checkBtn').textContent = t('check');
+            document.getElementById('nextBtn').textContent = t('next');
+            document.querySelectorAll('.lang-btn').forEach(function(b) {
+                b.classList.toggle('active', b.dataset.lang === currentLang);
+            });
+
+            const sel = document.getElementById('practiceSelector');
+            if (sel) {
+                const labels = {
+                    home: currentLang === 'zh' ? '🏠 返回目錄' : '🏠 Home',
+                    ch1: currentLang === 'zh' ? '⚗️ 儀器與標籤 (Ch.1)' : '⚗️ Apparatus & Labels (Ch.1)',
+                    ch2: currentLang === 'zh' ? '🔬 特性變化分類 (Ch.2)' : '🔬 Properties & Changes (Ch.2)',
+                    detective: currentLang === 'zh' ? '🕵️ 偵探訓練' : '🕵️ Detective Training',
+                    ch5: currentLang === 'zh' ? '⚛️ 原子與周期表 (Ch.5/6)' : '⚛️ Atoms & Periodic Table (Ch.5/6)',
+                    ions: currentLang === 'zh' ? '🧪 離子與化合物 (Ch.7)' : '🧪 Ionic Compounds (Ch.7)',
+                    structure: currentLang === 'zh' ? '🏗️ 結構 (Ch.9)' : '🏗️ Structure (Ch.9)',
+                    rxn: currentLang === 'zh' ? '⚙️ 金屬反應 (Ch.11)' : '⚙️ Metal Reactions (Ch.11)',
+                };
+                for (let i = 0; i < sel.options.length; i++) {
+                    const val = sel.options[i].value;
+                    if (labels[val]) sel.options[i].textContent = labels[val];
+                }
+            }
+            updateScore();
+        }
+
+        function render() {
+            if (S.tab === 'table') {
+                renderTableTab();
+            } else if (S.tab === 'ptable') {
+                renderPtableVisibility(true);
+                drawPtable();
+            } else if (S.tab === 'atomic') {
+                renderAtomicVisibility(true);
+                drawAtomic();
+            } else if (S.tab === 'pn') {
+                renderPnVisibility(true);
+                drawPn();
+            } else {
+                renderQuizVisibility(true);
+                draw();
+            }
+        }
+
+        // ============================================================
+        // 初始化
+        // ============================================================
+        function init() {
+            const urlLang = new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('ch5_lang') || 'zh';
+            currentLang = (urlLang === 'zh' || urlLang === 'en') ? urlLang : 'zh';
+
+            document.querySelectorAll('.lang-btn').forEach(function(b) {
+                b.addEventListener('click', function() { setLanguage(b.dataset.lang); });
+            });
+            document.querySelectorAll('.tab-btn').forEach(function(b) {
+                b.addEventListener('click', function() { switchTab(b.dataset.tab); });
+            });
+            document.getElementById('checkBtn').addEventListener('click', check);
+            document.getElementById('nextBtn').addEventListener('click', draw);
+            document.getElementById('aqCenterInput').addEventListener('input', function() {
+                if (!S.isAnswered && S.tab === 'atomic') updateAtomicCheck();
+            });
+            document.getElementById('aqCenterInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !S.isAnswered && S.tab === 'atomic' && this.value.trim() !== '') {
+                    e.preventDefault();
+                    document.getElementById('checkBtn').click();
+                }
+            });
+            document.getElementById('aqCornerInput').addEventListener('input', function() {
+                if (!S.isAnswered && S.tab === 'atomic') updateAtomicCheck();
+            });
+            document.getElementById('aqCornerInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !S.isAnswered && S.tab === 'atomic' && this.value.trim() !== '') {
+                    e.preventDefault();
+                    document.getElementById('checkBtn').click();
+                }
+            });
+
+            const sel = document.getElementById('practiceSelector');
+            if (sel) {
+                sel.addEventListener('change', function() {
+                    const target = this.value;
+                    if (target === 'home') window.location.href = 'index.html?lang=' + currentLang;
+                    else window.location.href = target + '.html?lang=' + currentLang;
+                });
+            }
+
+            S.bank = buildBank('atomic');
+            updateButtonLabels();
+            render();
+            console.log('⚛️ 原子與周期表練習已啟動');
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+</body>
+</html>

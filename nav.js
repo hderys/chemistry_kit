@@ -4,6 +4,7 @@ const PAGES = [
     { id: 'ch1', label_zh: '⚗️ 儀器與標籤 (Ch.1)', label_en: '⚗️ Apparatus & Labels (Ch.1)' },
     { id: 'ch2', label_zh: '🔬 特性變化分類 (Ch.2)', label_en: '🔬 Properties & Changes (Ch.2)' },
     { id: 'detective', label_zh: '🕵️ 偵探訓練 (分析化學)', label_en: '🕵️ Detective Training (Analytical)' },
+    { id: 'ch5', label_zh: '⚛️ 原子與周期表 (Ch.5/6)', label_en: '⚛️ Atoms & Periodic Table (Ch.5/6)' },
     { id: 'ions', label_zh: '🧪 離子與化合物 (Ch.7)', label_en: '🧪 Ionic Compounds (Ch.7)' },
     { id: 'structure', label_zh: '🏗️ 結構 (Ch.9)', label_en: '🏗️ Structure (Ch.9)' },
     { id: 'rxn', label_zh: '⚙️ 金屬反應 (Ch.11)', label_en: '⚙️ Metal Reactions (Ch.11)' },
