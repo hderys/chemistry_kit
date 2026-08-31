@@ -1655,6 +1655,7 @@ function renderQuizVisibility(show) {
                 const correct = colValue(e, key);
                 let ok;
                 if (key === 'symbol') ok = inp.value.trim() === correct;
+                else if (key === 'econf') ok = inp.value.replace(/\s/g, '') === correct.replace(/\s/g, '');
                 else ok = normalizeAnswer(inp.value) === normalizeAnswer(correct);
                 inp.classList.add(ok ? 'correct' : 'wrong');
                 if (!ok) { allOk = false; inp.value = correct; }
